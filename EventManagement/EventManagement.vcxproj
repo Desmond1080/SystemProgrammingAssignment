@@ -127,8 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="clearScreen.cpp" />
     <ClCompile Include="encryptioncpp.cpp" />
     <ClCompile Include="file.cpp" />
+    <ClCompile Include="forgotpassword.cpp" />
+    <ClCompile Include="guest.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="user.cpp" />
     <ClCompile Include="validation.cpp" />

@@ -31,7 +31,7 @@ bool validatePassword(string& password) {
 }
 
 bool validateContactNumber(string& contactNumber) {
-	//10 digit number or 11 digit number
+	//10 digit number 
 	regex regex_pattern(R"(^\d{10}$)");
 	return regex_match(contactNumber, regex_pattern);
 }
