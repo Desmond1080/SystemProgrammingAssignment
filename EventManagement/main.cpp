@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
+
 #include "function.h"
+#include "participantRegHeader.h"
 
 using namespace std;
 

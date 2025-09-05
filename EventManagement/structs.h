@@ -1,5 +1,5 @@
 #pragma once
-#define structs.h
+#define structs_h
 
 #include <string>
 
