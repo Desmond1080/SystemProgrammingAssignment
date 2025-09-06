@@ -19,7 +19,7 @@ void listEvents(const vector<Event>& events) {
 
         // Convert time_t → readable string
         std::tm tmStruct{};
-        localtime_s(&tmStruct, &e.timestamp); // safer version on MSVC
+        localtime_s(&tmStruct, &e.date); // safer version on MSVC
         std::ostringstream dateStream;
         dateStream << std::put_time(&tmStruct, "%Y-%m-%d %H:%M");
 
@@ -31,7 +31,9 @@ void listEvents(const vector<Event>& events) {
             << endl;
 
         // Print ticket categories
-        for (const auto& [catName, catInfo] : e.categoryOptions) {
+        for (const auto& category : e.categoryOptions) {
+            const string& catName = category.first;
+            const auto& catInfo = category.second;
             cout << "   - " << catName
                 << " | Price: " << catInfo.first
                 << " | Available: " << catInfo.second << endl;
