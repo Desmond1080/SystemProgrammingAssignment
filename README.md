@@ -24,16 +24,17 @@ Currently depends on `nlohmann-json`.
 
 2. Enable vcpkg integration in Visual Studio (one-time setup):
    
-```sh
-.\vcpkg integrate install
+   ```sh
+   .\vcpkg integrate install
 
 3. Clone this repository:
 
-```sh
-git clone https://github.com/YOUR-USERNAME/EventManageTest.git
-cd EventManageTest
+   ```sh
+   git clone https://github.com/YOUR-USERNAME/EventManageTest.git
+   cd EventManageTest
 
 4. Open the solution (EventManageTest.sln) in Visual Studio.
 
     Dependencies will be restored automatically using vcpkg.json.
+
 
