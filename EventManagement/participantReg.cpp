@@ -13,6 +13,7 @@ void browseEvents(User user) {
     // Match selected user count from enum class
 
     while (true) {
+        clearScreen();
         cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
 
         int catChoice = 0;
@@ -47,9 +48,7 @@ void browseEvents(User user) {
 	    // Category category = Category::Concert; // Example category
         EventCategory category = static_cast<EventCategory>(catChoice);
 
-	    cout << "#" << categoryToString(category) << endl;
-
-		// Display events in the selected category
+		// Event manager
         EventManager manager;
         string filename = "events.json";
 
@@ -65,17 +64,49 @@ void browseEvents(User user) {
             system("pause"); // Press any key to continue
             continue;
 		}
-        
+
+        selectEvent(categoryEvents, category);
+    }
+}
+
+void selectEvent(const vector<Event>& categoryEvents, EventCategory category) {
+    while (true) {
+        // system("pause"); // Press any key to continue
+        clearScreen();
+	    cout << "#" << categoryToString(category) << endl;
+
+        int eventChoice = 0;
+
         listEventsUser(categoryEvents);
+
+        cout << "Select Event to view details or 0 to return: ";
+        cin >> eventChoice;
+
+        // Invalid choice
+        if (eventChoice < 0 || eventChoice > static_cast<int>(categoryEvents.size())) {
+            cout << "Invalid choice. Please try again." << endl;
+			system("pause"); // Press any key to continue
+			//clearScreen();
+			continue;
+		}
+
+        if (eventChoice == 0) {
+			//clearScreen();
+			return; // Return to category menu
+		}
+
+        // Display event details and ticket prices
+        clearScreen();
+        categoryEvents[eventChoice - 1].printDetails();
         system("pause"); // Press any key to continue
 
-        // Select to view event details and ticket prices
-        // Return or book ticket
-        // 
+        // Book tickets
     }
 }
 
 void listEventsUser(const vector<Event>& events) {
+    cout << "=====================================";
+
     for (size_t i = 0; i < events.size(); i++) {
         const Event& e = events[i];
 
@@ -85,7 +116,8 @@ void listEventsUser(const vector<Event>& events) {
         std::ostringstream dateStream;
         dateStream << std::put_time(&tmStruct, "%Y-%m-%d %H:%M");
 
-        cout << i + 1 << ". " << e.name << endl;
+        cout << i + 1 << ". " << endl;
+        cout << e.name << endl;
         cout << "Location: " << e.location << endl;
         cout << "Date: " << dateStream.str() << endl;
 
@@ -96,6 +128,8 @@ void listEventsUser(const vector<Event>& events) {
                 << " | Price: " << catPair.second.first //catPrice
                 << " | Available: " << catPair.second.second << endl; 
         }
+
+        cout << "=====================================";
     }
 }
 
