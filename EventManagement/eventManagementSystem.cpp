@@ -1,6 +1,6 @@
 #include "participantRegHeader.h"
 
-int main(){
+int main1(){
     Event events[5];
     loadEvents(events);
 

@@ -171,6 +171,7 @@ void editUserProfile(User& user) {
 		cout << "8. Edit Password" << endl;
 		cout << "9. Exit Edit Profile" << endl;
 		cout << "Enter your choice: ";
+
 		cin >> choice;
 		cin.ignore();
 
