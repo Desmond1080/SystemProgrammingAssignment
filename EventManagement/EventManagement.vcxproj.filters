@@ -39,10 +39,25 @@
     <ClCompile Include="forgotpassword.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="participantReg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="function.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="participantRegHeader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="events.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="user.txt" />
   </ItemGroup>
 </Project>
