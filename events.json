@@ -1,0 +1,25 @@
+{
+    "events": [
+        {
+            "category": 5,
+            "categoryOptions": [
+                {
+                    "available": 100,
+                    "catName": "VIP",
+                    "price": 120.0
+                },
+                {
+                    "available": 500,
+                    "catName": "Standard",
+                    "price": 50.0
+                }
+            ],
+            "description": "Outdoor concert",
+            "location": "Central Park",
+            "name": "Music Festival",
+            "organizer": "ABC Corp",
+            "ticketPrice": 50.0,
+            "timestamp": 1757103929
+        }
+    ]
+}
