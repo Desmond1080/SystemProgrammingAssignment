@@ -6,6 +6,114 @@
 
 using namespace std;
 
+//before user login 
+bool userLoginMenu(User &user) {
+	int choice;
+	User loginUser;
+
+	while (true) {
+		cout << "=== User Page ===" << endl;
+		cout << "1. Login" << endl;
+		cout << "2. Register" << endl;
+		cout << "3. Forget Password" << endl;
+		cout << "4. Back to Main Menu" << endl;
+		cout << "Enter your choice: ";
+
+		// Check if input is valid
+		if (!(cin >> choice)) {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			clearScreen();
+			cout << "Invalid input. Please enter a number." << endl;
+			continue;
+		}
+		
+		if (validateChoice(choice,1 ,4)) {
+			switch (choice) {
+			case 1:
+				clearScreen();
+				if (userLogin(loginUser)) {
+					user = loginUser;
+					return true; // login successful
+				}
+				break;
+			case 2:
+				clearScreen();
+				userRegister();
+				break;
+			case 3:
+				clearScreen();
+				{
+					string email;
+					cout << "Enter your registered email: ";
+					getline(cin, email);
+					forgotPassword(email);
+				}
+				break;
+			case 4:
+				clearScreen();
+				return false; // back to main menu
+			default:
+				cout << "Invalid choice. Please try again." << endl;
+			}
+		}
+		else {
+			cout << endl << endl;
+			clearScreen();
+			cout << "Invalid input. Please enter a number between 1 and 4." << endl;
+		}
+
+	}
+}
+
+// after user login 
+void userMenu(User& user) {
+	int choice;
+	while (true) {
+		cout << "=== User Menu ===" << endl;
+		cout << "1. View Profile" << endl;
+		cout << "2. Edit Profile" << endl;
+		cout << "3. Delete Account" << endl;
+		cout << "4. Forget Password" << endl;
+		cout << "5. Logout" << endl;
+		cout << "Enter your choice: ";
+		
+		// Check if input is valid
+		if (!(cin >> choice)) {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Invalid input. Please enter a number." << endl;
+			continue;
+		}
+
+		if (validateChoice(choice,1,5)) {
+			switch (choice) {
+			case 1:
+				displayUserProfile(user);
+				break;
+			case 2:
+				editUserProfile(user);
+				break;
+			case 3:
+				deleteUserAccount(user);
+				return; // exit user menu after account deletion
+			case 4:
+				forgotPassword(user.email);
+				break;
+			case 5:
+				cout << "Logging out..." << endl;
+				clearScreen();
+				return; // exit user menu to logout
+			default:
+				cout << "Invalid choice. Please try again." << endl;
+			}
+		}
+		else {
+			cout << "Invalid input. Please enter a number between 1 and 5." << endl;
+		}
+	}
+}
+
 //user sign up 
 void userRegister() {
 
@@ -15,18 +123,49 @@ void userRegister() {
 	//clear input buffer before taking input
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-	cout << "Enter First Name: ";
-	getline(cin, user1.username.firstname);
+	while (true) {
+		cout << "Enter First Name: ";
+		getline(cin, user1.username.firstname);
+		if (validateName(user1.username.firstname) && validateLine(user1.username.firstname)) {
+			break;
+		}
+		else {
+			cout << "Invalid first name input. Re-enter and first name cannot contain '|'." << endl;
+		}
+	}
 
-	cout << "Enter Last Name: ";
-	getline(cin, user1.username.lastname);
+	while (true) {
+		cout << "Enter Last Name: ";
+		getline(cin, user1.username.lastname);
+		if (validateName(user1.username.lastname) && validateLine(user1.username.lastname)) {
+			break;
+		}
+		else {
+			cout << "Invalid last name input. Re-enter and last name cannot contain '|'." << endl;
+		}
+	}
 
-	cout << "Enter Nickname: ";
-	getline(cin, user1.nickname);
+	while (true) {
+		cout << "Enter Nickname: ";
+		getline(cin, user1.nickname);
+		if (!user1.nickname.empty() && validateLine(user1.nickname)) {
+			break;
+		}
+		else {
+			cout << "Ninckname cannot be empty or contain '|' . Re-enter." << endl;
+		}
+	}
 
-	cout << "Enter Age: ";
-	cin >> user1.age;
-	cin.ignore(); //clear new line character
+	while (true) {
+		cout << "Enter Age: ";
+		getline(cin, user1.age);
+		if (validateAge(user1.age)) {
+			break;
+		}
+		else {
+			cout << "Invalid age input. Re-enter" << endl;
+		}
+	}
 
 	while (true) {
 		cout << "Enter gender (Male/Female): ";
@@ -40,9 +179,9 @@ void userRegister() {
 	}
 
 	while (true) {
-		cout << "Enter contact number (10 digits): ";
+		cout << "Enter contact number (012-3456789 or 012-34567891): ";
 		getline(cin, user1.contactNumber);
-		if (validateContactNumber(user1.contactNumber)) {
+		if (validateContactNumber(user1.contactNumber) && validateLine(user1.contactNumber)) {
 			break;
 		}
 		else {
@@ -53,18 +192,26 @@ void userRegister() {
 	while (true) {
 		cout << "Enter email: ";
 		getline(cin, user1.email);
-		if (validateEmail(user1.email)) {
+		if (validateEmail(user1.email) && validateLine(user1.email)) {
+			// check if the email already exits
+			User tempUser;
+			if (loadUserProfile(user1.email, tempUser)) {
+				cout << "Email already registered. Please use a different email." << endl;
+			}
+			else {
+				break;
+			}
 			break;
 		}
 		else {
-			cout << "Invalid email. Re-enter." << endl;
+			cout << "Invalid email. Re-enter and field cannot contain '|'." << endl;
 		}
 	}
 
 	while (true) {
 		cout << "Enter password (At least 8 characters): ";
 		getline(cin, user1.password);
-		if (validatePassword(user1.password)) {
+		if (validatePassword(user1.password) && validateLine(user1.password)) {
 			//generate salt and hash password 
 			user1.salt = generateSalt();
 			user1.passwordHash = hashPassword(user1.password, user1.salt);
@@ -85,13 +232,12 @@ void userRegister() {
 
 // user login
 bool userLogin(User &loginUser) {
+	//clear input buffer before taking input
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	string email, password;
 	User user1;
 
 	cout << "=== User Login ===" << endl;
-
-	//clear input buffer before taking input
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 	cout << "Enter email: ";
 	getline(cin, email);
@@ -129,11 +275,25 @@ bool userLogin(User &loginUser) {
 				cout << "Too many failed login attempts. " << endl;
 				cout << "Please try again later or use the 'Forgot Password' option (Y/N)." << endl;
 				char choice;
-				cin >> choice;
-				if(choice == 'Y' || choice == 'y') {
-					forgotPassword(email);
-				}
-				updateUserProfile(user1); // update the login attempt
+				bool validChoice = false;
+				while (!validChoice) {
+					cin >> choice;
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+					if (validatePasswordConfirmation(choice)) {
+						validChoice = true;
+						if (choice == 'Y' || choice == 'y') {
+							forgotPassword(email);
+						}
+						else {
+							cout << "Please try again" << endl;
+						}
+					}
+					else {
+						cout << "Invalid input please field with y or n " << endl;
+					}
+				} 
+				updateUserProfile(user1);
 				return false;
 
 			}

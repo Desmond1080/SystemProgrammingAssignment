@@ -4,6 +4,7 @@
 
 using namespace std;
 
+// for user 
 void forgotPassword(const string& email) {
 	User user1;
 	if (!loadUserProfile(email, user1)) {

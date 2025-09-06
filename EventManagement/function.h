@@ -40,15 +40,16 @@ struct User {
 	int loginAttempts;
 };
 
-//create event details using structure 
-struct event {
-	
+//create organizer records using structure 
+struct Organizer {
+	string name;
+	string email;
+	string password;
+	string passwordHash;
+	string salt;
+	string description;
 };
 
-//category 
-struct category {
-
-};
 
 //create ticket details using structure 
 struct ticket {
@@ -61,24 +62,45 @@ void clearScreen();
 void continueAsGuest();
 
 //user functions
+bool userLoginMenu(User& user);
+void userMenu(User& user);
 void userRegister();
 bool userLogin(User &loginUser);
 void displayUserProfile(const User &user);
 void editUserProfile(User &user);
 void deleteUserAccount(User& user);
 
+//organizer function
+bool organizerLoginMenu(Organizer& loginOrganizer);
+void organizerMenu(Organizer& organizer);
+void organizerRegister();
+bool organizerLogin(Organizer& loginOrganizer);
+void displayOrganizerProfile(const Organizer& organizer);
+void editOrganizerProfile(Organizer& organizer);
+
 //validations
 bool validateEmail(string& email);
 bool validatePassword(string& password);
 bool validateContactNumber(string& contactNumber);
 bool validateGender(string& gender);
+bool validateAge(string& age);
+bool validateChoice(int choice, int minChoice, int maxChoice);
+bool validateLine(const string& input);
+bool validateName(const string& name);
+bool validatePasswordConfirmation(const char& input);
 
-//file input io
+//user file input io
 void saveUserProfile(const User& user);
 bool loadUserProfile(const string& email, User& user);
 vector<User> storeAllUsers();
 void updateUserProfile(const User& user);
 void removeUserProfile(const string& email);
+
+//organizer file input i/o
+void saveOrganizerProfile(const Organizer& organizer);
+bool loadOrganizerProfile(const string& email, Organizer& organizer);
+vector<Organizer> storeAllOrganizer();
+void updateOrganizerProfile(const Organizer& organizer);
 
 //forgot password
 void forgotPassword(const string& email);

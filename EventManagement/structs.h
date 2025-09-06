@@ -1,5 +1,5 @@
 #pragma once
-#define structs.h
+#define structs_h
 
 #include <string>
 
@@ -75,11 +75,6 @@ struct Venue{
     string postcode;
     string city;
     State state;
-};
-
-struct Organizer{
-    string name;
-    string description;
 };
 
 struct Event{

@@ -133,6 +133,7 @@
     <ClCompile Include="forgotpassword.cpp" />
     <ClCompile Include="guest.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="organizer.cpp" />
     <ClCompile Include="user.cpp" />
     <ClCompile Include="validation.cpp" />
   </ItemGroup>
