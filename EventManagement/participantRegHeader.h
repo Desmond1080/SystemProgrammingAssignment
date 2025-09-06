@@ -2,14 +2,18 @@
 
 #include "structs.h"
 #include "function.h"
+#include "Event.h"
 
 #include <vector>
 #include <iostream>
 
+using namespace std;
+
 void browseEvents(User user);
 void displayCatMenu();
-vector<Event> displayEventInCategory(
-    const vector<Event>& events,
-    Category category
-);
-void loadEvents(Event events[]);
+void listEventsUser(const vector<Event>& events);
+//vector<Event> displayEventInCategory(
+//    const vector<Event>& events,
+//    Category category
+//);
+//void loadEvents(Event events[]);

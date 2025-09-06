@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>17.0</VCProjectVersion>
+    <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{734210df-c5e8-4008-a657-76b23fdd8b7a}</ProjectGuid>
-    <RootNamespace>EventManagement</RootNamespace>
+    <ProjectGuid>{411ca17e-bf65-41b3-b25f-0a9b94caf1fb}</ProjectGuid>
+    <RootNamespace>EventManageTest</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -70,9 +70,6 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Label="Vcpkg">
-    <VcpkgEnableManifest>true</VcpkgEnableManifest>
-  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -107,8 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)include</AdditionalIncludeDirectories>
-      <LanguageStandard>Default</LanguageStandard>
+      <AdditionalIncludeDirectories>C:\Users\Xiang Ying\Desktop\EventManageTest\EventManageTest;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,33 +128,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="clearScreen.cpp" />
-    <ClCompile Include="encryptioncpp.cpp" />
+    <ClCompile Include="..\..\..\Downloads\prac9 (1)\EventCreation\EventCreation\main.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="EventManager.cpp" />
-    <ClCompile Include="event_main.cpp" />
-    <ClCompile Include="file.cpp" />
     <ClCompile Include="FileManager.cpp" />
-    <ClCompile Include="forgotpassword.cpp" />
-    <ClCompile Include="guest.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="participantReg.cpp" />
-    <ClCompile Include="user.cpp" />
-    <ClCompile Include="validation.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="events.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="events.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Event.h" />
     <ClInclude Include="EventManager.h" />
     <ClInclude Include="FileManager.h" />
-    <ClInclude Include="function.h" />
-    <ClInclude Include="participantRegHeader.h" />
-    <ClInclude Include="structs.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="user.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="events.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

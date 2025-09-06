@@ -1,5 +1,11 @@
 #include <iostream>
 #include <string>
+#include <limits>
+#include <sstream>
+#include "Event.h"
+#include "EventManager.h"
+#include "FileManager.h"
+#include <iomanip>
 
 #include "function.h"
 #include "participantRegHeader.h"
@@ -36,7 +42,7 @@ int main() {
 					cout << "4. Edit Profile" << endl;
 					cout << "5. Delete Account" << endl; // under edit profile?
 					cout << "6. Logout" << endl;
-					cout << "Enter your choice:";
+					cout << "Enter your choice: ";
 					cin >> userchoice;
 
 					switch (userchoice) {

@@ -37,7 +37,7 @@ struct User {
 	string password;
 	string passwordHash;
 	string salt;
-	int loginAttempts;
+	int loginAttempts = 0;
 };
 
 //create event details using structure 
