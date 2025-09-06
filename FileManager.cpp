@@ -15,7 +15,7 @@ void FileManager::saveToJSON(const string& filename, const vector<Event>& events
         ev["name"] = e.name;
         ev["description"] = e.description;
         ev["category"] = static_cast<int>(e.category); // store enum as int
-        ev["timestamp"] = e.timestamp;
+        ev["timestamp"] = e.date;
         ev["location"] = e.location;
         ev["organizer"] = e.organizer;
         ev["ticketPrice"] = e.ticketPrice;
@@ -65,7 +65,7 @@ vector<Event> FileManager::loadFromJSON(const string& filename) {
         e.name = ev.value("name", "");
         e.description = ev.value("description", "");
         e.category = static_cast<EventCategory>(ev.value("category", 0));
-        e.timestamp = static_cast<time_t>(ev.value("timestamp", 0));
+        e.date = static_cast<time_t>(ev.value("timestamp", 0));
         e.location = ev.value("location", "");
         e.organizer = ev.value("organizer", "");
         e.ticketPrice = ev.value("ticketPrice", 0.0);

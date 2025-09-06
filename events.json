@@ -20,6 +20,22 @@
             "organizer": "ABC Corp",
             "ticketPrice": 50.0,
             "timestamp": 1757103929
+        },
+        {
+            "category": 3,
+            "categoryOptions": [
+                {
+                    "available": 20,
+                    "catName": "VIP",
+                    "price": 400.0
+                }
+            ],
+            "description": "This is a fun event haha",
+            "location": "Kuala Lumpur",
+            "name": "Testing Event",
+            "organizer": "XT",
+            "ticketPrice": 200.0,
+            "timestamp": 1757153460
         }
     ]
 }
