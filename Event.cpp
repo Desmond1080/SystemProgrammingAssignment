@@ -1,9 +1,8 @@
-#include "Event.h"
+﻿#include "Event.h"
 #include <iomanip>
 #include <iostream>
 #include <ctime>
 #include <sstream>
-#include <algorithm>
 
 using namespace std;
 

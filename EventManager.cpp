@@ -24,7 +24,7 @@ void EventManager::listEvents() const {
         return;
     }
 
-    cout << "\n==================== Event List ====================\n";
+    cout << "\n-------------------- Event List --------------------\n";
     for (size_t i = 0; i < events.size(); i++) {
         events[i].printDetails((int)i);
     }

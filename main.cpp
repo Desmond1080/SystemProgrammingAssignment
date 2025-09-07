@@ -1,543 +1,213 @@
 #include <iostream>
 #include <limits>
 #include <sstream>
-#include <cstdlib>
-#include <string>
 #include "Event.h"
 #include "EventManager.h"
 #include "FileManager.h"
-#include "validation.h"
-#include "function.h"
 #include <iomanip>
 
 using namespace std;
 
 void listEvents(const vector<Event>& events) {
-	if (events.empty()) {
-		cout << "No events available.\n";
-		return;
-	}
+    if (events.empty()) {
+        cout << "No events available.\n";
+        return;
+    }
 
-	cout << "\n-------------------- Event List --------------------\n";
-	for (size_t i = 0; i < events.size(); i++) {
-		events[i].printDetails((int)i);
-	}
+    for (size_t i = 0; i < events.size(); i++) {
+        const Event& e = events[i];
+
+        // Convert time_t → readable string
+        std::tm tmStruct{};
+        localtime_s(&tmStruct, &e.timestamp); // safer version on MSVC
+        std::ostringstream dateStream;
+        dateStream << std::put_time(&tmStruct, "%Y-%m-%d %H:%M");
+
+        cout << i << ". " << e.name
+            << " | " << e.description
+            << " | Location: " << e.location
+            << " | Organizer: " << e.organizer
+            << " | Date: " << dateStream.str()
+            << endl;
+
+        // Print ticket categories
+        for (const auto& [catName, catInfo] : e.categoryOptions) {
+            cout << "   - " << catName
+                << " | Price: " << catInfo.first
+                << " | Available: " << catInfo.second << endl;
+        }
+    }
 }
 
 
 Event createEventFromInput() {
-	string name, description, location, organizer;
-	double ticketPrice = 0.0;
-	time_t startTime = 0, endTime = 0;
+    string name, description, location, organizer;
+    int categoryChoice;
+    double ticketPrice;
+    time_t date = time(nullptr); // default current time
 
-	while (true) {
-		cout << "Enter Event Name (q to cancel): ";
-		getline(cin, name);
-		if (isCancel(name)) {
-			name = "";
-			break;
-		}
-		if (name.empty()) {
-			cout << "Event name cannot be empty!\n";
-			continue;
-		}
-		if (!isValidEventName(name)) {  // New function for event name
-			cout << "Event name can only contain letters, numbers, and spaces. Retry.\n";
-			continue;
-		}
-		break;
-	}
-	cout << "Enter Description (q to cancel): ";
-	std::getline(std::cin, description);
-	if (isCancel(description)) {
-		clearScreen();
-		return Event();
-	}
+    cout << "Enter Event Name: ";
+    getline(cin, name);
 
-	cout << "-------------------- Categories --------------------n";
-	for (int i = 0; i < (int)EventCategory::Count; i++) {
-		cout << "  " << i << ". " << Event::categoryToString((EventCategory)i) << "\n";
-	}
-	cout << "----------------------------------------------------\n";
+    cout << "Enter Description: ";
+    getline(cin, description);
 
-	int categoryChoice = -1;
-	while (true) {
-		categoryChoice = getIntInput("Select Category (q to cancel): ");
-		if (categoryChoice == -1) {
-			clearScreen();
-			return Event();
-		}
+    cout << "Select Category (0=Corporate, 1=TradeShow, 2=Fundraising, "
+        "3=Personal, 4=Award, 5=Festival, 6=Wedding, 7=Seminar): ";
+    cin >> categoryChoice;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-		// validate bounds
-		if (categoryChoice < 0 || categoryChoice >= (int)EventCategory::Count) {
-			cout << "Invalid category!Please select a valid number.\n";
-			continue;
-		}
-		break;
-	}
+    cout << "Enter Location: ";
+    getline(cin, location);
 
-	while (true) {
-		cout << "Enter Location (q to cancel): ";
-		std::getline(std::cin, location);
-		if (isCancel(location)) {
-			clearScreen();
-			return Event();
-		}
-		if (location.empty()) {
-			cout << "Location cannot be empty!\n";
-			return Event();
-		}
-		if (!isValidNameOrLocation(location)) {
-			cout << "Location can only contain letters, spaces and commas. Retry.\n";
-			continue;
-		}
-		break;
-	}
+    cout << "Enter Organizer: ";
+    getline(cin, organizer);
 
-	while (true) {
-		cout << "Enter Organizer (q to cancel): ";
-		std::getline(std::cin, organizer);
-		if (isCancel(organizer)) { 
-			clearScreen();
-			return Event();
-		}
-		if (organizer.empty()) {
-			cout << "Organizer cannot be empty.\n";
-			continue;
-		}
-		if (!isValidNameOrLocation(organizer)) {
-			cout << "Organizer can only contain letters and spaces. Retry.\n";
-			continue;
-		}
-		break;
-	}
+    cout << "Enter Base Ticket Price: ";
+    cin >> ticketPrice;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-	ticketPrice = getDoubleInput("Enter Base Ticket Price (q to cancel): ");
-	if(ticketPrice == -1.0) {
-		clearScreen();
-		return Event();
-	}
-	if (ticketPrice < 0.0) {
-		cout << "Ticket price cannot be negative!\n";
-		return Event();
-	}
+    Event e(name, description, static_cast<EventCategory>(categoryChoice),
+        date, location, organizer, ticketPrice, {});
 
-	while (true) {
-		string startStr, endStr;
-		cout << "Enter event start datetime (YYYY-MM-DD HH:MM) (q to cancel): ";
-		getline(cin, startStr);
-		if (isCancel(startStr)) return Event();
+    // Add ticket categories
+    char addMore;
+    do {
+        string catName;
+        double price;
+        int available;
 
-		tm startTm{};
-		istringstream ssStart(startStr);
-		ssStart >> get_time(&startTm, "%Y-%m-%d %H:%M");
-		if (ssStart.fail()) {
-			cout << "Invalid format.\n";
-			continue;
-		}
-		startTime = mktime(&startTm);
+        cout << "Enter ticket category name: ";
+        getline(cin, catName);
 
-		cout << "Enter event end datetime (YYYY-MM-DD HH:MM) (q to cancel): ";
-		getline(cin, endStr);
-		if (isCancel(endStr)) return Event();
+        cout << "Enter price: ";
+        cin >> price;
+        cout << "Enter available tickets: ";
+        cin >> available;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-		tm endTm{};
-		istringstream ssEnd(endStr);
-		ssEnd >> get_time(&endTm, "%Y-%m-%d %H:%M");
-		if (ssEnd.fail()) { 
-			cout << "Invalid format.\n"; 
-			continue;
-		}
-		endTime = mktime(&endTm);
+        e.addCategory(catName, price, available);
 
-		if (difftime(endTime, startTime) <= 0) {
-			cout << "End time must be after start time.\n";
-			continue;
-		}
-		break;
-	}
+        cout << "Add another ticket category? (y/n): ";
+        cin >> addMore;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    } while (addMore == 'y' || addMore == 'Y');
 
-	Event e(name, description, static_cast<EventCategory>(categoryChoice),
-		startTime, endTime, location, organizer, ticketPrice, {});
-
-	// Add ticket categories
-	char addMore = 'n';
-	do {
-		string choiceStr;
-		cout << "Add a ticket category? (y/n): ";
-		getline(cin, choiceStr);
-		if (!choiceStr.empty()) {
-			addMore = choiceStr[0];
-		}
-
-		if (addMore == 'y' || addMore == 'Y') {
-			string catName;
-			double price;
-			int available;
-
-			while (true) {
-				cout << "Enter ticket category name (q to cancel): ";
-				getline(cin, catName);
-				if (isCancel(catName)) {
-					clearScreen();
-					return Event();
-				}
-				if (!isValidNameOrLocation(catName)) {
-					cout << "Category name cannot contain special characters. Retry.\n";
-					continue;
-				}
-				break; // valid
-			}
-
-			price = getDoubleInput("Enter price (q to cancel): ");
-			if (price == -1.0) {
-				clearScreen();
-				return Event();
-			}
-			while (true) {
-				available = getIntInput("Enter available tickets (q to cancel): ");
-				if (available == -1) {
-					clearScreen();
-					return Event();
-				}
-				if (available < 0) {
-					cout << "Ticket availability cannot be negative. Retry.\n";
-					continue;
-				}
-				break; // valid
-			}
-
-
-			e.addCategory(catName, price, available);
-		}
-	} while (addMore == 'y' || addMore == 'Y');
-
-	return e;
+    return e;
 }
 
 int main() {
-	EventManager manager;
-	string filename = "events.json";
+    EventManager manager;
+    string filename = "events.json";
 
-	// Load saved events
-	auto existing = FileManager::loadFromJSON(filename);
-	if (existing.empty()) {
-		cout << "No events loaded (file may be missing or empty).\n";
-	}
-	else {
-		for (auto& e : existing) {
-			manager.addEvent(e);
-		}
-	}
+    // Load existing events if file exists
+    auto existing = FileManager::loadFromJSON(filename);
+    for (auto& e : existing) {
+        manager.addEvent(e);
+    }
 
-	while (true) {
-		int choice = -1;
-		while (true) {
-			cout << "\n---------- Event Manager ----------\n"
-				<< "1. Add Event\n"
-				<< "2. List Events\n"
-				<< "3. Search Events\n"
-				<< "4. Edit Event\n"
-				<< "5. Delete Event\n"
-				<< "6. Save & Exit\n"
-				<< "Choose an option: ";
+    int choice;
+    do {
+        cout << "\n===== Event Management Menu =====\n";
+        cout << "1. Create Event\n";
+        cout << "2. List Events\n";
+        cout << "3. Update Event\n";
+        cout << "4. Delete Event\n";
+        cout << "5. Save & Exit\n";
+        cout << "Choose an option: ";
+        cin >> choice;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-			string rawInput;
-			getline(cin, rawInput);
+        switch (choice) {
+        case 1: {
+            Event e = createEventFromInput();
+            manager.addEvent(e);
+            cout << "Event created!\n";
+            break;
+        }
+        case 2: {
+            listEvents(manager.getEvents());
+            break;
+        }
+        case 3: {
+            manager.listEvents();
+            cout << "Enter index of event to update (0-based): ";
+            size_t idx;
+            cin >> idx;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-			try {
-				choice = stoi(rawInput);
-				if (choice < 1 || choice > 6) {
-					cout << "Invalid option. Try again.\n";
-					continue;
-				}
-				break;
-			}
-			catch (...) {
-				cout << "Invalid input. Please enter a number.\n";
-			}
-		}
+            if (idx < manager.getEvents().size()) {
+                int updateChoice;
+                cout << "\nUpdate Options:\n";
+                cout << "1. Postpone Event (Change Date)\n";
+                cout << "2. Update Ticket Capacity\n";
+                cout << "3. Update Entire Event\n";
+                cout << "Choose an option: ";
+                cin >> updateChoice;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-		// 1. Add Event
-		if (choice == 1) {
-			Event e = createEventFromInput();
-			if (e.name.empty()) {
-				cout << "Event creation cancelled.\n";
-			}
-			else {
-				manager.addEvent(e);
-				cout << "Event added!\n";
-			}
+                // Make a copy so we can modify
+                Event updated = manager.getEvents()[idx];
 
-		}
-		// 2. List Events
-		else if (choice == 2) {
-			manager.listEvents();
-		}
-		// 3. Search Events
-		else if (choice == 3) {
-			int searchChoice = -1;
-			while (true) {
-				searchChoice = getIntInput(
-					"\n ===== Search Options ===== \n"
-					"1. Search by Name\n"
-					"2. Search by Category\n"
-					"Choose an option (q to cancel): "
-				);
-				if (searchChoice == -1) {
-					clearScreen();
-					cout << "Search cancelled.\n";
-					break;
-				}
-				if (searchChoice < 1 || searchChoice > 2) {
-					cout << "Invalid search option.\n";
-					continue;
-				}
-				break;
-			}
-			if (searchChoice == -1) continue;
+                if (updateChoice == 1) {
+                    int days;
+                    cout << "Enter number of days to postpone: ";
+                    cin >> days;
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-			vector<Event> results;
-			if (searchChoice == 1) {
-				string keyword;
-				cout << "Enter event name to search (q to cancel): ";
-				getline(cin, keyword);
-				if (isCancel(keyword)) {
-					clearScreen();
-					cout << "Search cancelled.\n";
-					continue;
-				}
-				auto results = manager.searchEventsByName(keyword);
-				if (results.empty()) {
-					cout << "No events found matching '" << keyword << "'.\n";
-				}
-				else {
-					cout << results.size() << " event(s) found:\n";
-					listEvents(results);
-				}
-			}
-			else if (searchChoice == 2) {
-				cout << "-------------------- Categories --------------------\n";
-				for (int i = 0; i < (int)EventCategory::Count; i++) {
-					cout << "  " << i << ". " << Event::categoryToString((EventCategory)i) << "\n";
-				}
-				cout << "-----------------------------------------------------\n";
-				int categoryChoice = -1;
-				while (true) {
-					categoryChoice = getIntInput("Select Category to search (q to cancel): ");
-					if (categoryChoice == -1) {
-						clearScreen();
-						cout << "Search cancelled.\n";
-						break;
-					}
-					// validate bounds
-					if (categoryChoice < 0 || categoryChoice >= (int)EventCategory::Count) {
-						cout << "Invalid category!Please select a valid number.\n";
-						continue;
-					}
-					break;
-				}
-				// Display results
-				if (results.empty()) {
-					cout << "No events found.\n";
-				}
-				else {
-					cout << "\n----- Search Results -----\n";
-					for (size_t i = 0; i < results.size(); i++) {
-						results[i].printDetails((int)i);
-					}
-				}
-			}
-		}
-		// 4. Edit Event
-		else if (choice == 3) {
-			listEvents(manager.getEvents());
+                    time_t newDate = updated.getDate() + (days * 24 * 60 * 60);
+                    updated.setDate(newDate);
 
-			int idx;
-			while (true) {
-				idx = getIntInput("Enter index of event to update (q to cancel): ");
+                    manager.editEvent(idx, updated);
+                    cout << "Event postponed by " << days << " days!\n";
+                }
+                else if (updateChoice == 2) {
+                    updated.listCategories();
+                    cout << "Enter ticket category index to update: ";
+                    size_t catIdx;
+                    cin >> catIdx;
+                    cout << "Enter new ticket capacity: ";
+                    int newCap;
+                    cin >> newCap;
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-				if (idx == -1) {
-					clearScreen();
-					cout << "Update cancelled.\n";
-					continue;
-				}
+                    updated.updateCategoryCapacity(catIdx, newCap);
+                    manager.editEvent(idx, updated);
+                    cout << "Ticket capacity updated!\n";
+                }
+                else if (updateChoice == 3) {
+                    Event fresh = createEventFromInput();
+                    manager.editEvent(idx, fresh);
+                    cout << "Event fully updated!\n";
+                }
+                else {
+                    cout << "Invalid update option.\n";
+                }
+            }
+            else {
+                cout << "Invalid index.\n";
+            }
+            break;
+        }
+        case 4: {
+            listEvents(manager.getEvents());
+            cout << "Enter index of event to delete (0-based): ";
+            size_t idx;
+            cin >> idx;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            manager.deleteEvent(idx);
+            cout << "Event deleted!\n";
+            break;
+        }
+        case 5: {
+            FileManager::saveToJSON(filename, manager.getEvents());
+            cout << "Events saved. Exiting...\n";
+            break;
+        }
+        default:
+            cout << "Invalid choice. Try again.\n";
+        }
+    } while (choice != 5);
 
-				if (idx < 0 || idx >= (int)manager.getEvents().size()) {
-					cout << "Invalid index.\n";
-					continue;
-				}
-
-				break;
-			}
-			if (idx == -1) continue;
-
-			// Confirm
-			if (!getConfirmation("Are you sure you want to update event '" +
-				manager.getEvents()[idx].name + "'? (y/n): ")) {
-				cout << "Update cancelled.\n";
-				continue;
-			}
-
-			int updateChoice;
-			while (true) {
-				updateChoice = getIntInput(
-					"\n ----- Update Options ----- \n"
-					"1. Postpone Event (Change Date)\n"
-					"2. Update Ticket Capacity\n"
-					"3. Update Entire Event\n"
-					"Choose an option (q to cancel): "
-				);
-
-				if (updateChoice == -1) {
-					clearScreen();
-					cout << "Update cancelled.\n";
-					continue;
-				}
-
-				if (updateChoice < 1 || updateChoice > 3) {
-					cout << "Invalid update option.\n";
-					continue;
-				}
-				break;
-			}
-			if (updateChoice == -1) continue;
-
-			Event updated = manager.getEvents()[idx];
-
-			if (updateChoice == 1) {
-				time_t newStart, newEnd;
-				while (true)
-				{
-					string startStr, endStr;
-
-					cout << "Enter new event start datetime (YYYY-MM-DD HH:MM) (q to cancel): ";
-					getline(cin, startStr);
-					if (isCancel(startStr)) {
-						clearScreen();
-						cout << "Update cancelled.\n";
-						break;
-					}
-
-					tm startTm{};
-					istringstream ssStart(startStr);
-					ssStart >> get_time(&startTm, "%Y-%m-%d %H:%M");
-					if (ssStart.fail()) {
-						cout << "Invalid date format! Use YYYY-MM-DD HH:MM.\n";
-						continue;
-					}
-
-					newStart = mktime(&startTm);
-
-					tm endTm{};
-					istringstream ssEnd(endStr);
-					ssEnd >> get_time(&endTm, "%Y-%m-%d %H:%M");
-					if (ssEnd.fail()) { cout << "Invalid format.\n"; continue; }
-
-					newEnd = mktime(&endTm);
-
-					if (difftime(newEnd, newStart) <= 0) {
-						cout << "End time must be after start time.\n";
-						continue;
-					}
-
-					updated.setStartDate(newStart);
-					updated.setEndDate(newEnd);
-					manager.editEvent(idx, updated);
-					cout << "Event start and end dates updated successfully!\n";
-					break;
-				}
-			}
-			else if (updateChoice == 2) {
-				updated.listCategories();
-
-				int catIdx;
-				while (true)
-				{
-					catIdx = getIntInput("Enter ticket category index to update (q to cancel): ");
-					if (catIdx == -1) {
-						clearScreen();
-						cout << "Update cancelled.\n";
-						break;
-					}
-
-					if (catIdx < 0 || catIdx >= (int)updated.categoryOptions.size()) {
-						cout << "Invalid ticket category index.\n";
-						continue;
-					}
-					break;
-				}
-				if (catIdx == -1) continue;
-
-				while (true) {
-					int change = getIntInput("Enter number of tickets to add/deduct (use negative to deduct, q to cancel): ");
-					if (change == -1) {
-						clearScreen();
-						cout << "Update cancelled.\n";
-						break;
-					}
-
-					int currentCap = updated.categoryOptions[catIdx].second.second;
-					int updatedCap = currentCap + change;
-
-					if (updatedCap < 0) {
-						cout << "Error: resulting capacity cannot be negative. Retry.\n";
-						continue;
-					}
-
-					updated.updateCategoryCapacity(catIdx, change);
-					manager.editEvent(idx, updated);
-					cout << "Ticket capacity updated successfully! New capacity: " << updatedCap << "\n";
-					break;
-				}
-			}
-			else if (updateChoice == 3) {
-				Event fresh = createEventFromInput();
-				if (fresh.name.empty()) {
-					cout << "Event update cancelled.\n";
-				}
-				else {
-					manager.editEvent(idx, fresh);
-					cout << "Event fully updated!\n";
-				}
-			}
-			else {
-				cout << "Invalid update option.\n";
-			}
-		}
-		// 5. Delete Event
-		else if (choice == 5) {
-			listEvents(manager.getEvents());
-			int idx;
-			while (true) {
-				idx = getIntInput("Enter index of event to delete (q to cancel): ");
-				if (idx == -1) { 
-					cout << "Delete cancelled.\n"; 
-					break;
-				}
-				if (idx < 0 || idx >= (int)manager.getEvents().size()) {
-					cout << "Invalid index. Try again.\n";
-					continue;
-				}
-
-				if (getConfirmation("Are you sure you want to delete event '" +
-					manager.getEvents()[idx].name + "'? (y/n): ")) {
-					manager.deleteEvent(idx);
-					cout << "Event deleted!\n";
-				}else {
-						cout << "Delete cancelled.\n";
-					}
-
-				break; // valid
-			}
-			if (idx == -1) continue;
-		}
-		// 6. Save & Exit
-		else if (choice == 6) {
-			FileManager::saveToJSON(filename, manager.getEvents());
-			cout << "Events saved. Exiting...\n";
-			break;
-		}
-	}
-	return 0;
+    return 0;
 }
