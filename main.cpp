@@ -3,12 +3,16 @@
 #include <sstream>
 #include <cstdlib>
 #include <string>
+#include <iomanip>
+
 #include "Event.h"
 #include "EventManager.h"
 #include "FileManager.h"
 #include "validation.h"
 #include "function.h"
-#include <iomanip>
+#include "refund_summary.h"
+#include "ReportManager.h"
+#include "ReportUI.h"
 
 using namespace std;
 
@@ -18,12 +22,11 @@ void listEvents(const vector<Event>& events) {
 		return;
 	}
 
-	cout << "\n==================== Event List ====================\n";
+	cout << "\n-------------------- Event List --------------------\n";
 	for (size_t i = 0; i < events.size(); i++) {
 		events[i].printDetails((int)i);
 	}
 }
-
 
 Event createEventFromInput() {
 	string name, description, location, organizer;
@@ -54,11 +57,11 @@ Event createEventFromInput() {
 		return Event();
 	}
 
-	cout << "==================== Categories ====================\n";
+	cout << "-------------------- Categories --------------------n";
 	for (int i = 0; i < (int)EventCategory::Count; i++) {
 		cout << "  " << i << ". " << Event::categoryToString((EventCategory)i) << "\n";
 	}
-	cout << "====================================================\n";
+	cout << "----------------------------------------------------\n";
 
 	int categoryChoice = -1;
 	while (true) {
@@ -215,7 +218,67 @@ Event createEventFromInput() {
 	return e;
 }
 
-int main01() {
+int ReportingManagement() {
+	while (true) {
+		clearScreen();
+		cout << "Welcome to the Reporting Management System!\n";
+		cout << "\n---------- Reporting Menu ----------\n"
+			<< "1. Summary Report\n"
+			<< "2. Custom Report\n"
+			<< "3. Exit\n"
+			<< "Select an option: ";
+
+		string rawInput;
+		getline(cin, rawInput);
+
+		if (!isDigitsOnly(rawInput)) {
+			cout << "Invalid input. Enter digits only.\n";
+			continue;
+		}
+
+		int choice = stoi(rawInput);
+
+		switch (choice) {
+		case 1: { // Summary Report
+			string filename = "sample_payment_record.txt";
+			auto transactions = parseFile(filename);
+
+			if (transactions.empty()) {
+				cout << "No transaction records found.\n";
+				break;
+			}
+
+			auto summary = generateSummary(transactions);
+
+			showRefundSummary(summary);
+			showTop3Sales(summary);
+			break;
+		}
+		case 2: { // Custom Report
+			string filename = "events.json";
+
+			vector<Event> events = FileManager::loadFromJSON(filename);
+			if (events.empty()) {
+				cout << "No events loaded (file may be missing or empty).\n";
+			}
+			else {
+				cout << "Loaded " << events.size() << " events.\n";
+				
+				ReportUI::showReportMenu(events);
+			}
+			break;
+		}
+		case 3:
+			cout << "Exiting program...\n";
+			return 0;
+
+		default:
+			cout << "Invalid option. Try again.\n";
+		}
+	}
+}
+
+int EventManagement() {
 	EventManager manager;
 	string filename = "events.json";
 
@@ -229,16 +292,20 @@ int main01() {
 			manager.addEvent(e);
 		}
 	}
+	
+	clearScreen();
+	cout << "Welcome to the Event Management System!\n";
 
 	while (true) {
 		int choice = -1;
 		while (true) {
-			cout << "\n========= Event Manager =========\n"
+			cout << "\n---------- Event Manager ----------\n"
 				<< "1. Add Event\n"
 				<< "2. List Events\n"
-				<< "3. Edit Event\n"
-				<< "4. Delete Event\n"
-				<< "5. Save & Exit\n"
+				<< "3. Search Events\n"
+				<< "4. Edit Event\n"
+				<< "5. Delete Event\n"
+				<< "6. Save & Exit\n"
 				<< "Choose an option: ";
 
 			string rawInput;
@@ -246,7 +313,7 @@ int main01() {
 
 			try {
 				choice = stoi(rawInput);
-				if (choice < 1 || choice > 5) {
+				if (choice < 1 || choice > 6) {
 					cout << "Invalid option. Try again.\n";
 					continue;
 				}
@@ -273,7 +340,82 @@ int main01() {
 		else if (choice == 2) {
 			manager.listEvents();
 		}
-		// 3. Edit Event
+		// 3. Search Events
+		else if (choice == 3) {
+			int searchChoice = -1;
+			while (true) {
+				searchChoice = getIntInput(
+					"\n ===== Search Options ===== \n"
+					"1. Search by Name\n"
+					"2. Search by Category\n"
+					"Choose an option (q to cancel): "
+				);
+				if (searchChoice == -1) {
+					clearScreen();
+					cout << "Search cancelled.\n";
+					break;
+				}
+				if (searchChoice < 1 || searchChoice > 2) {
+					cout << "Invalid search option.\n";
+					continue;
+				}
+				break;
+			}
+			if (searchChoice == -1) continue;
+
+			vector<Event> results;
+			if (searchChoice == 1) {
+				string keyword;
+				cout << "Enter event name to search (q to cancel): ";
+				getline(cin, keyword);
+				if (isCancel(keyword)) {
+					clearScreen();
+					cout << "Search cancelled.\n";
+					continue;
+				}
+				auto results = manager.searchEventsByName(keyword);
+				if (results.empty()) {
+					cout << "No events found matching '" << keyword << "'.\n";
+				}
+				else {
+					cout << results.size() << " event(s) found:\n";
+					listEvents(results);
+				}
+			}
+			else if (searchChoice == 2) {
+				cout << "-------------------- Categories --------------------\n";
+				for (int i = 0; i < (int)EventCategory::Count; i++) {
+					cout << "  " << i << ". " << Event::categoryToString((EventCategory)i) << "\n";
+				}
+				cout << "-----------------------------------------------------\n";
+				int categoryChoice = -1;
+				while (true) {
+					categoryChoice = getIntInput("Select Category to search (q to cancel): ");
+					if (categoryChoice == -1) {
+						clearScreen();
+						cout << "Search cancelled.\n";
+						break;
+					}
+					// validate bounds
+					if (categoryChoice < 0 || categoryChoice >= (int)EventCategory::Count) {
+						cout << "Invalid category!Please select a valid number.\n";
+						continue;
+					}
+					break;
+				}
+				// Display results
+				if (results.empty()) {
+					cout << "No events found.\n";
+				}
+				else {
+					cout << "\n----- Search Results -----\n";
+					for (size_t i = 0; i < results.size(); i++) {
+						results[i].printDetails((int)i);
+					}
+				}
+			}
+		}
+		// 4. Edit Event
 		else if (choice == 3) {
 			listEvents(manager.getEvents());
 
@@ -306,7 +448,7 @@ int main01() {
 			int updateChoice;
 			while (true) {
 				updateChoice = getIntInput(
-					"\n ===== Update Options ===== \n"
+					"\n ----- Update Options ----- \n"
 					"1. Postpone Event (Change Date)\n"
 					"2. Update Ticket Capacity\n"
 					"3. Update Entire Event\n"
@@ -429,8 +571,8 @@ int main01() {
 				cout << "Invalid update option.\n";
 			}
 		}
-		// 4. Delete Event
-		else if (choice == 4) {
+		// 5. Delete Event
+		else if (choice == 5) {
 			listEvents(manager.getEvents());
 			int idx;
 			while (true) {
@@ -456,11 +598,43 @@ int main01() {
 			}
 			if (idx == -1) continue;
 		}
-		// 5. Save & Exit
-		else if (choice == 5) {
+		// 6. Save & Exit
+		else if (choice == 6) {
 			FileManager::saveToJSON(filename, manager.getEvents());
 			cout << "Events saved. Exiting...\n";
 			break;
+		}
+	}
+	return 0;
+}
+
+int main() {
+	while (true) {
+		clearScreen();
+		cout << "========== Main Menu ==========\n"
+			<< "1. Event Management\n"
+			<< "2. Reporting Management\n"
+			<< "3. Exit\n"
+			<< "Choose an option: ";
+		string rawInput;
+		getline(cin, rawInput);
+		if (!isDigitsOnly(rawInput)) {
+			cout << "Invalid input. Enter digits only.\n";
+			continue;
+		}
+		int choice = stoi(rawInput);
+		switch (choice) {
+		case 1:
+			EventManagement();
+			break;
+		case 2:
+			ReportingManagement();
+			break;
+		case 3:
+			cout << "Exiting program...\n";
+			return 0;
+		default:
+			cout << "Invalid option. Try again.\n";
 		}
 	}
 	return 0;
