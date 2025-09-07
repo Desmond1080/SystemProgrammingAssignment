@@ -2,42 +2,44 @@
 #include <iostream>
 #include <algorithm>
 #include <cctype>
+#include <sstream>
+#include <iomanip>
 
 using namespace std;
 
-// cancel helper function
-bool isCancel(const std::string& input) {
-    std::string trimmed = input;
-    // remove any empty spaces
-    trimmed.erase(trimmed.begin(), std::find_if(trimmed.begin(), trimmed.end(), [](unsigned char ch) {
-        return !std::isspace(ch);
-        }));
-    trimmed.erase(std::find_if(trimmed.rbegin(), trimmed.rend(), [](unsigned char ch) {
-        return !std::isspace(ch);
-        }).base(), trimmed.end());
+// Cancel Helper
+bool isCancel(const string& input) {
+    string trimmed = input;
+    // Trim leading spaces
+    trimmed.erase(trimmed.begin(), find_if(trimmed.begin(), trimmed.end(), [](unsigned char ch) { return !isspace(ch); }));
+    // Trim trailing spaces
+    trimmed.erase(find_if(trimmed.rbegin(), trimmed.rend(), [](unsigned char ch) { return !isspace(ch); }).base(), trimmed.end());
 
     return (trimmed == "q" || trimmed == "Q" || trimmed == "-1");
 }
 
-// Helper function for integer input
-int getIntInput(const std::string& prompt, bool allowCancel) {
-    std::string input;
+//  Integer Input
+int getIntInput(const string& prompt, bool allowCancel) {
+    string input;
     while (true) {
-        std::cout << prompt;
-        std::getline(std::cin, input);
+        cout << prompt;
+        getline(cin, input);
 
         if (allowCancel && isCancel(input)) return -1;
 
-        // Check that every character is a digit
-        if (!input.empty() && std::all_of(input.begin(), input.end(), ::isdigit)) {
-            return std::stoi(input);
+        try {
+            size_t idx;
+            int value = stoi(input, &idx);
+            if (idx != input.size()) throw invalid_argument("Invalid characters");
+            return value;
         }
-
-        std::cout << "Invalid input. Please enter a valid number.\n";
+        catch (...) {
+            cout << "Invalid input. Please enter a valid integer.\n";
+        }
     }
 }
 
-// Helper function for double input
+//  Double Input 
 double getDoubleInput(const string& prompt, bool allowCancel) {
     string input;
     while (true) {
@@ -47,7 +49,14 @@ double getDoubleInput(const string& prompt, bool allowCancel) {
         if (allowCancel && isCancel(input)) return -1.0;
 
         try {
-            return stod(input);
+            size_t idx;
+            double value = stod(input, &idx);
+            if (idx != input.size()) throw invalid_argument("Invalid characters");
+            if (value < 0) {
+                cout << "Number must be positive.\n";
+                continue;
+            }
+            return value;
         }
         catch (...) {
             cout << "Invalid input. Please enter a number.\n";
@@ -55,40 +64,56 @@ double getDoubleInput(const string& prompt, bool allowCancel) {
     }
 }
 
-// Helper function for confirmation (y/n)
-bool getConfirmation(const std::string& prompt) {
+// Confirmation y/n
+bool getConfirmation(const string& prompt) {
     while (true) {
-        std::string input;
-        std::cout << prompt;
-        std::getline(std::cin, input);
+        string input;
+        cout << prompt;
+        getline(cin, input);
 
         if (input == "y" || input == "Y") return true;
         if (input == "n" || input == "N") return false;
 
-        std::cout << "Invalid input. Please enter 'y' or 'n'.\n";
+        cout << "Invalid input. Please enter 'y' or 'n'.\n";
     }
 }
 
-// Helper: check if string contains any digits
+// String Helper 
 bool containsNumber(const string& str) {
     return any_of(str.begin(), str.end(), ::isdigit);
 }
 
-// Validate names and locations (only letters, spaces and commas allowed)
-bool isValidNameOrLocation(const std::string& input) {
-    if (input.empty()) return false;
+bool isDigitsOnly(const string& str) {
+    return !str.empty() && all_of(str.begin(), str.end(), ::isdigit);
+}
 
-    // Check each character
-    return std::all_of(input.begin(), input.end(), [](unsigned char ch) {
-        return std::isalpha(ch) || std::isspace(ch) || ch == ','; // only letters, spaces and commas allowed
+bool isValidNameOrLocation(const string& input) {
+    if (input.empty()) return false;
+    return all_of(input.begin(), input.end(), [](unsigned char ch) {
+        return isalpha(ch) || isspace(ch) || ch == ',';
         });
 }
 
-// Event name validation: letters, numbers, spaces only
-bool isValidEventName(const std::string& str) {
-    for (char c : str) {
-        if (!isalnum(c) && !isspace(c)) return false;
-    }
-    return !str.empty();
+bool isValidEventName(const string& str) {
+    if (str.empty()) return false;
+    return all_of(str.begin(), str.end(), [](unsigned char ch) {
+        return isalnum(ch) || isspace(ch);
+        });
 }
 
+// Date Validation
+bool isValidDate(const string& input) {
+    if (input.size() != 10) return false; // strict format
+
+    tm tmStruct{};
+    istringstream ss(input);
+    ss >> get_time(&tmStruct, "%Y-%m-%d");
+    if (ss.fail()) return false;
+
+    if (tmStruct.tm_mon < 0 || tmStruct.tm_mon > 11) return false;
+    if (tmStruct.tm_mday < 1 || tmStruct.tm_mday > 31) return false;
+
+    // check if date is reasonable (not before 1970)
+    time_t t = mktime(&tmStruct);
+    return t != -1;
+}
