@@ -1,9 +1,10 @@
-#include <iostream>
-#include <limits>
-#include <sstream>
 #include "Event.h"
 #include "EventManager.h"
 #include "FileManager.h"
+
+#include <iostream>
+#include <limits>
+#include <sstream>
 #include <iomanip>
 
 using namespace std;
@@ -96,7 +97,7 @@ Event createEventFromInput() {
     return e;
 }
 
-int main2() {
+int manageEvents() {
     EventManager manager;
     string filename = "events.json";
 
