@@ -215,7 +215,7 @@ Event createEventFromInput() {
 	return e;
 }
 
-int main01() {
+int main() {
 	EventManager manager;
 	string filename = "events.json";
 
@@ -236,9 +236,10 @@ int main01() {
 			cout << "\n========= Event Manager =========\n"
 				<< "1. Add Event\n"
 				<< "2. List Events\n"
-				<< "3. Edit Event\n"
-				<< "4. Delete Event\n"
-				<< "5. Save & Exit\n"
+				<< "3. Search Events\n"
+				<< "4. Edit Event\n"
+				<< "5. Delete Event\n"
+				<< "6. Save & Exit\n"
 				<< "Choose an option: ";
 
 			string rawInput;
@@ -246,7 +247,7 @@ int main01() {
 
 			try {
 				choice = stoi(rawInput);
-				if (choice < 1 || choice > 5) {
+				if (choice < 1 || choice > 6) {
 					cout << "Invalid option. Try again.\n";
 					continue;
 				}
@@ -273,7 +274,82 @@ int main01() {
 		else if (choice == 2) {
 			manager.listEvents();
 		}
-		// 3. Edit Event
+		// 3. Search Events
+		else if (choice == 3) {
+			int searchChoice = -1;
+			while (true) {
+				searchChoice = getIntInput(
+					"\n ===== Search Options ===== \n"
+					"1. Search by Name\n"
+					"2. Search by Category\n"
+					"Choose an option (q to cancel): "
+				);
+				if (searchChoice == -1) {
+					clearScreen();
+					cout << "Search cancelled.\n";
+					break;
+				}
+				if (searchChoice < 1 || searchChoice > 2) {
+					cout << "Invalid search option.\n";
+					continue;
+				}
+				break;
+			}
+			if (searchChoice == -1) continue;
+
+			vector<Event> results;
+			if (searchChoice == 1) {
+				string keyword;
+				cout << "Enter event name to search (q to cancel): ";
+				getline(cin, keyword);
+				if (isCancel(keyword)) {
+					clearScreen();
+					cout << "Search cancelled.\n";
+					continue;
+				}
+				auto results = manager.searchEventsByName(keyword);
+				if (results.empty()) {
+					cout << "No events found matching '" << keyword << "'.\n";
+				}
+				else {
+					cout << results.size() << " event(s) found:\n";
+					listEvents(results);
+				}
+			}
+			else if (searchChoice == 2) {
+				cout << "==================== Categories ====================\n";
+				for (int i = 0; i < (int)EventCategory::Count; i++) {
+					cout << "  " << i << ". " << Event::categoryToString((EventCategory)i) << "\n";
+				}
+				cout << "====================================================\n";
+				int categoryChoice = -1;
+				while (true) {
+					categoryChoice = getIntInput("Select Category to search (q to cancel): ");
+					if (categoryChoice == -1) {
+						clearScreen();
+						cout << "Search cancelled.\n";
+						break;
+					}
+					// validate bounds
+					if (categoryChoice < 0 || categoryChoice >= (int)EventCategory::Count) {
+						cout << "Invalid category!Please select a valid number.\n";
+						continue;
+					}
+					break;
+				}
+				// Display results
+				if (results.empty()) {
+					cout << "No events found.\n";
+				}
+				else {
+					cout << "\n===== Search Results =====\n";
+					for (size_t i = 0; i < results.size(); i++) {
+						results[i].printDetails((int)i);
+					}
+				}
+			}
+		}
+		// 4. Edit Event
 		else if (choice == 3) {
 			listEvents(manager.getEvents());
 
@@ -429,8 +505,8 @@ int main01() {
 				cout << "Invalid update option.\n";
 			}
 		}
-		// 4. Delete Event
-		else if (choice == 4) {
+		// 5. Delete Event
+		else if (choice == 5) {
 			listEvents(manager.getEvents());
 			int idx;
 			while (true) {
@@ -456,8 +532,8 @@ int main01() {
 			}
 			if (idx == -1) continue;
 		}
-		// 5. Save & Exit
-		else if (choice == 5) {
+		// 6. Save & Exit
+		else if (choice == 6) {
 			FileManager::saveToJSON(filename, manager.getEvents());
 			cout << "Events saved. Exiting...\n";
 			break;
