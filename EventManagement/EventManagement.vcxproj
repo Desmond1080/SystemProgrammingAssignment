@@ -140,10 +140,12 @@
     <ClCompile Include="file.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="forgotpassword.cpp" />
-    <ClCompile Include="guest.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="participantReg.cpp" />
     <ClCompile Include="organizer.cpp" />
+    <ClCompile Include="payment.cpp" />
+    <ClCompile Include="payment_main.cpp" />
+    <ClCompile Include="payment_validation.cpp" />
     <ClCompile Include="user.cpp" />
     <ClCompile Include="validation.cpp" />
   </ItemGroup>
@@ -153,9 +155,11 @@
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="function.h" />
     <ClInclude Include="participantRegHeader.h" />
+    <ClInclude Include="payment.h" />
     <ClInclude Include="structs.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="payment_records.txt" />
     <Text Include="user.txt" />
   </ItemGroup>
   <ItemGroup>

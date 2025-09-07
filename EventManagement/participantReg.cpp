@@ -3,10 +3,11 @@
 #include "Event.h"
 #include "EventManager.h"
 #include "FileManager.h"
+#include "payment.h"
 
 using namespace std;
 
-void browseEvents(User user) {
+void browseEvents(User* user) {
 	vector<Event> events;
 	//loadEvents(events);
 
@@ -57,6 +58,7 @@ void browseEvents(User user) {
         for (auto& e : existing) {
             manager.addEvent(e);
         }
+
         vector<Event> categoryEvents = manager.searchEventsByCategory(category);
 
 		if (categoryEvents.empty()) {
@@ -69,7 +71,7 @@ void browseEvents(User user) {
     }
 }
 
-void selectEvent(const vector<Event>& categoryEvents, EventCategory category, User user) {
+void selectEvent(const vector<Event>& categoryEvents, EventCategory category, User* user) {
     while (true) {
         cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
 
@@ -102,7 +104,7 @@ void selectEvent(const vector<Event>& categoryEvents, EventCategory category, Us
     }
 }
 
-void selectTicket(Event event, User user) {
+void selectTicket(Event event, User* user) {
     // vector of tickets to buy
     // ticketType index, quantity
     vector<pair<int, int>> ticketsToBuy;
@@ -153,24 +155,7 @@ void selectTicket(Event event, User user) {
             }
         }
 
-        // Display cart (2x VIP - RM150; Total RM300)
-        cout << "Your Cart:" << endl;
-        double totalAmount = 0.0;
-
-        for (const auto& t : ticketsToBuy) {
-			int index = t.first;
-			int qty = t.second;
-
-			double price = event.categoryOptions.at(index).second.first;
-			double subTotal = price * qty;
-			totalAmount += subTotal;
-
-			cout << qty << " x " << event.categoryOptions.at(index).first
-				 << " - RM" << price << " each"
-				 << " | Subtotal: RM" << subTotal << endl;
-		}
-
-        cout << endl << "Total Amount: RM" << totalAmount << endl << endl;
+        displayCart(ticketsToBuy, event);
 
         char proceedChoice = ' ';
 
@@ -189,12 +174,74 @@ void selectTicket(Event event, User user) {
 
         if (toupper(proceedChoice) == 'Y') {
 			// Proceed to checkout
-			// Pass ticketsToBuy and user to xin hua's function
+            makePayment(ticketsToBuy, user, event, ticketChoice - 1);
 			break; // Exit loop after checkout
 		} else if (toupper(proceedChoice) == 'N') {
 			continue; // Continue loop to select more tickets
         }
     }
+}
+
+void makePayment(vector<pair<int, int>> ticketsToBuy, User* user, Event event, int index) {
+    Payment payment;
+
+    if (user == nullptr) {
+        getGuestDetails(payment);
+    }
+    else {
+        payment.name = user -> username.firstname + user -> username.lastname;
+		payment.email = user -> email;
+		payment.phone = user -> contactNumber;
+    }
+
+    // Show summary
+    clearScreen();
+    displayCart(ticketsToBuy, event);
+    showPaymentSummary(payment);
+
+    // Choose method
+    choosePaymentMethod(payment);
+
+    // Process payment
+    if (processPayment(payment)) {
+        EventManager manager;
+
+        // Make a copy so we can modify
+        Event updated = manager.getEvents()[index];
+
+		// Update ticket availability
+        for (const auto& t : ticketsToBuy) {
+            int catIndex = t.first;
+            int qty = t.second;
+
+            int currentCapacity = updated.categoryOptions.at(catIndex).second.second;
+            updated.updateCategoryCapacity(catIndex, currentCapacity - qty);
+        }
+
+		manager.editEvent(index, updated);
+        FileManager::saveToJSON("events.json", manager.getEvents());
+    }
+}
+
+void displayCart(vector<pair<int, int>> ticketsToBuy, Event event){
+    // e.g. (2x VIP - RM150; Total RM300)
+	cout << "Your Cart:" << endl;
+	double totalAmount = 0.0;
+
+	for (const auto& t : ticketsToBuy) {
+		int index = t.first;
+		int qty = t.second;
+
+		double price = event.categoryOptions.at(index).second.first;
+		double subTotal = price * qty;
+		totalAmount += subTotal;
+
+		cout << qty << " x " << event.categoryOptions.at(index).first
+			 << " - RM" << price << " each"
+			 << " | Subtotal: RM" << subTotal << endl;
+	}
+
+	cout << endl << "Total Amount: RM" << totalAmount << endl << endl;
 }
 
 int selectTicketQuantity(const pair<string, pair<double, int>>& category) {
@@ -258,7 +305,7 @@ void listEventsUser(const vector<Event>& events) {
 }
 
 void displayCatMenu(){
-    system("cls");
+    clearScreen();
 
     cout << "Select Category:" << endl;
 

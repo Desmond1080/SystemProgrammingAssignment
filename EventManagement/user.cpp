@@ -2,7 +2,7 @@
 #include <string>
 #include <algorithm>
 #include "function.h"
-
+#include "participantRegHeader.h"
 
 using namespace std;
 
@@ -12,11 +12,13 @@ bool userLoginMenu(User &user) {
 	User loginUser;
 
 	while (true) {
+		clearScreen();
 		cout << "=== User Page ===" << endl;
 		cout << "1. Login" << endl;
 		cout << "2. Register" << endl;
-		cout << "3. Forget Password" << endl;
-		cout << "4. Back to Main Menu" << endl;
+		cout << "3. Continue as Guest" << endl;
+		cout << "4. Forgot Password" << endl;
+		cout << "5. Back to Main Menu" << endl;
 		cout << "Enter your choice: ";
 
 		// Check if input is valid
@@ -28,7 +30,7 @@ bool userLoginMenu(User &user) {
 			continue;
 		}
 		
-		if (validateChoice(choice,1 ,4)) {
+		if (validateChoice(choice,1 ,5)) {
 			switch (choice) {
 			case 1:
 				clearScreen();
@@ -43,6 +45,10 @@ bool userLoginMenu(User &user) {
 				break;
 			case 3:
 				clearScreen();
+				browseEvents(nullptr);
+				break;
+			case 4:
+				clearScreen();
 				{
 					string email;
 					cout << "Enter your registered email: ";
@@ -50,7 +56,7 @@ bool userLoginMenu(User &user) {
 					forgotPassword(email);
 				}
 				break;
-			case 4:
+			case 5:
 				clearScreen();
 				return false; // back to main menu
 			default:
@@ -70,12 +76,15 @@ bool userLoginMenu(User &user) {
 void userMenu(User& user) {
 	int choice;
 	while (true) {
+		clearScreen();
 		cout << "=== User Menu ===" << endl;
-		cout << "1. View Profile" << endl;
-		cout << "2. Edit Profile" << endl;
-		cout << "3. Delete Account" << endl;
-		cout << "4. Forget Password" << endl;
-		cout << "5. Logout" << endl;
+		cout << "1. Browse Events" << endl;
+		cout << "2. View Tickets" << endl;
+		cout << "3. View Profile" << endl;
+		cout << "4. Edit Profile" << endl;
+		cout << "5. Delete Account" << endl;
+		cout << "6. Forgot Password" << endl;
+		cout << "7. Logout" << endl;
 		cout << "Enter your choice: ";
 		
 		// Check if input is valid
@@ -83,24 +92,31 @@ void userMenu(User& user) {
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			cout << "Invalid input. Please enter a number." << endl;
+			system("pause");
 			continue;
 		}
 
-		if (validateChoice(choice,1,5)) {
+		if (validateChoice(choice,1,7)) {
 			switch (choice) {
 			case 1:
-				displayUserProfile(user);
+				browseEvents(&user);
 				break;
 			case 2:
-				editUserProfile(user);
 				break;
 			case 3:
-				deleteUserAccount(user);
-				return; // exit user menu after account deletion
+				displayUserProfile(user);
+				system("pause");
+				break;
 			case 4:
-				forgotPassword(user.email);
+				editUserProfile(user);
 				break;
 			case 5:
+				deleteUserAccount(user);
+				return; // exit user menu after account deletion
+			case 6:
+				forgotPassword(user.email);
+				break;
+			case 7:
 				cout << "Logging out..." << endl;
 				clearScreen();
 				return; // exit user menu to logout
@@ -197,6 +213,7 @@ void userRegister() {
 			User tempUser;
 			if (loadUserProfile(user1.email, tempUser)) {
 				cout << "Email already registered. Please use a different email." << endl;
+				continue;
 			}
 			else {
 				break;
@@ -225,9 +242,8 @@ void userRegister() {
 	user1.loginAttempts = 0;
 
 	saveUserProfile(user1);
-	cout << "Registration successful!" << endl;
-
-
+	cout << endl << "Registration successful!" << endl;
+	system("pause");
 }
 
 // user login
@@ -245,6 +261,7 @@ bool userLogin(User &loginUser) {
 	// compare email to load user profile check if it is true or false
 	if (!loadUserProfile(email, user1)) {
 		cout << "Login failed. Invalid email or password." << endl;
+		system("pause");
 		return false;
 	}
 
@@ -257,11 +274,11 @@ bool userLogin(User &loginUser) {
 		string passwordHash = hashPassword(password, user1.salt);
 
 		if (passwordHash == user1.passwordHash) {
-			cout << "Login successful! Welcome, " << user1.nickname << endl;
-			user1.loginAttempts = 0; //reset login attempts after successful login
+			user1.loginAttempts = 0; // reset login attempts after successful login
 			loginUser = user1;
 			updateUserProfile(user1);
 			clearScreen();// update the login attempt
+			cout << "Login successful! Welcome, " << user1.nickname << endl;
 			return true;
 		}
 		else {
@@ -320,6 +337,7 @@ void editUserProfile(User& user) {
 	int choice;
 	string field;
 	do {
+		clearScreen();
 		cout << "=== Edit Profile ===" << endl;
 		cout << "1. Edit First Name" << endl;
 		cout << "2. Edit Last Name" << endl;
@@ -342,6 +360,7 @@ void editUserProfile(User& user) {
 			if (!field.empty()) {
 				user.username.firstname = field;
 				cout << "First Name updated successfully!" << endl;
+				system("pause");
 			}
 			break;
 
@@ -351,6 +370,7 @@ void editUserProfile(User& user) {
 			if (!field.empty()) {
 				user.username.lastname = field;
 				cout << "Last Name updated successfully!" << endl;
+				system("pause");
 			}
 			break;
 
@@ -360,6 +380,7 @@ void editUserProfile(User& user) {
 			if (!field.empty()) {
 				user.nickname = field;
 				cout << "Nickname updated successfully!" << endl;
+				system("pause");
 			}
 			break;
 		case 4:
@@ -368,6 +389,7 @@ void editUserProfile(User& user) {
 			if (!field.empty()) {
 				user.age = field;
 				cout << "Age updated successfully!" << endl;
+				system("pause");
 			}
 			break;
 		case 5:
@@ -376,6 +398,7 @@ void editUserProfile(User& user) {
 			if (!field.empty() && validateGender(field)) {
 				user.gender = field;
 				cout << "Gender updated successfully!" << endl;
+				system("pause");
 			}
 			break;
 		case 6:
@@ -384,6 +407,7 @@ void editUserProfile(User& user) {
 			if (!field.empty() && validateContactNumber(field)) {
 				user.contactNumber = field;
 				cout << "Contact Number updated successfully!" << endl;
+				system("pause");
 			}
 			else {
 				cout << "Invalid contact number. Update failed." << endl;
@@ -395,6 +419,7 @@ void editUserProfile(User& user) {
 			if (!field.empty() && validateEmail(field)) {
 				user.email = field;
 				cout << "Email updated successfully!" << endl;
+				system("pause");
 			}
 			else {
 				cout << "Invalid email. Update failed." << endl;
@@ -408,6 +433,7 @@ void editUserProfile(User& user) {
 				user.salt = generateSalt();
 				user.passwordHash = hashPassword(user.password, user.salt);
 				cout << "Password updated successfully!" << endl;
+				system("pause");
 			}
 			else {
 				cout << "Invalid password. Update failed." << endl;

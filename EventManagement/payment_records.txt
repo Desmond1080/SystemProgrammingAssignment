@@ -1,0 +1,35 @@
+Date  : 2025-09-04
+Time  : 23:03:52
+Name  : Monica Cheng
+Phone : 0198765432
+Method: Credit/Debit Card
+Status: Not Processed
+Amount: RM 999.00
+-------------------------
+
+Date  : 2025-09-04
+Time  : 23:58:01
+Name  : Xin Hua
+Phone : 0111111111
+Method: E-Wallet
+Status: Completed
+Amount: RM 8888.00
+-------------------------
+
+Date  : 2025-09-05
+Time  : 00:07:54
+Name  : bmbm
+Phone : 0111111119
+Method: E-Wallet
+Status: Completed
+Amount: RM 888.00
+-------------------------
+
+Date  : 2025-09-07
+Time  : 11:08:22
+Name  : Moni Piku
+Phone : 0123456219
+Method: E-Wallet
+Status: Refunded
+Amount: RM 34567.00
+-------------------------

@@ -58,9 +58,6 @@ struct ticket {
 
 void clearScreen();
 
-// guest functions 
-void continueAsGuest();
-
 //user functions
 bool userLoginMenu(User& user);
 void userMenu(User& user);
