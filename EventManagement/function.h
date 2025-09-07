@@ -37,7 +37,7 @@ struct User {
 	string password;
 	string passwordHash;
 	string salt;
-	int loginAttempts;
+	int loginAttempts = 0;
 };
 
 //create organizer records using structure 
@@ -57,9 +57,6 @@ struct ticket {
 };
 
 void clearScreen();
-
-// guest functions 
-void continueAsGuest();
 
 //user functions
 bool userLoginMenu(User& user);

@@ -1,6 +1,14 @@
 #include <iostream>
 #include <string>
+#include <limits>
+#include <sstream>
+#include "Event.h"
+#include "EventManager.h"
+#include "FileManager.h"
+#include <iomanip>
+
 #include "function.h"
+#include "participantRegHeader.h"
 
 using namespace std;
 
@@ -15,8 +23,7 @@ int main() {
 		cout << "=== Event Management System ===" << endl;
 		cout << "1. User" << endl;
 		cout << "2. Organizer" << endl;
-		cout << "3. Continue as Guest" << endl;
-		cout << "4. Exit" << endl;
+		cout << "3. Exit" << endl;
 		cout << "Enter your choice: ";
 
 		// Check if input is valid
@@ -45,9 +52,6 @@ int main() {
 				}
 				break;
 			case 3:
-				clearScreen();
-				break;
-			case 4:
 				cout << "Exiting the program. Goodbye!" << endl;
 				return 0;
 			default:
@@ -60,4 +64,6 @@ int main() {
 			cout << "Invalid input. Please enter a number between 1 and 4." << endl;
 		}
 	}
+
+	return 0;
 }

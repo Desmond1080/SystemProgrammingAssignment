@@ -16,7 +16,7 @@ void saveUserProfile(const User& user) {
 	}
 }
 
-//compare email to load the user data 
+// compare email to load the user data 
 // return true if found, false if not found
 bool loadUserProfile(const string& email, User& user) {
 	ifstream file("user.txt");
