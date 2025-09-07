@@ -39,6 +39,7 @@ void FileManager::saveToJSON(const string& filename, const vector<Event>& events
         cerr << "Error opening JSON file for writing!" << endl;
         return;
     }
+
     outFile << j.dump(4); // pretty print with 4-space indent
     cout << "Events saved to " << filename << endl;
 }
@@ -82,6 +83,6 @@ vector<Event> FileManager::loadFromJSON(const string& filename) {
         events.push_back(e);
     }
 
-    cout << "Events loaded from " << filename << endl;
+    //cout << "Events loaded from " << filename << endl;
     return events;
 }

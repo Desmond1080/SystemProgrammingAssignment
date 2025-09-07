@@ -19,6 +19,8 @@ struct Payment {
     string date;
     string time;
     string timestamp;
+    string eventName;
+    vector<pair<int, int>> tickets; // {categoryIndex, quantity}
 };
 
 // Function declarations

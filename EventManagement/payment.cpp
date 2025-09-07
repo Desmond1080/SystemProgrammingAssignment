@@ -1,5 +1,8 @@
 #include "payment.h"
 #include "function.h"
+#include "Event.h"
+#include "EventManager.h"
+#include "FileManager.h"
 
 #include <iostream>
 #include <fstream>
@@ -63,12 +66,13 @@ void showPaymentSummary(Payment& p) {
     bool confirmed = false;
 
     while (!confirmed){
-        cout << "\n----- Payment Summary -----\n";
+        cout << "----- Payment Summary -----\n";
         cout << "Name        : " << p.name << endl;
         cout << "Email       : " << p.email << endl;
         cout << "Phone       : " << p.phone << endl;
         //cout << fixed << setprecision(2);
         //cout << "Amount      : RM " << p.amount << "\n" << endl;
+        cout << endl;
         cout << "1. Comfirm\n";
         cout << "2. Edit details\n";
         cout << "Enter choice: ";
@@ -102,7 +106,7 @@ void choosePaymentMethod(Payment& p) {
     int choice;
 
     clearScreen();
-    cout << "\nChoose Payment Method:\n";
+    cout << "Choose Payment Method:\n";
     cout << "1. Credit/Debit Card\n";
     cout << "2. E-Wallet\n";
     cout << "Enter choice: ";
@@ -124,6 +128,7 @@ void choosePaymentMethod(Payment& p) {
 void generateReceipt(const Payment& p) {
     cout << "\n============= RECEIPT =============\n";
     cout << "Customer Name  : " << p.name << endl;
+    cout << "Email          : " << p.email << endl;
     cout << "Phone Number   : " << p.phone << endl;
     cout << "Payment Method : " << p.method << endl;
     cout << "Payment Status : " << p.status << endl;
@@ -131,12 +136,39 @@ void generateReceipt(const Payment& p) {
     cout << "Time           : " << p.time << endl;
     cout << fixed << setprecision(2);
     cout << "Amount Paid    : RM " << p.amount << endl;
+    cout << "Event          : " << p.eventName << endl;
+    cout << "Tickets        : ";
+
+    EventManager manager;
+    string filename = "events.json";
+
+    // Load existing events if file exists
+    auto existing = FileManager::loadFromJSON(filename);
+    for (auto& e : existing) {
+        manager.addEvent(e);
+    }
+
+    Event event = manager.searchEventByName(p.eventName);
+
+    //cout << "Event found." << event.name << endl;
+
+    for (size_t i = 0; i < p.tickets.size(); ++i) {
+        int catIndex = p.tickets[i].first;
+        int quantity = p.tickets[i].second;
+
+        cout << quantity << " x " << event.categoryOptions[catIndex].first;
+        if (i < p.tickets.size() - 1) {
+			cout << ", ";
+		}
+    }
+
+    cout << endl;
 
     if (p.status == "Completed") {
-        cout << "Thank you for your payment!\n";
+        cout << endl << "Thank you for your payment!\n";
     }
     else if (p.status == "Cancelled") {
-        cout << "Payment was cancelled.\n";
+        cout << "Payment cancelled.\n";
     }
 
     cout << "===================================\n";
@@ -160,12 +192,11 @@ bool processPayment(Payment& p) {
                 switch (choice) {
                 case '1':
                     p.status = "Completed";
-                    cout << "Payment completed successfully!\n";
+                    cout << endl << "Payment completed successfully!\n";
                     p.date = getCurrentDate();
                     p.time = getCurrentTime();
                     generateReceipt(p);
                     savePaymentToFile(p);
-                    // update payment record file
                     return true;
                 case '2':
                     //p.status = "Cancelled";
@@ -191,17 +222,43 @@ bool processPayment(Payment& p) {
 }
 
 void savePaymentToFile(const Payment& p) {
-    ofstream file("payment_records.txt", ios::app); 
+    ofstream file("payment_records.txt", ios::app);
+
     if (file.is_open()) {
         file << "Date  : " << p.date << "\n";
         file << "Time  : " << p.time << "\n";
         file << "Name  : " << p.name << "\n";
+        file << "Email : " << p.email << "\n";
         file << "Phone : " << p.phone << "\n";
         file << "Method: " << p.method << "\n";
         file << "Status: " << p.status << "\n";
         file << fixed << setprecision(2);
         file << "Amount: RM " << p.amount << "\n";
-        file << "-------------------------\n\n";
+        file << "Event : " << p.eventName << "\n";
+
+        // e.g. 0|2,1|3
+        EventManager manager;
+        string filename = "events.json";
+
+        // Load existing events if file exists
+        auto existing = FileManager::loadFromJSON(filename);
+        for (auto& e : existing) {
+            manager.addEvent(e);
+        }
+
+        Event event = manager.searchEventByName(p.eventName);
+
+        file << "Tickets: ";
+        for (size_t i = 0; i < p.tickets.size(); ++i) {
+			int catIndex = p.tickets[i].first;
+			int quantity = p.tickets[i].second;
+			file << catIndex << "|" << quantity;
+			if (i < p.tickets.size() - 1) {
+				file << ",";
+			}
+		}
+
+        file << "\n-------------------------\n\n";
         file.close();
         cout << "\nPayment details saved to file.\n";
     }
@@ -232,6 +289,9 @@ vector<Payment> loadPaymentsFromFile() {
         else if (line.find("Name  : ") != string::npos) {
             p.name = line.substr(8);
         }
+		else if (line.find("Email : ") != string::npos) {
+			p.email = line.substr(8);
+		}
         else if (line.find("Phone : ") != string::npos) {
             p.phone = line.substr(8);
         }
@@ -244,6 +304,23 @@ vector<Payment> loadPaymentsFromFile() {
         else if (line.find("Amount: RM ") != string::npos) {
             p.amount = stod(line.substr(10)); // convert string to double
         }
+        else if (line.find("Event : ") != string::npos) {
+			p.eventName = line.substr(8);
+		}
+		else if (line.find("Tickets: ") != string::npos) {
+			p.tickets.clear();
+            string categories = line.substr(9); // e.g. 0|2,1|3
+            stringstream ss(categories);
+            string item;
+            while (getline(ss, item, ',')) {
+				size_t delimiterPos = item.find('|');
+				if (delimiterPos != string::npos) {
+					int catIndex = stoi(item.substr(0, delimiterPos));
+					int quantity = stoi(item.substr(delimiterPos + 1));
+					p.tickets.push_back({catIndex, quantity});
+				}
+			}
+		}
         else if (line.find("-------------------------") != string::npos) {
             payments.push_back(p);
             p = Payment(); // reset
@@ -258,12 +335,24 @@ void saveAllPayments(const vector<Payment>& payments) {
     for (const auto& p : payments) {
         outfile << "Date  : " << p.date << "\n";
         outfile << "Time  : " << p.time << "\n";
-        outfile << "Name  : " << p.name << "\n";
+        outfile << "Email : " << p.email << "\n";
         outfile << "Phone : " << p.phone << "\n";
         outfile << "Method: " << p.method << "\n";
         outfile << "Status: " << p.status << "\n";
         outfile << fixed << setprecision(2);
         outfile << "Amount: RM " << p.amount << "\n";
+        outfile << "Event : " << p.eventName << "\n";
+        outfile << "Tickets: ";
+
+        for (size_t i = 0; i < p.tickets.size(); ++i) {
+			int catIndex = p.tickets[i].first;
+			int quantity = p.tickets[i].second;
+			outfile << catIndex << "|" << quantity;
+			if (i < p.tickets.size() - 1) {
+				outfile << ",";
+			}
+		}
+
         outfile << "-------------------------\n\n";
     }
 }
@@ -305,10 +394,33 @@ void refundPayment() {
             cout << "Date   : " << p.date << "\n";
             cout << "Time   : " << p.time << "\n";
             cout << "Name   : " << p.name << "\n";
+            cout << "Email  : " << p.email << "\n";
             cout << "Phone  : " << p.phone << "\n";
-            cout << "Amount : RM " << fixed << setprecision(2) << p.amount << "\n";
             cout << "Method : " << p.method << "\n";
             cout << "Status : " << p.status << "\n\n";
+            cout << "Amount : RM " << fixed << setprecision(2) << p.amount << "\n";
+            cout << "Event  : " << p.eventName << "\n";
+            cout << "Tickets: ";
+
+            EventManager manager;
+            string filename = "events.json";
+
+            // Load existing events if file exists
+            auto existing = FileManager::loadFromJSON(filename);
+            for (auto& e : existing) {
+                manager.addEvent(e);
+            }
+
+            Event event = manager.searchEventByName(p.eventName);
+
+            for (size_t i = 0; i < p.tickets.size(); ++i) {
+			    int catIndex = p.tickets[i].first;
+			    int quantity = p.tickets[i].second;
+				cout << "- " << quantity << " x " << event.categoryOptions[catIndex].first;
+				if (i < p.tickets.size() - 1) {
+					cout << ", ";
+				}
+			}
 
             if (p.status == "Cancelled") {
                 cout << "This payment has already been cancelled.\n";

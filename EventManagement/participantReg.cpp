@@ -155,7 +155,9 @@ void selectTicket(Event event, User* user) {
             }
         }
 
-        displayCart(ticketsToBuy, event);
+        double totalAmount = 0.0;
+
+        displayCart(ticketsToBuy, event, totalAmount);
 
         char proceedChoice = ' ';
 
@@ -194,9 +196,18 @@ void makePayment(vector<pair<int, int>> ticketsToBuy, User* user, Event event, i
 		payment.phone = user -> contactNumber;
     }
 
+    payment.eventName = event.name;
+    payment.tickets = ticketsToBuy;
+
     // Show summary
     clearScreen();
-    displayCart(ticketsToBuy, event);
+
+    double totalAmount = 0.0;
+
+    displayCart(ticketsToBuy, event, totalAmount);
+
+    payment.amount = totalAmount;
+
     showPaymentSummary(payment);
 
     // Choose method
@@ -205,28 +216,57 @@ void makePayment(vector<pair<int, int>> ticketsToBuy, User* user, Event event, i
     // Process payment
     if (processPayment(payment)) {
         EventManager manager;
+        string filename = "events.json";
+
+        // Load existing events if file exists
+        auto existing = FileManager::loadFromJSON(filename);
+        for (auto& e : existing) {
+            manager.addEvent(e);
+        }
 
         // Make a copy so we can modify
         Event updated = manager.getEvents()[index];
 
-		// Update ticket availability
-        for (const auto& t : ticketsToBuy) {
-            int catIndex = t.first;
-            int qty = t.second;
+        int eventIdx = -1;
+        const auto& events = manager.getEvents();
+        for (size_t i = 0; i < events.size(); ++i) {
+            if (events[i].name == event.name) {
+                eventIdx = static_cast<int>(i);
+                break;
+            }
+        }
+        if (eventIdx != -1) {
+            // Update ticket availability
+            for (const auto& t : ticketsToBuy) {
+                int catIndex = t.first;
+                int qty = t.second;
+                if (catIndex >= 0 && catIndex < static_cast<int>(updated.categoryOptions.size())) {
+                    int currentCapacity = updated.categoryOptions.at(catIndex).second.second;
+                    updated.updateCategoryCapacity(catIndex, currentCapacity - qty);
+                }
+            }
 
-            int currentCapacity = updated.categoryOptions.at(catIndex).second.second;
-            updated.updateCategoryCapacity(catIndex, currentCapacity - qty);
+            manager.editEvent(eventIdx, updated);
+            FileManager::saveToJSON("events.json", manager.getEvents());
         }
 
-		manager.editEvent(index, updated);
-        FileManager::saveToJSON("events.json", manager.getEvents());
+		//// Update ticket availability
+  //      for (const auto& t : ticketsToBuy) {
+  //          int catIndex = t.first;
+  //          int qty = t.second;
+
+  //          int currentCapacity = updated.categoryOptions.at(catIndex).second.second;
+  //          updated.updateCategoryCapacity(catIndex, currentCapacity - qty);
+  //      }
+
+		//manager.editEvent(index, updated);
+  //      FileManager::saveToJSON("events.json", manager.getEvents());
     }
 }
 
-void displayCart(vector<pair<int, int>> ticketsToBuy, Event event){
+void displayCart(vector<pair<int, int>> ticketsToBuy, Event event, double& totalAmount){
     // e.g. (2x VIP - RM150; Total RM300)
 	cout << "Your Cart:" << endl;
-	double totalAmount = 0.0;
 
 	for (const auto& t : ticketsToBuy) {
 		int index = t.first;
@@ -296,7 +336,7 @@ void listEventsUser(const vector<Event>& events) {
         //for (const auto& catPair : e.categoryOptions.size() {
         for (size_t j = 0; j < e.categoryOptions.size(); j++) {
             pair<string, pair<double, int>> catPair = e.categoryOptions.at(j);
-            cout << j + 1 << "." << catPair.first //catName
+            cout << j + 1 << ". " << catPair.first //catName
                 << " - RM" << catPair.second.first << endl; //catPrice
         }
 

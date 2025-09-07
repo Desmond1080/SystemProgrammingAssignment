@@ -108,7 +108,7 @@ void Event::printDetailsForUser() const {
 
     for (size_t j = 0; j < categoryOptions.size(); j++) {
         pair<string, pair<double, int>> catPair = categoryOptions.at(j);
-        cout << j + 1 << "." << catPair.first //catName
+        cout << j + 1 << ". " << catPair.first //catName
             << " - RM" << catPair.second.first << endl; //catPrice
     }
 

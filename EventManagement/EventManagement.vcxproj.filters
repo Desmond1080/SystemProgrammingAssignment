@@ -54,9 +54,6 @@
     <ClCompile Include="organizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="payment_main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="payment_validation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

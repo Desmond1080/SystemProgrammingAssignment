@@ -144,7 +144,6 @@
     <ClCompile Include="participantReg.cpp" />
     <ClCompile Include="organizer.cpp" />
     <ClCompile Include="payment.cpp" />
-    <ClCompile Include="payment_main.cpp" />
     <ClCompile Include="payment_validation.cpp" />
     <ClCompile Include="user.cpp" />
     <ClCompile Include="validation.cpp" />

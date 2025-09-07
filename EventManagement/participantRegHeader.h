@@ -17,7 +17,7 @@ void selectEvent(const vector<Event>& categoryEvents, EventCategory category, Us
 void selectTicket(Event event, User* user);
 int selectTicketQuantity(const pair<string, pair<double, int>>& category);
 void makePayment(vector<pair<int, int>> ticketsToBuy, User* user, Event event, int index);
-void displayCart(vector<pair<int, int>> ticketsToBuy, Event event);
+void displayCart(vector<pair<int, int>> ticketsToBuy, Event event, double& totalAmount);
 //vector<Event> displayEventInCategory(
 //    const vector<Event>& events,
 //    Category category

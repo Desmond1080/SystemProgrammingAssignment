@@ -16,7 +16,7 @@ public:
     void listEvents() const;
     void editEvent(size_t index, const Event& updatedEvent);
     void deleteEvent(size_t index);
-    vector<Event> searchEventsByName(const string& name) const;
+    Event searchEventByName(const string& name) const;
     vector<Event> searchEventsByCategory(EventCategory category) const;
 };
 

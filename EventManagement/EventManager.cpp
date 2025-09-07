@@ -44,14 +44,13 @@ void EventManager::deleteEvent(size_t index) {
     }
 }
 
-vector<Event> EventManager::searchEventsByName(const string& name) const {
-    vector<Event> results;
+Event EventManager::searchEventByName(const string& name) const {
     for (const auto& event : events) {
         if (event.name == name) {
-            results.push_back(event);
+            return event;
         }
     }
-    return results;
+    return Event(); // Return default event if not found
 }
 
 vector<Event> EventManager::searchEventsByCategory(EventCategory category) const {
