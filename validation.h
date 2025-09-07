@@ -1,25 +1,24 @@
-#pragma once
-#include <iostream>
-#include <string>
+#ifndef VALIDATION_H
+#define VALIDATION_H
 
-// cancel helper
+#include <string>
+#include <ctime>
+
+// Cancellation helper
 bool isCancel(const std::string& input);
 
-// integer input helper with cancel option
-int getIntInput(const std::string& prompt, bool allowCancel = true);
-
-// double input helper with cancel option
-double getDoubleInput(const std::string& prompt, bool allowCancel = true);
-
-// confirmation helper (y/n)
+// Input helpers
+int getIntInput(const std::string& prompt, bool allowCancel = false);
+double getDoubleInput(const std::string& prompt, bool allowCancel = false);
 bool getConfirmation(const std::string& prompt);
 
-// check if string contains any numeric characters
+// String validation
 bool containsNumber(const std::string& str);
+bool isDigitsOnly(const std::string& str);
+bool isValidNameOrLocation(const std::string& input); // letters, spaces, commas
+bool isValidEventName(const std::string& str);        // letters, numbers, spaces
 
-// Validation for names and locations
-bool isValidNameOrLocation(const std::string& str);
+// Date validation
+bool isValidDate(const std::string& input); // YYYY-MM-DD
 
-// Validation helper for event names (alphanumeric and spaces)
-bool isValidEventName(const std::string& str);
-// end of FUNCTION_H
+#endif
