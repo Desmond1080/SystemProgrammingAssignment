@@ -1,23 +1,21 @@
-#ifndef EVENTMANAGER_H
-#define EVENTMANAGER_H
+    #ifndef EVENTMANAGER_H
+    #define EVENTMANAGER_H
 
-#include <vector>
-#include "Event.h"
+    #include <vector>
+    #include "Event.h"
 
-using namespace std;
+    class EventManager {
+    private:
+        std::vector<Event> events;
 
-class EventManager {
-private:
-    vector<Event> events;
+    public:
+        void addEvent(const Event& event);
+        std::vector<Event> getEvents() const;
+        void listEvents() const;
+        void editEvent(std::size_t index, const Event& updatedEvent);
+        void deleteEvent(std::size_t index);
+        std::vector<Event> searchEventsByName(const std::string& name) const;
+        std::vector<Event> searchEventsByCategory(EventCategory category) const;
+    };
 
-public:
-    void addEvent(const Event& event);
-    vector<Event> getEvents() const;
-    void listEvents() const;
-    void editEvent(size_t index, const Event& updatedEvent);
-    void deleteEvent(size_t index);
-    vector<Event> searchEventsByName(const string& name) const;
-    vector<Event> searchEventsByCategory(EventCategory category) const;
-};
-
-#endif
+    #endif
