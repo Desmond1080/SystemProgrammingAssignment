@@ -18,7 +18,7 @@ void listEvents(const vector<Event>& events) {
 		return;
 	}
 
-	cout << "\n==================== Event List ====================\n";
+	cout << "\n-------------------- Event List --------------------\n";
 	for (size_t i = 0; i < events.size(); i++) {
 		events[i].printDetails((int)i);
 	}
@@ -54,11 +54,11 @@ Event createEventFromInput() {
 		return Event();
 	}
 
-	cout << "==================== Categories ====================\n";
+	cout << "-------------------- Categories --------------------n";
 	for (int i = 0; i < (int)EventCategory::Count; i++) {
 		cout << "  " << i << ". " << Event::categoryToString((EventCategory)i) << "\n";
 	}
-	cout << "====================================================\n";
+	cout << "----------------------------------------------------\n";
 
 	int categoryChoice = -1;
 	while (true) {
@@ -233,7 +233,7 @@ int main() {
 	while (true) {
 		int choice = -1;
 		while (true) {
-			cout << "\n========= Event Manager =========\n"
+			cout << "\n---------- Event Manager ----------\n"
 				<< "1. Add Event\n"
 				<< "2. List Events\n"
 				<< "3. Search Events\n"
@@ -317,11 +317,11 @@ int main() {
 				}
 			}
 			else if (searchChoice == 2) {
-				cout << "==================== Categories ====================\n";
+				cout << "-------------------- Categories --------------------\n";
 				for (int i = 0; i < (int)EventCategory::Count; i++) {
 					cout << "  " << i << ". " << Event::categoryToString((EventCategory)i) << "\n";
 				}
-				cout << "====================================================\n";
+				cout << "-----------------------------------------------------\n";
 				int categoryChoice = -1;
 				while (true) {
 					categoryChoice = getIntInput("Select Category to search (q to cancel): ");
@@ -342,7 +342,7 @@ int main() {
 					cout << "No events found.\n";
 				}
 				else {
-					cout << "\n===== Search Results =====\n";
+					cout << "\n----- Search Results -----\n";
 					for (size_t i = 0; i < results.size(); i++) {
 						results[i].printDetails((int)i);
 					}
@@ -382,7 +382,7 @@ int main() {
 			int updateChoice;
 			while (true) {
 				updateChoice = getIntInput(
-					"\n ===== Update Options ===== \n"
+					"\n ----- Update Options ----- \n"
 					"1. Postpone Event (Change Date)\n"
 					"2. Update Ticket Capacity\n"
 					"3. Update Entire Event\n"
