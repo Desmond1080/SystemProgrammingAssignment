@@ -77,20 +77,15 @@ struct Venue{
     State state;
 };
 
-struct Organizer{
+struct Event{
+    Category category;
     string name;
     string description;
+    Venue venue;
+    string date;
+    string time;
+    Organizer organizer;
 };
-
-//struct Event{
-//    Category category;
-//    string name;
-//    string description;
-//    Venue venue;
-//    string date;
-//    string time;
-//    Organizer organizer;
-//};
 
 struct Participant{
     Name name;

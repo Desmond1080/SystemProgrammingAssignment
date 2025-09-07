@@ -135,3 +135,99 @@ void removeUserProfile(const string& email) {
 		cerr << "Error opening file for writing." << endl;
 	}
 }
+
+// organizer file input i/o
+void saveOrganizerProfile(const Organizer& organizer) {
+	ofstream file("organizer.txt", ios::app);
+	if (file.is_open()) {
+		file << organizer.name << "|" << organizer.email << "|" << organizer.password << "|" << organizer.description << endl;
+		file.close();
+	}
+	else {
+		cerr << "Error opening file for writing." << endl;
+	}
+}
+
+// compare email to load the organizer data
+// return true if found, false if not found
+bool loadOrganizerProfile(const string& email, Organizer& organizer) {
+	ifstream file("organizer.txt");
+	if (file.is_open()) {
+		string line;
+		while (getline(file, line)) {
+			vector<string> fields;
+			stringstream ss(line);
+			string field;
+
+			while (getline(ss, field, '|')) {
+				fields.push_back(field);
+			}
+
+			if (fields.size() >= 4 && fields[1] == email) {
+				organizer.name = fields[0];
+				organizer.email = fields[1];
+				organizer.password = fields[2];
+				organizer.description = fields[3];
+				file.close();
+				return true;
+			}
+
+		}
+		file.close();
+	}
+	return false;
+}
+
+//store all organizers into a vector
+vector<Organizer> storeAllOrganizer() {
+	vector<Organizer> organizers;
+	ifstream file("organizer.txt");
+
+	if (file.is_open()) {
+		string line;
+		while (getline(file, line)) {
+			vector<string> fields;
+			stringstream ss(line);
+			string field;
+			while (getline(ss, field, '|')) {
+				fields.push_back(field);
+			}
+
+			if (fields.size() >= 4) {
+				Organizer organizer;
+				organizer.name = fields[0];
+				organizer.email = fields[1];
+				organizer.password = fields[2];
+				organizer.description = fields[3];
+
+				organizers.push_back(organizer);
+			}
+		}
+		file.close();
+	}
+	return organizers;
+}
+
+//update organizer profile 
+void updateOrganizerProfile(const Organizer& organizer) {
+	vector<Organizer> organizers = storeAllOrganizer();
+	ofstream file("organizer.txt");
+
+	if (file.is_open()) {
+		for (int i = 0; i < organizers.size(); i++) {
+			Organizer currentOrganizer = organizers[i];
+
+			if (currentOrganizer.email == organizer.email) {
+				// write new updated organizer data 
+				file << organizer.name << "|" << organizer.email << "|" << organizer.password << "|" << organizer.description << endl;
+			}
+			else {
+				file << currentOrganizer.name << "|" << currentOrganizer.email << "|" << currentOrganizer.password << "|" << currentOrganizer.description << endl;
+			}
+		}
+		file.close();
+	}
+	else {
+		cerr << "Error opening file for writing." << endl;
+	}
+}
