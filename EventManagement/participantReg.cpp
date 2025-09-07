@@ -65,13 +65,14 @@ void browseEvents(User user) {
             continue;
 		}
 
-        selectEvent(categoryEvents, category);
+        selectEvent(categoryEvents, category, user);
     }
 }
 
-void selectEvent(const vector<Event>& categoryEvents, EventCategory category) {
+void selectEvent(const vector<Event>& categoryEvents, EventCategory category, User user) {
     while (true) {
-        // system("pause"); // Press any key to continue
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+
         clearScreen();
 	    cout << "#" << categoryToString(category) << endl;
 
@@ -96,16 +97,138 @@ void selectEvent(const vector<Event>& categoryEvents, EventCategory category) {
 		}
 
         // Display event details and ticket prices
-        clearScreen();
-        categoryEvents[eventChoice - 1].printDetails();
-        system("pause"); // Press any key to continue
-
-        // Book tickets
+        Event selectedEvent = categoryEvents[eventChoice - 1];
+        selectTicket(selectedEvent, user);
     }
 }
 
+void selectTicket(Event event, User user) {
+    // vector of tickets to buy
+    // ticketType index, quantity
+    vector<pair<int, int>> ticketsToBuy;
+
+    while (true) {
+        clearScreen();
+        event.printDetailsForUser();
+
+        int ticketChoice = 0;
+
+        // Select ticket type to buy or return
+        cout << "Select ticket category to buy or 0 to return: ";
+        cin >> ticketChoice;
+
+        // Invalid choice
+        if (ticketChoice < 0 || ticketChoice > event.categoryOptions.size()) {
+            cout << "Invalid choice. Please try again." << endl;
+            system("pause"); // Press any key to continue
+            continue;
+        }
+
+        if (ticketChoice == 0) {
+			return; // Return to events in category
+		}
+
+        pair<string, pair<double, int>> selectedCategory = event.categoryOptions.at(ticketChoice - 1);
+        
+        int quantity = selectTicketQuantity(selectedCategory);
+
+        if (quantity == 0) {
+            continue; // Return to ticket category selection
+		} else {
+            // Check if already selected
+            bool existing = false;
+
+            for (auto& t : ticketsToBuy) {
+				if (t.first == ticketChoice - 1) {
+					existing = true;
+                    // Add to existing quantity
+                    t.second += quantity;
+					break;
+				}
+			}
+
+            // Add new entry if not found
+            if (!existing) {
+			    ticketsToBuy.push_back({ticketChoice - 1, quantity}); // Store index and quantity
+            }
+        }
+
+        // Display cart (2x VIP - RM150; Total RM300)
+        cout << "Your Cart:" << endl;
+        double totalAmount = 0.0;
+
+        for (const auto& t : ticketsToBuy) {
+			int index = t.first;
+			int qty = t.second;
+
+			double price = event.categoryOptions.at(index).second.first;
+			double subTotal = price * qty;
+			totalAmount += subTotal;
+
+			cout << qty << " x " << event.categoryOptions.at(index).first
+				 << " - RM" << price << " each"
+				 << " | Subtotal: RM" << subTotal << endl;
+		}
+
+        cout << endl << "Total Amount: RM" << totalAmount << endl << endl;
+
+        char proceedChoice = ' ';
+
+        while (true) {
+            cout << "Enter 'Y' to proceed to checkout or 'N' to buy more tickets: ";
+            cin >> proceedChoice;
+
+            if (toupper(proceedChoice) != 'Y' && toupper(proceedChoice) != 'N') {
+                cout << "Invalid choice. Please try again" << endl;
+                system("pause"); // Press any key to continue
+            }
+            else {
+                break;
+            }
+        }
+
+        if (toupper(proceedChoice) == 'Y') {
+			// Proceed to checkout
+			// Pass ticketsToBuy and user to xin hua's function
+			break; // Exit loop after checkout
+		} else if (toupper(proceedChoice) == 'N') {
+			continue; // Continue loop to select more tickets
+        }
+    }
+}
+
+int selectTicketQuantity(const pair<string, pair<double, int>>& category) {
+    int ticketsToBuy = 0;
+
+	while (true) {
+		int quantity = 0;
+
+		cout << "Enter quantity of " << category.first << " tickets - RM" << category.second.first << " to buy (or 0 to cancel): ";
+		cin >> quantity;
+
+		if (quantity < 0) {
+			cout << "Invalid quantity. Please try again." << endl;
+			system("pause"); // Press any key to continue
+			continue;
+		} else if (quantity == 0) {
+			cout << "Purchase cancelled." << endl;
+			system("pause"); // Press any key to continue
+			return ticketsToBuy;
+		} else if (quantity > category.second.second) {
+			cout << "Only " << category.second.second << " tickets available. Please try again." << endl;
+			system("pause"); // Press any key to continue
+			continue;
+		} else {
+			cout << endl << "Added " << quantity << " x " << category.first << " tickets to your cart." << endl << endl;
+			ticketsToBuy += quantity;
+            return ticketsToBuy;
+		}
+	}
+}
+
+// Event cards
 void listEventsUser(const vector<Event>& events) {
-    cout << "=====================================";
+    cout << "=====================================" << endl;
 
     for (size_t i = 0; i < events.size(); i++) {
         const Event& e = events[i];
@@ -116,29 +239,23 @@ void listEventsUser(const vector<Event>& events) {
         std::ostringstream dateStream;
         dateStream << std::put_time(&tmStruct, "%Y-%m-%d %H:%M");
 
-        cout << i + 1 << ". " << endl;
+        cout << "#" << i + 1 << endl;
         cout << e.name << endl;
         cout << "Location: " << e.location << endl;
         cout << "Date: " << dateStream.str() << endl;
 
         // From RMxx.xx
         // Print ticket categories
-        for (const auto& catPair : e.categoryOptions) {
-            cout << "   - " << catPair.first //catName
-                << " | Price: " << catPair.second.first //catPrice
-                << " | Available: " << catPair.second.second << endl; 
+        //for (const auto& catPair : e.categoryOptions.size() {
+        for (size_t j = 0; j < e.categoryOptions.size(); j++) {
+            pair<string, pair<double, int>> catPair = e.categoryOptions.at(j);
+            cout << j + 1 << "." << catPair.first //catName
+                << " - RM" << catPair.second.first << endl; //catPrice
         }
 
-        cout << "=====================================";
+        cout << "=====================================" << endl;
     }
 }
-
-//void loadEvents(vector<Event>& events){
-//    // Mock event data
-//    // To be read from file
-//    events.push_back({ Category::Concert, "g-dragon day 1", "details....", {"axiata arena", "11700", "bukit jalil", State::WP_Kuala_Lumpur}, "2023-10-10", "10:00", {"galaxy", "only the best events"} });
-//    events.push_back({ Category::Concert, "g-dragon day 2", "details....", {"axiata arena", "11700", "bukit jalil", State::WP_Kuala_Lumpur}, "2023-10-11", "10:00", {"galaxy", "only the best events"} });
-//}
 
 void displayCatMenu(){
     system("cls");
@@ -150,22 +267,4 @@ void displayCatMenu(){
         Category cat = static_cast<Category>(i);
         cout << (i + 1) << ". " << catToString(cat) << endl;
     }
-}
-
-//vector<Event> getEventInCategory(
-//    const vector<Event>& events,
-//    Category category
-//){
-//    vector<Event> result;
-//    for (const auto& event : events) {
-//        if (event.category == category) {
-//            result.push_back(event);
-//        }
-//    }
-//    return result;
-//}
-
-void displayEvents(
-    Category category
-){
 }

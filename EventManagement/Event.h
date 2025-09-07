@@ -51,6 +51,7 @@ public:
 
     void addCategory(const string& catName, double price, int available);
     void printDetails() const;
+    void printDetailsForUser() const;
 
     void setDate(time_t newDate);
     time_t getDate() const;

@@ -87,3 +87,30 @@ void Event::printDetails() const {
     }
     cout << "------------------------------------\n";
 }
+
+void Event::printDetailsForUser() const {
+    cout << "Event: " << name << endl;
+    cout << "Description: " << description << endl;
+    cout << "Category: " << categoryToString(category) << endl;
+
+    // Convert time_t into readable date
+    struct tm readable;
+    localtime_s(&readable, &date);
+    char buffer[80];
+    strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M", &readable);
+    cout << "Date: " << buffer << endl;
+
+    cout << "Location: " << location << endl;
+    cout << "Organizer: " << organizer << endl;
+
+    cout << "------------------------------------" << endl;
+    cout << "Ticket Categories:" << endl;
+
+    for (size_t j = 0; j < categoryOptions.size(); j++) {
+        pair<string, pair<double, int>> catPair = categoryOptions.at(j);
+        cout << j + 1 << "." << catPair.first //catName
+            << " - RM" << catPair.second.first << endl; //catPrice
+    }
+
+    cout << "------------------------------------" << endl;
+}
