@@ -124,6 +124,7 @@ void userMenu(User& user) {
 				return; // exit user menu after account deletion
 			case 6:
 				forgotPassword(user.email);
+				return; // exit user menu to re-login after password change
 				break;
 			case 7:
 				refundPayment(&user);
@@ -445,7 +446,9 @@ void editUserProfile(User& user) {
 			getline(cin, field);
 			if (!field.empty() && validatePassword(field)) {
 				user.password = field;
-				user.salt = generateSalt();
+				do {
+					user.salt = generateSalt();
+				} while (!validateLine(user.salt));
 				user.passwordHash = hashPassword(user.password, user.salt);
 				cout << "Password updated successfully!" << endl;
 				system("pause");
