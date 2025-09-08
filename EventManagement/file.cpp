@@ -140,7 +140,7 @@ void removeUserProfile(const string& email) {
 void saveOrganizerProfile(const Organizer& organizer) {
 	ofstream file("organizer.txt", ios::app);
 	if (file.is_open()) {
-		file << organizer.name << "|" << organizer.email << "|" << organizer.password << "|" << organizer.description << endl;
+		file << organizer.name << "|" << organizer.email << "|" << organizer.passwordHash << "|" << organizer.salt << "|" << organizer.description << endl;
 		file.close();
 	}
 	else {
@@ -163,11 +163,12 @@ bool loadOrganizerProfile(const string& email, Organizer& organizer) {
 				fields.push_back(field);
 			}
 
-			if (fields.size() >= 4 && fields[1] == email) {
+			if (fields.size() >= 5 && fields[1] == email) {
 				organizer.name = fields[0];
 				organizer.email = fields[1];
-				organizer.password = fields[2];
-				organizer.description = fields[3];
+				organizer.passwordHash = fields[2];
+				organizer.salt = fields[3];
+				organizer.description = fields[4];
 				file.close();
 				return true;
 			}
@@ -193,12 +194,13 @@ vector<Organizer> storeAllOrganizer() {
 				fields.push_back(field);
 			}
 
-			if (fields.size() >= 4) {
+			if (fields.size() >= 5) {
 				Organizer organizer;
 				organizer.name = fields[0];
 				organizer.email = fields[1];
-				organizer.password = fields[2];
-				organizer.description = fields[3];
+				organizer.passwordHash = fields[2];
+				organizer.salt = fields[3];
+				organizer.description = fields[4];
 
 				organizers.push_back(organizer);
 			}
@@ -219,7 +221,7 @@ void updateOrganizerProfile(const Organizer& organizer) {
 
 			if (currentOrganizer.email == organizer.email) {
 				// write new updated organizer data 
-				file << organizer.name << "|" << organizer.email << "|" << organizer.password << "|" << organizer.description << endl;
+				file << organizer.name << "|" << organizer.email << "|" << organizer.passwordHash << "|" << organizer.salt << "|"  << organizer.description << endl;
 			}
 			else {
 				file << currentOrganizer.name << "|" << currentOrganizer.email << "|" << currentOrganizer.password << "|" << currentOrganizer.description << endl;

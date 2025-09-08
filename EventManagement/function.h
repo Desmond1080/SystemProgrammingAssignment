@@ -12,7 +12,6 @@
 #include <random>
 #include <cstdlib>
 
-
 using namespace std;
 
 const int MAX_LOGIN_ATTEMPTS = 5;
@@ -69,7 +68,7 @@ bool userLogin(User &loginUser);
 void displayUserProfile(const User &user);
 void editUserProfile(User &user);
 void deleteUserAccount(User& user);
-void viewTickets(string &email);
+void viewOrders(string &email);
 
 //organizer function
 bool organizerLoginMenu(Organizer& loginOrganizer);

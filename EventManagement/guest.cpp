@@ -1,5 +1,6 @@
 #include "function.h"
 #include "participantRegHeader.h"
+#include "payment.h"
 
 #include <iostream>
 
@@ -13,8 +14,9 @@ void guestMenu() {
 	while (true) {
 		cout << "===== Guest Menu =====\n";
 		cout << "1. Browse Events\n";
-		cout << "2. View Tickets\n";
-		cout << "3. Return to Main Menu\n";
+		cout << "2. View Orders\n";
+		cout << "3. Refund Payment\n";
+		cout << "4. Return to Main Menu\n";
 		cout << "Enter your choice: " << endl;
 
 		if (!(cin >> choice)) {
@@ -25,7 +27,7 @@ void guestMenu() {
 			continue;
 		}
 
-		if (validateChoice(choice, 1, 3)) {
+		if (validateChoice(choice, 1, 4)) {
 			switch (choice) {
 			case 1:
 				clearScreen();
@@ -35,9 +37,11 @@ void guestMenu() {
 				clearScreen();
 				cout << "Enter your email to view tickets: ";
 				cin >> email;
-				viewTickets(email);
+				viewOrders(email);
 				break;
 			case 3:
+				refundPayment(nullptr);
+			case 4:
 				return; // Return to main menu
 			default:
 				cout << "Invalid choice. Please try again.\n";
