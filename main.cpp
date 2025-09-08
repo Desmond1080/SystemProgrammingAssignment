@@ -10,9 +10,9 @@
 #include "FileManager.h"
 #include "validation.h"
 #include "function.h"
-#include "refund_summary.h"
 #include "ReportManager.h"
 #include "ReportUI.h"
+#include "Transactionh.h"
 
 using namespace std;
 
@@ -225,7 +225,8 @@ int ReportingManagement() {
 		cout << "\n---------- Reporting Menu ----------\n"
 			<< "1. Summary Report\n"
 			<< "2. Custom Report\n"
-			<< "3. Exit\n"
+			<< "3. Back to Main Menu\n"
+			<< "-------------------------------------\n"
 			<< "Select an option: ";
 
 		string rawInput;
@@ -241,17 +242,22 @@ int ReportingManagement() {
 		switch (choice) {
 		case 1: { // Summary Report
 			string filename = "sample_payment_record.txt";
-			auto transactions = parseFile(filename);
+			vector<Transaction> transactions = parseFile(filename);
 
 			if (transactions.empty()) {
 				cout << "No transaction records found.\n";
 				break;
 			}
 
-			auto summary = generateSummary(transactions);
+			auto summary = ReportUI::generateSummary(transactions);
 
-			showRefundSummary(summary);
-			showTop3Sales(summary);
+			ReportUI::showRefundSummary(summary);
+			ReportUI::showTop3Sales(summary);
+
+			string input;
+			cout << "\n----------------------------------------\n";
+			cout << "Press Enter to return to Reporting Menu...";
+			getline(cin, input);
 			break;
 		}
 		case 2: { // Custom Report
@@ -263,11 +269,16 @@ int ReportingManagement() {
 			}
 			else {
 				cout << "Loaded " << events.size() << " events.\n";
-				
 				ReportUI::showReportMenu(events);
 			}
+
+			string input;
+			cout << "\n----------------------------------------\n";
+			cout << "Press Enter to return to Reporting Menu...";
+			getline(cin, input);
 			break;
 		}
+
 		case 3:
 			cout << "Exiting program...\n";
 			return 0;
