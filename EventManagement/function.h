@@ -66,6 +66,7 @@ bool userLogin(User &loginUser);
 void displayUserProfile(const User &user);
 void editUserProfile(User &user);
 void deleteUserAccount(User& user);
+void viewTickets(User& user);
 
 //organizer function
 bool organizerLoginMenu(Organizer& loginOrganizer);
