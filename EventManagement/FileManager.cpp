@@ -88,8 +88,8 @@ vector<Event> FileManager::loadFromJSON(const string& filename) {
             }
             e.category = static_cast<EventCategory>(catInt);
 
-            e.setStartDate(ev.value("startDate", 0));
-            e.setEndDate(ev.value("endDate", 0));
+            e.setStartDate(ev["startDate"].get<int64_t>());
+            e.setEndDate(ev["endDate"].get<int64_t>());
             e.location = ev.value("location", "");
             e.organizer = ev.value("organizer", "");
             e.status = ev.value("status", "");
@@ -108,7 +108,7 @@ vector<Event> FileManager::loadFromJSON(const string& filename) {
             events.push_back(e);
         }
 
-        cout << "Loaded " << events.size() << " events from " << filename << endl;
+        //cout << "Loaded " << events.size() << " events from " << filename << endl;
     }
     catch (const json::parse_error& ex) {
         cerr << "JSON parse error in file '" << filename << "': " << ex.what() << endl;

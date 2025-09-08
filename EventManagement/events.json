@@ -1,125 +1,148 @@
 {
-  "events": [
-    {
-      "category": 5,
-      "categoryOptions": [
+    "events": [
         {
-          "available": 100,
-          "catName": "VIP",
-          "price": 120.0
+            "category": 5,
+            "categoryOptions": [
+                {
+                    "available": 100,
+                    "catName": "VIP",
+                    "price": 120.0
+                },
+                {
+                    "available": 500,
+                    "catName": "Standard",
+                    "price": 50.0
+                }
+            ],
+            "description": "Outdoor concert",
+            "endDate": 1760061600,
+            "location": "Central Park",
+            "name": "Music Festival",
+            "organizer": "ABC Corp",
+            "startDate": 1760054400,
+            "status": "scheduled"
         },
         {
-          "available": 500,
-          "catName": "Standard",
-          "price": 50.0
-        }
-      ],
-      "description": "Outdoor concert",
-      "location": "Central Park",
-      "name": "Music Festival",
-      "organizer": "ABC Corp",
-      "status": "scheduled",
-      "timestamp": 1757103929
-    },
-    {
-      "category": 3,
-      "categoryOptions": [
-        {
-          "available": 20,
-          "catName": "VIP",
-          "price": 400.0
-        }
-      ],
-      "description": "This is a fun event haha",
-      "location": "Kuala Lumpur",
-      "name": "Testing Event",
-      "organizer": "XT",
-      "status": "scheduled",
-      "timestamp": 1757153460
-    },
-    {
-      "category": 4,
-      "categoryOptions": [
-        {
-          "available": 100,
-          "catName": "VIP",
-          "price": 120.0
+            "category": 3,
+            "categoryOptions": [
+                {
+                    "available": 20,
+                    "catName": "VIP",
+                    "price": 400.0
+                }
+            ],
+            "description": "This is a fun event haha",
+            "endDate": 1760061600,
+            "location": "Kuala Lumpur",
+            "name": "Testing Event",
+            "organizer": "XT",
+            "startDate": 1760054400,
+            "status": "scheduled"
         },
         {
-          "available": 300,
-          "catName": "Standard",
-          "price": 70.0
-        }
-      ],
-      "description": "Go run",
-      "location": "Penang bridge",
-      "name": "Penang Marathon",
-      "organizer": "ABC Corp",
-      "status": "scheduled",
-      "timestamp": 1757103929
-    },
-    {
-      "category": 5,
-      "categoryOptions": [
-        {
-          "available": 50,
-          "catName": "VIP",
-          "price": 100.0
+            "category": 4,
+            "categoryOptions": [
+                {
+                    "available": 100,
+                    "catName": "VIP",
+                    "price": 120.0
+                },
+                {
+                    "available": 300,
+                    "catName": "Standard",
+                    "price": 70.0
+                }
+            ],
+            "description": "Go run",
+            "endDate": 1760061600,
+            "location": "Penang bridge",
+            "name": "Penang Marathon",
+            "organizer": "ABC Corp",
+            "startDate": 1760054400,
+            "status": "scheduled"
         },
         {
-          "available": 200,
-          "catName": "Standard",
-          "price": 30.0
-        }
-      ],
-      "description": "Bonding",
-      "location": "Central Park",
-      "name": "Charity Amazing Hunt",
-      "organizer": "ABC Corp",
-      "status": "scheduled",
-      "timestamp": 1757103929
-    },
-    {
-      "category": 6,
-      "categoryOptions": [
-        {
-          "available": 20,
-          "catName": "VIP",
-          "price": 200.0
+            "category": 5,
+            "categoryOptions": [
+                {
+                    "available": 50,
+                    "catName": "VIP",
+                    "price": 100.0
+                },
+                {
+                    "available": 200,
+                    "catName": "Standard",
+                    "price": 30.0
+                }
+            ],
+            "description": "Bonding",
+            "endDate": 1760061600,
+            "location": "Central Park",
+            "name": "Charity Amazing Hunt",
+            "organizer": "ABC Corp",
+            "startDate": 1760054400,
+            "status": "scheduled"
         },
         {
-          "available": 150,
-          "catName": "Standard",
-          "price": 50.0
-        }
-      ],
-      "description": "A night of laughter",
-      "location": "COEX",
-      "name": "Comedy Clash",
-      "organizer": "Penang laughs",
-      "status": "scheduled",
-      "timestamp": 1757103929
-    },
-    {
-      "category": 6,
-      "categoryOptions": [
-        {
-          "available": 10,
-          "catName": "VIP",
-          "price": 50.0
+            "category": 6,
+            "categoryOptions": [
+                {
+                    "available": 20,
+                    "catName": "VIP",
+                    "price": 200.0
+                },
+                {
+                    "available": 150,
+                    "catName": "Standard",
+                    "price": 50.0
+                }
+            ],
+            "description": "A night of laughter",
+            "endDate": 1760061600,
+            "location": "COEX",
+            "name": "Comedy Clash",
+            "organizer": "Penang laughs",
+            "startDate": 1760054400,
+            "status": "scheduled"
         },
         {
-          "available": 20,
-          "catName": "Standard",
-          "price": 30.0
+            "category": 6,
+            "categoryOptions": [
+                {
+                    "available": 10,
+                    "catName": "VIP",
+                    "price": 50.0
+                },
+                {
+                    "available": 20,
+                    "catName": "Standard",
+                    "price": 30.0
+                }
+            ],
+            "description": "try out your jokes",
+            "endDate": 1760061600,
+            "location": "COEX",
+            "name": "Open Mic",
+            "organizer": "Penang laughs",
+            "startDate": 1760054400,
+            "status": "scheduled"
+        },
+        {
+            "category": 6,
+            "categoryOptions": [
+                {
+                    "available": 20,
+                    "catName": "vip",
+                    "price": 100.0
+                }
+            ],
+            "description": "laugh",
+            "endDate": 1760061600,
+            "location": "coex",
+            "name": "laughing zi",
+            "organizer": "",
+            "startDate": 1760054400,
+            "status": "scheduled"
         }
-      ],
-      "description": "try out your jokes",
-      "location": "COEX",
-      "name": "Open Mic",
-      "organizer": "Penang laughs",
-      "status": "scheduled",
-      "timestamp": 1757103929
-    }
-  ]
+    ]
 }

@@ -160,6 +160,7 @@
     <ClInclude Include="validation.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="organizer.txt" />
     <Text Include="payment_records.txt" />
     <Text Include="user.txt" />
   </ItemGroup>

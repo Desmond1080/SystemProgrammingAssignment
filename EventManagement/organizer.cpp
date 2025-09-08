@@ -94,12 +94,12 @@ void organizerMenu(Organizer& organizer) {
 				break;
 			case 3:
 				clearScreen();
-				manageEvents();
+				manageEvents(organizer);
 				break;
 			case 4:
 				clearScreen();
 				cout << "Logging out..." << endl;
-				break;
+				return;
 			default:
 				cout << "Invalid choice. Please try again." << endl;
 			}
@@ -175,6 +175,7 @@ void organizerRegister() {
 	}
 
 	saveOrganizerProfile(organizer1);
+	clearScreen();
 	cout << "Organizer registered successfully!" << endl;
 }
 
@@ -189,7 +190,9 @@ bool organizerLogin(Organizer& loginOrganizer) {
 	getline(cin, email);
 
 	if (!loadOrganizerProfile(email, organizer)) {
-		cout << "Email not found. Please register first.";
+		clearScreen();
+		cout << "Email not found. Please register first." << endl;
+		//system("pause");
 		return false;
 	}
 
@@ -200,9 +203,10 @@ bool organizerLogin(Organizer& loginOrganizer) {
 	string hashedPassword = hashPassword(password, organizer.salt);
 
 	if (hashedPassword == organizer.passwordHash) {
-		cout << "Login successful! Welcome, " << organizer.name << endl;
-		loginOrganizer = organizer; //copy organizer data to loginOrganizer
-		organizerMenu(loginOrganizer); //show organizer menu
+		clearScreen();
+		cout << "Login successful! Welcome, " << organizer.name << "!" << endl;
+		//loginOrganizer = organizer; //copy organizer data to loginOrganizer
+		//organizerMenu(loginOrganizer); //show organizer menu
 		clearScreen();
 		return true;
 	}
@@ -239,7 +243,7 @@ void editOrganizerProfile(Organizer& organizer) {
 			cout << "Invalid input. Please enter a number." << endl;
 			continue;
 		}
-		cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear buffer
+		//cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear buffer
 
 		if (validateChoice(choice,1,4)) {
 			cin.ignore(numeric_limits<streamsize>::max(), '\n'); //clear input buffer
@@ -248,12 +252,14 @@ void editOrganizerProfile(Organizer& organizer) {
 				cout << "Enter new name: ";
 				getline(cin, organizer.name);
 				updateOrganizerProfile(organizer);
+				clearScreen();
 				cout << "Name updated successfully!" << endl;
 				break;
 			case 2:
 				cout << "Enter new description: ";
 				getline(cin, organizer.description);
 				updateOrganizerProfile(organizer);
+				clearScreen();
 				cout << "Description updated successfully!" << endl;
 				break;
 			case 3:
@@ -266,6 +272,7 @@ void editOrganizerProfile(Organizer& organizer) {
 						organizer.salt = generateSalt();
 						organizer.passwordHash = hashPassword(newPassword, organizer.salt);
 						updateOrganizerProfile(organizer);
+						clearScreen();
 						cout << "Password updated successfully!" << endl;
 						break;
 					}
@@ -300,11 +307,12 @@ void listEvents(const vector<Event>& events) {
 	}
 }
 
-
-Event createEventFromInput() {
-	string name, description, location, organizer;
+Event createEventFromInput(Organizer& loginOrganizer) {
+	string name, description, location, organizer = loginOrganizer.name;
 	double ticketPrice = 0.0;
 	time_t startTime = 0, endTime = 0;
+
+	clearScreen();
 
 	while (true) {
 		cout << "Enter Event Name (q to cancel): ";
@@ -370,23 +378,23 @@ Event createEventFromInput() {
 		break;
 	}
 
-	while (true) {
-		cout << "Enter Organizer (q to cancel): ";
-		std::getline(std::cin, organizer);
-		if (isCancel(organizer)) { 
-			clearScreen();
-			return Event();
-		}
-		if (organizer.empty()) {
-			cout << "Organizer cannot be empty.\n";
-			continue;
-		}
-		if (!isValidNameOrLocation(organizer)) {
-			cout << "Organizer can only contain letters and spaces. Retry.\n";
-			continue;
-		}
-		break;
-	}
+	//while (true) {
+	//	cout << "Enter Organizer (q to cancel): ";
+	//	std::getline(std::cin, organizer);
+	//	if (isCancel(organizer)) { 
+	//		clearScreen();
+	//		return Event();
+	//	}
+	//	if (organizer.empty()) {
+	//		cout << "Organizer cannot be empty.\n";
+	//		continue;
+	//	}
+	//	if (!isValidNameOrLocation(organizer)) {
+	//		cout << "Organizer can only contain letters and spaces. Retry.\n";
+	//		continue;
+	//	}
+	//	break;
+	//}
 
 	//ticketPrice = getDoubleInput("Enter Base Ticket Price (q to cancel): ");
 	//if(ticketPrice == -1.0) {
@@ -483,15 +491,27 @@ Event createEventFromInput() {
 				break; // valid
 			}
 
-
 			e.addCategory(catName, price, available);
 		}
-	} while (addMore == 'y' || addMore == 'Y');
+		else if (addMore == 'n' || addMore == 'N') {
+			if (e.categoryOptions.empty()) {
+				cout << "At least one ticket category is required.\n";
+			}
+			else {
+				break; // done adding
+			}
+		}
+		else {
+			cout << "Invalid choice. Please enter 'y' or 'n'.\n";
+		}
+	} while (addMore == 'y' || addMore == 'Y' || e.categoryOptions.empty());
 
 	return e;
 }
 
-void manageEvents() {
+void manageEvents(Organizer& organizer) {
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
 	EventManager manager;
 	string filename = "events.json";
 
@@ -509,7 +529,7 @@ void manageEvents() {
 	while (true) {
 		int choice = -1;
 		while (true) {
-			cout << "\n========= Event Manager =========\n"
+			cout << "========= Event Manager =========\n"
 				<< "1. Add Event\n"
 				<< "2. List Events\n"
 				<< "3. Edit Event\n"
@@ -535,19 +555,20 @@ void manageEvents() {
 
 		// 1. Add Event
 		if (choice == 1) {
-			Event e = createEventFromInput();
+			Event e = createEventFromInput(organizer);
 			if (e.name.empty()) {
 				cout << "Event creation cancelled.\n";
 			}
 			else {
 				manager.addEvent(e);
+				clearScreen();
 				cout << "Event added!\n";
 			}
-
 		}
 		// 2. List Events
 		else if (choice == 2) {
 			manager.listEvents();
+			system("pause");
 		}
 		// 3. Edit Event
 		else if (choice == 3) {
@@ -692,7 +713,7 @@ void manageEvents() {
 				}
 			}
 			else if (updateChoice == 3) {
-				Event fresh = createEventFromInput();
+				Event fresh = createEventFromInput(organizer);
 				if (fresh.name.empty()) {
 					cout << "Event update cancelled.\n";
 				}
@@ -744,6 +765,7 @@ void manageEvents() {
 		}
 		// 5. Save & Exit
 		else if (choice == 5) {
+			clearScreen();
 			FileManager::saveToJSON(filename, manager.getEvents());
 			cout << "Events saved. Exiting...\n";
 			break;

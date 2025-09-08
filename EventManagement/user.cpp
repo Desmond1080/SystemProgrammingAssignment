@@ -294,7 +294,7 @@ bool userLogin(User &loginUser) {
 			loginUser = user1;
 			updateUserProfile(user1);
 			clearScreen();// update the login attempt
-			cout << "Login successful! Welcome, " << user1.nickname << endl;
+			cout << "Login successful! Welcome, " << user1.nickname << "!" << endl;
 			return true;
 		}
 		else {

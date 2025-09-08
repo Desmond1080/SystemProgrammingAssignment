@@ -70,15 +70,15 @@ void browseEvents(User* user) {
         vector<Event> categoryEvents = manager.searchEventsByCategory(category);
 
         // Filter out events that are full and past
-        time_t now = time(0);
-        categoryEvents.erase(remove_if(categoryEvents.begin(), categoryEvents.end(),
-			[now](const Event& e) {
-				bool allSoldOut = all_of(e.categoryOptions.begin(), e.categoryOptions.end(),
-					[](const pair<string, pair<double, int>>& cat) {
-						return cat.second.second <= 0; // Check if capacity is 0
-					});
-				return allSoldOut || e.endDate < now; // Remove if all categories sold out or event has ended
-			}), categoryEvents.end());
+   //     time_t now = time(0);
+   //     categoryEvents.erase(remove_if(categoryEvents.begin(), categoryEvents.end(),
+			//[now](const Event& e) {
+			//	bool allSoldOut = all_of(e.categoryOptions.begin(), e.categoryOptions.end(),
+			//		[](const pair<string, pair<double, int>>& cat) {
+			//			return cat.second.second <= 0; // Check if capacity is 0
+			//		});
+			//	return allSoldOut || e.endDate < now; // Remove if all categories sold out or event has ended
+			//}), categoryEvents.end());
 
 		if (categoryEvents.empty()) {
 			//cout << "No events found in this category." << endl;
