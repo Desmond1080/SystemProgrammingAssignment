@@ -44,11 +44,12 @@ Event::Event(const string& name,
     time_t endDate,
     const string& location,
     const string& organizer,
-    double ticketPrice,
+    const string& status,
+    //double ticketPrice,
     const vector<pair<string, pair<double, int>>>& categoryOptions)
     : name(name), description(description), category(category),
     startDate(startDate), endDate(endDate), location(location), 
-    organizer(organizer), ticketPrice(ticketPrice),
+    organizer(organizer), status(status),
     categoryOptions(categoryOptions) {}
 
 // Getters
@@ -58,6 +59,8 @@ time_t Event::getEndDate() const { return endDate; }
 // Setters
 void Event::setStartDate(time_t newStart) { startDate = newStart; }
 void Event::setEndDate(time_t newEnd) { endDate = newEnd; }
+
+void Event::cancelEvent() { status = "Cancelled"; }
 
 void Event::updateCategoryCapacity(size_t index, int capacityChange) {
     if (index >= categoryOptions.size()) {
@@ -120,7 +123,19 @@ void Event::printDetails(int index) const {
     cout << " Start Date  : " << startBuffer << "\n";
     cout << " End Date    : " << endBuffer << "\n";
     cout << " Category    : " << Event::categoryToString(category) << "\n";
-    cout << " Base Price  : RM" << std::fixed << std::setprecision(2) << ticketPrice << "\n";
+    //cout << " Base Price  : RM" << std::fixed << std::setprecision(2) << ticketPrice << "\n";
+    
+    // From RMxx.xx
+    double minPrice = categoryOptions.at(0).second.first;
+
+    for (size_t j = 1; j < categoryOptions.size(); j++) {
+        double catPrice = categoryOptions.at(j).second.first;
+        if (catPrice < minPrice) {
+            minPrice = catPrice;
+        }
+    }
+
+    cout << fixed << setprecision(2) << "From RM" << minPrice << endl;
 
     if (!categoryOptions.empty()) {
         cout << " Ticket Categories:\n";
@@ -153,8 +168,8 @@ void Event::printDetailsForUser() const {
     strftime(startBuffer, sizeof(startBuffer), "%Y-%m-%d %H:%M", &tmStart);
     strftime(endBuffer, sizeof(endBuffer), "%Y-%m-%d %H:%M", &tmEnd);
 
-    cout << " Start Date  : " << startBuffer << "\n";
-    cout << " End Date    : " << endBuffer << "\n";
+    cout << "Start Date  : " << startBuffer << "\n";
+    cout << "End Date    : " << endBuffer << "\n";
 
     cout << "Location: " << location << endl;
     cout << "Organizer: " << organizer << endl;

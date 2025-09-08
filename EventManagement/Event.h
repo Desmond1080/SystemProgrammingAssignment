@@ -32,7 +32,8 @@ public:
     std::time_t endDate;
     std::string location;
     std::string organizer;
-    double ticketPrice;
+    std::string status;
+    //double ticketPrice;
 
     // Ticket categories: {name, {price, available}}
     std::vector<std::pair<std::string, std::pair<double, int>>> categoryOptions;
@@ -46,7 +47,8 @@ public:
         const std::time_t endDate,
         const std::string& location,
         const std::string& organizer,
-        double ticketPrice,
+        const std::string& status,
+        //double ticketPrice,
         const std::vector<std::pair<std::string, std::pair<double, int>>>& categoryOptions);
 
     Event() = default;
@@ -56,6 +58,8 @@ public:
 
     std::time_t getStartDate() const;
     std::time_t getEndDate() const;
+
+    void cancelEvent();
 
     void updateCategoryCapacity(std::size_t index, int capacityChange);
     void listCategories() const;

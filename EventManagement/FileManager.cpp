@@ -21,7 +21,8 @@ void FileManager::saveToJSON(const string& filename, const vector<Event>& events
             ev["endDate"] = static_cast<int64_t>(e.getEndDate());
             ev["location"] = e.location;
             ev["organizer"] = e.organizer;
-            ev["ticketPrice"] = e.ticketPrice;
+            ev["status"] = e.status;
+            //ev["ticketPrice"] = e.ticketPrice;
 
             // save category options
             json options = json::array();
@@ -91,7 +92,7 @@ vector<Event> FileManager::loadFromJSON(const string& filename) {
             e.setEndDate(ev.value("endDate", 0));
             e.location = ev.value("location", "");
             e.organizer = ev.value("organizer", "");
-            e.ticketPrice = ev.value("ticketPrice", 0.0);
+            e.status = ev.value("status", "");
 
             if (ev.contains("categoryOptions") && ev["categoryOptions"].is_array()) {
                 for (const auto& opt : ev["categoryOptions"]) {

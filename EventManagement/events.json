@@ -18,7 +18,7 @@
       "location": "Central Park",
       "name": "Music Festival",
       "organizer": "ABC Corp",
-      "ticketPrice": 50.0,
+      "status": "scheduled", 
       "timestamp": 1757103929
     },
     {
@@ -34,8 +34,92 @@
       "location": "Kuala Lumpur",
       "name": "Testing Event",
       "organizer": "XT",
-      "ticketPrice": 200.0,
+      "status": "scheduled", 
       "timestamp": 1757153460
+    },
+    {
+      "category": 4,
+      "categoryOptions": [
+        {
+          "available": 100,
+          "catName": "VIP",
+          "price": 120.0
+        },
+        {
+          "available": 300,
+          "catName": "Standard",
+          "price": 70.0
+        }
+      ],
+      "description": "Go run",
+      "location": "Penang bridge",
+      "name": "Penang Marathon",
+      "organizer": "ABC Corp",
+      "status": "scheduled", 
+      "timestamp": 1757103929
+    },
+    {
+      "category": 5,
+      "categoryOptions": [
+        {
+          "available": 50,
+          "catName": "VIP",
+          "price": 100.0
+        },
+        {
+          "available": 200,
+          "catName": "Standard",
+          "price": 30.0
+        }
+      ],
+      "description": "Bonding",
+      "location": "Central Park",
+      "name": "Charity Amazing Hunt",
+      "organizer": "ABC Corp",
+      "status": "scheduled", 
+      "timestamp": 1757103929
+    },
+    {
+      "category": 6,
+      "categoryOptions": [
+        {
+          "available": 20,
+          "catName": "VIP",
+          "price": 200.0
+        },
+        {
+          "available": 150,
+          "catName": "Standard",
+          "price": 50.0
+        }
+      ],
+      "description": "A night of laughter",
+      "location": "COEX",
+      "name": "Comedy Clash",
+      "organizer": "Penang laughs",
+      "status": "scheduled", 
+      "timestamp": 1757103929
+    },
+    {
+      "category": 6,
+      "categoryOptions": [
+        {
+          "available": 10,
+          "catName": "VIP",
+          "price": 50.0
+        },
+        {
+          "available": 20,
+          "catName": "Standard",
+          "price": 30.0
+        }
+      ],
+      "description": "try out your jokes",
+      "location": "COEX",
+      "name": "Open Mic",
+      "organizer": "Penang laughs",
+      "status": "scheduled", 
+      "timestamp": 1757103929
     }
   ]
 }
