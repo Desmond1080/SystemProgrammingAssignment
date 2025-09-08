@@ -136,7 +136,7 @@
     <ClCompile Include="encryptioncpp.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="EventManager.cpp" />
-    <ClCompile Include="event_main.cpp" />
+    <ClCompile Include="event_validation.cpp" />
     <ClCompile Include="file.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="forgotpassword.cpp" />
@@ -156,6 +156,7 @@
     <ClInclude Include="participantRegHeader.h" />
     <ClInclude Include="payment.h" />
     <ClInclude Include="structs.h" />
+    <ClInclude Include="validation.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="payment_records.txt" />

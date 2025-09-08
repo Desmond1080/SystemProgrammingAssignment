@@ -5,15 +5,12 @@
 #include "Event.h"
 #include <vector>
 
-using namespace std;
-
 class FileManager {
 public:
-    static void saveToJSON(const string& filename, const vector<Event>& events);
-    static vector<Event> loadFromJSON(const string& filename);
+    static void saveToJSON(const std::string& filename, const std::vector<Event>& events);
+    static std::vector<Event> loadFromJSON(const std::string& filename);
 
-    static void loadFromJSON(const string& filename, Event& manager);
+    static void loadFromJSON(const std::string& filename, Event& manager);
 };
 
 #endif
-

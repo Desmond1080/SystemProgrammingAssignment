@@ -31,7 +31,7 @@ int main() {
 			cin.clear(); // Clear error flags
 			cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear buffer
 			clearScreen();
-			cout << "Invalid input. Please enter a number." << endl;
+			cout << "Invalid input. Please enter a number." << endl << endl;
 			continue;
 		}
 

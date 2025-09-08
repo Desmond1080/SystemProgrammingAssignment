@@ -7,11 +7,9 @@
 #include <ctime>
 #include <iostream>
 
-using namespace std;
-
 enum class EventCategory {
     Concert,
-	Sports,
+    Sports,
     Workshop,
     Music,
     Marathon,
@@ -20,46 +18,50 @@ enum class EventCategory {
     Theatre,
     Pet,
     Food,
-	Technology,
-	Competition,
+    Technology,
+    Competition,
     Count // Helper to get number of categories
 };
 
 class Event {
 public:
-    string name;
-    string description;
+    std::string name;
+    std::string description;
     EventCategory category;
-    time_t date;
-    string location;
-    string organizer;
+    std::time_t startDate;
+    std::time_t endDate;
+    std::string location;
+    std::string organizer;
     double ticketPrice;
 
     // Ticket categories: {name, {price, available}}
-    vector<pair<string, pair<double, int>>> categoryOptions;
+    std::vector<std::pair<std::string, std::pair<double, int>>> categoryOptions;
 
-    Event(const string& name,
-        const string& description,
+    static std::string categoryToString(EventCategory category);
+
+    Event(const std::string& name,
+        const std::string& description,
         EventCategory category,
-        time_t date,
-        const string& location,
-        const string& organizer,
+        const std::time_t startDate,
+        const std::time_t endDate,
+        const std::string& location,
+        const std::string& organizer,
         double ticketPrice,
-        const vector<pair<string, pair<double, int>>>& categoryOptions);
+        const std::vector<std::pair<std::string, std::pair<double, int>>>& categoryOptions);
 
     Event() = default;
 
-    void addCategory(const string& catName, double price, int available);
-    void printDetails() const;
-    void printDetailsForUser() const;
+    void setStartDate(std::time_t newStart);
+    void setEndDate(std::time_t newEnd);
 
-    void setDate(time_t newDate);
-    time_t getDate() const;
+    std::time_t getStartDate() const;
+    std::time_t getEndDate() const;
 
-    void updateCategoryCapacity(size_t index, int newCapacity);
+    void updateCategoryCapacity(std::size_t index, int capacityChange);
     void listCategories() const;
+	void addCategory(const std::string& catName, double price, int available);
+	void printDetails(int index = -1) const;
+    void printDetailsForUser() const;
 };
-
-string categoryToString(EventCategory category);
 
 #endif

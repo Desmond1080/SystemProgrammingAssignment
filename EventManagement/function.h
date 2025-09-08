@@ -74,6 +74,7 @@ void organizerRegister();
 bool organizerLogin(Organizer& loginOrganizer);
 void displayOrganizerProfile(const Organizer& organizer);
 void editOrganizerProfile(Organizer& organizer);
+void manageEvents();
 
 //validations
 bool validateEmail(string& email);

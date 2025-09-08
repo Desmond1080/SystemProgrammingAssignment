@@ -1,9 +1,12 @@
-#include "Event.h"
+﻿#include "Event.h"
+#include <iomanip>
+#include <iostream>
+#include <ctime>
 
 using namespace std;
 
 // Convert enum to string
-string categoryToString(EventCategory category) {
+string Event::categoryToString(EventCategory category) {
     switch (category) {
     case EventCategory::Concert: return "Concert";
     case EventCategory::Sports: return "Sports";
@@ -22,70 +25,114 @@ string categoryToString(EventCategory category) {
 }
 
 void Event::addCategory(const string& catName, double price, int available) {
-    categoryOptions.push_back({ catName,{ price, available} });
+    if (price < 0) {
+        cout << "Error: Ticket price cannot be negative.\n";
+        return;
+    }
+    if (available < 0) {
+        cout << "Error: Ticket availability cannot be negative.\n";
+        return;
+    }
+    categoryOptions.push_back({ catName, { price, available } });
 }
 
+// Event constructor
 Event::Event(const string& name,
     const string& description,
     EventCategory category,
-    time_t date,
+    time_t startDate,
+    time_t endDate,
     const string& location,
     const string& organizer,
     double ticketPrice,
     const vector<pair<string, pair<double, int>>>& categoryOptions)
-    : name(name), description(description), category(category), date(date),
-    location(location), organizer(organizer), ticketPrice(ticketPrice),
+    : name(name), description(description), category(category),
+    startDate(startDate), endDate(endDate), location(location), 
+    organizer(organizer), ticketPrice(ticketPrice),
     categoryOptions(categoryOptions) {}
 
-void Event::setDate(time_t newDate) {
-    date = newDate;
-}
+// Getters
+time_t Event::getStartDate() const { return startDate; }
+time_t Event::getEndDate() const { return endDate; }
 
-time_t Event::getDate() const {
-    return date;
-}
+// Setters
+void Event::setStartDate(time_t newStart) { startDate = newStart; }
+void Event::setEndDate(time_t newEnd) { endDate = newEnd; }
 
-void Event::updateCategoryCapacity(size_t index, int newCapacity) {
-    if (index < categoryOptions.size()) {
-        categoryOptions[index].second.second = newCapacity;
+void Event::updateCategoryCapacity(size_t index, int capacityChange) {
+    if (index >= categoryOptions.size()) {
+        cout << "Invalid category index.\n";
+        return;
     }
-    else {
-        std::cout << "Invalid category index.\n";
+
+    int& currentCapacity = categoryOptions[index].second.second; // reference to capacity
+    int updatedCapacity = currentCapacity + capacityChange;
+
+    if (updatedCapacity < 0) {
+        cout << "Error: Capacity cannot be negative.\n";
+        return;
     }
+
+    currentCapacity = updatedCapacity;
 }
 
 void Event::listCategories() const {
+    if (categoryOptions.empty()) {
+        cout << "No ticket categories available.\n";
+        return;
+    }
     for (size_t i = 0; i < categoryOptions.size(); i++) {
-        std::cout << i << ". " << categoryOptions[i].first
-            << " | Price: $" << categoryOptions[i].second.first
+        cout << i << ". " << categoryOptions[i].first
+            << " | Price: RM" << categoryOptions[i].second.first
             << " | Available: " << categoryOptions[i].second.second
             << "\n";
     }
 }
 
-void Event::printDetails() const {
-    cout << "Event: " << name << endl;
-    cout << "Description: " << description << endl;
-    cout << "Category: " << categoryToString(category) << endl;
 
-    // Convert time_t into readable date
-    struct tm readable;
-    localtime_s(&readable, &date);
-    char buffer[80];
-    strftime(buffer, sizeof(buffer), "%Y-%m-%d", &readable);
-    cout << "Date: " << buffer << endl;
+void Event::printDetails(int index) const {
+    // Convert time_t → readable string
+    char startBuffer[80], endBuffer[80];
+    std::tm tmStart{}, tmEnd{};
+#ifdef _WIN32
+    localtime_s(&tmStart, &startDate);
+    localtime_s(&tmEnd, &endDate);
+#else
+    localtime_r(&startDate, &tmStart);
+    localtime_r(&endDate, &tmEnd);
+#endif
+    strftime(startBuffer, sizeof(startBuffer), "%Y-%m-%d %H:%M", &tmStart);
+    strftime(endBuffer, sizeof(endBuffer), "%Y-%m-%d %H:%M", &tmEnd);
 
-    cout << "Location: " << location << endl;
-    cout << "Organizer: " << organizer << endl;
-    cout << "Base Ticket Price: $" << ticketPrice << endl;
-
-    cout << "\nTicket Categories:\n";
-    for (const auto& option : categoryOptions) {
-        cout << " - " << option.first
-            << " | Price: $" << option.second.first
-            << " | Available: " << option.second.second << endl;
+    cout << "\n==================== Event ====================\n";
+    if (index >= 0) {
+        cout << "[" << index << "] " << name << "\n";
+        cout << "----------------------------------------------------\n";
     }
-    cout << "------------------------------------\n";
+    else {
+        cout << name << "\n";
+        cout << "----------------------------------------------------\n";
+    }
+
+    cout << " Description : " << description << "\n";
+    cout << " Location    : " << location << "\n";
+    cout << " Organizer   : " << organizer << "\n";
+    cout << " Start Date  : " << startBuffer << "\n";
+    cout << " End Date    : " << endBuffer << "\n";
+    cout << " Category    : " << Event::categoryToString(category) << "\n";
+    cout << " Base Price  : RM" << std::fixed << std::setprecision(2) << ticketPrice << "\n";
+
+    if (!categoryOptions.empty()) {
+        cout << " Ticket Categories:\n";
+        int i = 0;
+        for (const auto& opt : categoryOptions) { // renamed from 'category' to avoid shadowing
+            cout << "   [" << i++ << "] "
+                << opt.first
+                << " | Price: RM" << opt.second.first
+                << " | Availability: " << opt.second.second << "\n";
+        }
+    }
+    cout << "====================================================\n";
 }
 
 void Event::printDetailsForUser() const {
@@ -93,12 +140,21 @@ void Event::printDetailsForUser() const {
     cout << "Description: " << description << endl;
     cout << "Category: " << categoryToString(category) << endl;
 
-    // Convert time_t into readable date
-    struct tm readable;
-    localtime_s(&readable, &date);
-    char buffer[80];
-    strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M", &readable);
-    cout << "Date: " << buffer << endl;
+    // Convert time_t → readable string
+    char startBuffer[80], endBuffer[80];
+    std::tm tmStart{}, tmEnd{};
+#ifdef _WIN32
+    localtime_s(&tmStart, &startDate);
+    localtime_s(&tmEnd, &endDate);
+#else
+    localtime_r(&startDate, &tmStart);
+    localtime_r(&endDate, &tmEnd);
+#endif
+    strftime(startBuffer, sizeof(startBuffer), "%Y-%m-%d %H:%M", &tmStart);
+    strftime(endBuffer, sizeof(endBuffer), "%Y-%m-%d %H:%M", &tmEnd);
+
+    cout << " Start Date  : " << startBuffer << "\n";
+    cout << " End Date    : " << endBuffer << "\n";
 
     cout << "Location: " << location << endl;
     cout << "Organizer: " << organizer << endl;
