@@ -6,7 +6,7 @@
 
 using namespace std;
 
-// Filter by organizer (exact match)
+// Filter by organizer
 vector<Event> ReportManager::filterByOrganizer(const vector<Event>& events, const string& organizer) {
     vector<Event> result;
     copy_if(events.begin(), events.end(), back_inserter(result),
@@ -22,7 +22,7 @@ vector<Event> ReportManager::filterByCategory(const vector<Event>& events, Event
     return result;
 }
 
-// Filter by date range (events starting between startDate and endDate)
+// Filter by date range
 vector<Event> ReportManager::filterByDateRange(const vector<Event>& events, time_t startDate, time_t endDate) {
     vector<Event> result;
     copy_if(events.begin(), events.end(), back_inserter(result),
@@ -30,7 +30,7 @@ vector<Event> ReportManager::filterByDateRange(const vector<Event>& events, time
     return result;
 }
 
-// Filter by minimum total tickets available
+// Filter by minimum total tickets
 vector<Event> ReportManager::filterByMinTickets(const vector<Event>& events, int minTickets) {
     vector<Event> result;
     copy_if(events.begin(), events.end(), back_inserter(result),
@@ -42,7 +42,7 @@ vector<Event> ReportManager::filterByMinTickets(const vector<Event>& events, int
     return result;
 }
 
-// Sort events by start date
+// Sort by start date
 void ReportManager::sortByStartDate(vector<Event>& events, bool ascending) {
     sort(events.begin(), events.end(),
         [&](const Event& a, const Event& b) {
@@ -50,7 +50,7 @@ void ReportManager::sortByStartDate(vector<Event>& events, bool ascending) {
         });
 }
 
-// Sort events by total tickets available
+// Sort by total tickets
 void ReportManager::sortByTotalTickets(vector<Event>& events, bool ascending) {
     sort(events.begin(), events.end(),
         [&](const Event& a, const Event& b) {
@@ -62,10 +62,10 @@ void ReportManager::sortByTotalTickets(vector<Event>& events, bool ascending) {
         });
 }
 
-// Display events in a formatted report
-void ReportManager::displaySummaryTable(const std::vector<Event>& events) {
+// Display summary table
+void ReportManager::displaySummaryTable(const vector<Event>& events) {
     if (events.empty()) {
-        std::cout << "No events to display.\n";
+        cout << "No events to display.\n";
         return;
     }
 
@@ -75,23 +75,21 @@ void ReportManager::displaySummaryTable(const std::vector<Event>& events) {
     const int width_date = 16;
     const int width_tickets = 10;
 
-    std::cout << std::left
-        << std::setw(width_name) << "Event Name"
-        << std::setw(width_cat) << "Category"
-        << std::setw(width_org) << "Organizer"
-        << std::setw(width_date) << "Start Date"
-        << std::setw(width_date) << "End Date"
-        << std::setw(width_tickets) << "Tickets"
+    cout << left
+        << setw(width_name) << "Event Name"
+        << setw(width_cat) << "Category"
+        << setw(width_org) << "Organizer"
+        << setw(width_date) << "Start Date"
+        << setw(width_date) << "End Date"
+        << setw(width_tickets) << "Tickets"
         << "\n";
 
-    std::cout << std::string(width_name + width_cat + width_org + width_date * 2 + width_tickets, '-') << "\n";
+    cout << string(width_name + width_cat + width_org + width_date * 2 + width_tickets, '-') << "\n";
 
     for (const auto& e : events) {
-        // Compute total tickets available
         int totalTickets = 0;
         for (auto& opt : e.categoryOptions) totalTickets += opt.second.second;
 
-        // Format dates
         char startBuf[20], endBuf[20];
         tm tmStart{}, tmEnd{};
 #ifdef _WIN32
@@ -104,16 +102,14 @@ void ReportManager::displaySummaryTable(const std::vector<Event>& events) {
         strftime(startBuf, sizeof(startBuf), "%Y-%m-%d", &tmStart);
         strftime(endBuf, sizeof(endBuf), "%Y-%m-%d", &tmEnd);
 
-        std::cout << std::left
-            << std::setw(width_name) << e.name.substr(0, width_name - 1)
-            << std::setw(width_cat) << Event::categoryToString(e.category)
-            << std::setw(width_org) << e.organizer.substr(0, width_org - 1)
-            << std::setw(width_date) << startBuf
-            << std::setw(width_date) << endBuf
-            << std::setw(width_tickets) << totalTickets
+        cout << left
+            << setw(width_name) << e.name.substr(0, width_name - 1)
+            << setw(width_cat) << Event::categoryToString(e.category)
+            << setw(width_org) << e.organizer.substr(0, width_org - 1)
+            << setw(width_date) << startBuf
+            << setw(width_date) << endBuf
+            << setw(width_tickets) << totalTickets
             << "\n";
     }
-
-    std::cout << "\n";
+    cout << "\n";
 }
-
