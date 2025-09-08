@@ -58,6 +58,9 @@ struct ticket {
 
 void clearScreen();
 
+// guest functions 
+void guestMenu();
+
 //user functions
 bool userLoginMenu(User& user);
 void userMenu(User& user);
@@ -66,6 +69,7 @@ bool userLogin(User &loginUser);
 void displayUserProfile(const User &user);
 void editUserProfile(User &user);
 void deleteUserAccount(User& user);
+void viewTickets(string &email);
 
 //organizer function
 bool organizerLoginMenu(Organizer& loginOrganizer);

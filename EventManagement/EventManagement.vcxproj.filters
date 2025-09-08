@@ -60,6 +60,9 @@
     <ClCompile Include="event_validation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="guest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="function.h">

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include "function.h"
 #include "participantRegHeader.h"
+#include "payment.h"
 
 using namespace std;
 
@@ -45,7 +46,7 @@ bool userLoginMenu(User &user) {
 				break;
 			case 3:
 				clearScreen();
-				browseEvents(nullptr);
+				guestMenu();
 				break;
 			case 4:
 				clearScreen();
@@ -101,7 +102,9 @@ void userMenu(User& user) {
 			case 1:
 				browseEvents(&user);
 				break;
-			case 2:
+			case 2:	
+				clearScreen();
+				viewTickets(user.email);
 				break;
 			case 3:
 				displayUserProfile(user);
@@ -466,5 +469,86 @@ void deleteUserAccount(User& user) {
 	}
 	else {
 		cout << "Account deletion cancelled." << endl;
+	}
+}
+
+// view tickets 
+void viewTickets(string &email) {
+	cout << "=== View Tickets ===" << endl;
+
+	//load all payments from file 
+	vector<Payment> payments = loadPaymentsFromFile();
+	vector <Payment> userPayments;
+
+	//filter payments for user 
+	for (int i = 0; i < payments.size(); i++) {
+		if (payments[i].email == email && payments[i].status == "Completed") {
+			userPayments.push_back(payments[i]);
+		}
+	}
+
+	if (userPayments.empty()) {
+		cout << "You have no tickets purchased." << endl;
+		system("pause");
+		return;
+	}
+
+	//display user tickets 
+	for (int i = 0; i < userPayments.size(); i++) {
+		Payment p = userPayments[i];
+		cout << "=== Ticket " << (i + 1) << " ===" << endl;
+		cout << "Event Name: " << p.eventName << endl;
+		cout << "Purchase Date: " << p.date << endl;
+		cout << "Purchase Time: " << p.time << endl;
+		cout << "Amount Paid: RM" << p.amount << endl;
+		cout << "Payment Method: " << p.method << endl;
+
+		//display tickets details 
+		cout << "Tickets: " << endl;
+		for (int j = 0; j < p.tickets.size(); j++) {
+			cout << "  Category Index: " << p.tickets[j].first << ", Quantity: " << p.tickets[j].second << endl;
+		}
+		cout << "======================================" << endl << endl;
+	}
+
+	//option to view specific ticket details
+	cout << "Enter the ticket number to view details or 0 to return:";
+	int ticketChoice;
+	//validate ticket choice input
+	while (true) {
+		if (!(cin >> ticketChoice)) {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Invalid input. Please enter a number." << endl;
+			continue;
+		}
+
+		// check if user wants to return 
+		if (ticketChoice == 0) {
+			return;
+		}
+
+		if (validateChoice(ticketChoice, 1, userPayments.size())) {
+			clearScreen();
+			Payment selectedPayment = userPayments[ticketChoice - 1];
+			cout << "=== Ticket Details ===" << endl;
+			cout << "Event Name: " << selectedPayment.eventName << endl;
+			cout << "Purchase Date: " << selectedPayment.date << endl;
+			cout << "Purchase Time: " << selectedPayment.time << endl;
+			cout << "Name : " << selectedPayment.name << endl;
+			cout << "Email : " << selectedPayment.email << endl;
+			cout << "Amount Paid: RM" << selectedPayment.amount << endl;
+			cout << "Payment Method: " << selectedPayment.method << endl;
+
+			cout << "\n Ticket category: " << endl;
+			for (int j = 0; j < selectedPayment.tickets.size(); j++) {
+				cout << "  Category Index: " << selectedPayment.tickets[j].first << ", Quantity: " << selectedPayment.tickets[j].second << endl;
+			}
+			system("pause");
+			break;
+		}
+		else {
+			cout << "Invalid choice. Please enter a number between 0 and " << userPayments.size() << "." << endl;
+		}
 	}
 }

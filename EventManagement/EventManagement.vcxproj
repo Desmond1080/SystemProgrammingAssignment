@@ -140,6 +140,7 @@
     <ClCompile Include="file.cpp" />
     <ClCompile Include="FileManager.cpp" />
     <ClCompile Include="forgotpassword.cpp" />
+    <ClCompile Include="guest.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="participantReg.cpp" />
     <ClCompile Include="organizer.cpp" />

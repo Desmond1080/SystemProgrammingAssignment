@@ -1,17 +1,38 @@
 {
-  "events": [
-    {
-      "category": 5,
-      "categoryOptions": [
+    "events": [
         {
-          "available": 100,
-          "catName": "VIP",
-          "price": 120.0
+            "category": 3,
+            "categoryOptions": [
+                {
+                    "available": 77,
+                    "catName": "VIP",
+                    "price": 400.0
+                }
+            ],
+            "description": "This is a fun event haha",
+            "endDate": 0,
+            "location": "Kuala Lumpur",
+            "name": "Testing Event",
+            "organizer": "XT",
+            "startDate": 0,
+            "ticketPrice": 200.0
         },
         {
-          "available": 500,
-          "catName": "Standard",
-          "price": 50.0
+            "category": 3,
+            "categoryOptions": [
+                {
+                    "available": 20,
+                    "catName": "VIP",
+                    "price": 400.0
+                }
+            ],
+            "description": "This is a fun event haha",
+            "endDate": 0,
+            "location": "Kuala Lumpur",
+            "name": "Testing Event",
+            "organizer": "XT",
+            "startDate": 0,
+            "ticketPrice": 200.0
         }
       ],
       "description": "Outdoor concert",
