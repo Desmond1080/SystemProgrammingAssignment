@@ -310,7 +310,7 @@ void editOrganizerProfile(Organizer& organizer) {
 	}
 }
 
-void listEvents(const vector<Event>& events) {
+void listEvents(const vector<Event>& events, const string& organizerName = "") {
 	if (events.empty()) {
 		cout << "No events available.\n";
 		return;
@@ -318,7 +318,9 @@ void listEvents(const vector<Event>& events) {
 
 	cout << "\n==================== Event List ====================\n";
 	for (size_t i = 0; i < events.size(); i++) {
-		events[i].printDetails((int)i);
+		if (organizerName.empty() || events[i].organizer == organizerName) {
+			events[i].printDetails((int)i);
+		}
 	}
 }
 
@@ -555,7 +557,7 @@ void manageEvents(Organizer& organizer) {
 				<< "1. Add Event\n"
 				<< "2. List Events\n"
 				<< "3. Edit Event\n"
-				<< "4. Delete Event\n"
+				<< "4. Cancel Event\n"
 				<< "5. Save & Exit\n"
 				<< "Choose an option: ";
 
@@ -589,13 +591,24 @@ void manageEvents(Organizer& organizer) {
 		}
 		// 2. List Events
 		else if (choice == 2) {
-			manager.listEvents();
+			manager.listEventsByOrganizer(organizer.name);
 			system("pause");
 			clearScreen();
 		}
 		// 3. Edit Event
 		else if (choice == 3) {
-			listEvents(manager.getEvents());
+			vector<Event> orgEvents = manager.getEventsByOrganizer(organizer.name);
+			if(orgEvents.empty()) {
+				cout << "No events to edit.\n";
+				system("pause");
+				clearScreen();
+				continue;
+			}
+
+			cout << "========== Event List ==========\n";
+			for (size_t i = 0; i < orgEvents.size(); i++) {
+				orgEvents[i].printDetails((int)i);
+			}
 
 			int idx;
 			while (true) {
@@ -615,6 +628,26 @@ void manageEvents(Organizer& organizer) {
 				break;
 			}
 			if (idx == -1) continue;
+
+			// find actual index in the full events	list 
+			Event selectedEvent = orgEvents[idx];
+			size_t actualIdx = 0;
+			bool found = false;
+			vector<Event> allEvents = manager.getEvents();
+			for (size_t i = 0; i < allEvents.size(); i++) {
+				if (allEvents[i].name == selectedEvent.name &&
+					allEvents[i].organizer == selectedEvent.organizer) {
+					actualIdx = i;
+					found = true;
+					break;
+				}
+			}
+
+			// event not found 
+			if (!found) {
+				cout << "Error: Event not found.\n";
+				continue;
+			}
 
 			// Confirm
 			if (!getConfirmation("Are you sure you want to update event '" +
@@ -679,6 +712,14 @@ void manageEvents(Organizer& organizer) {
 						cout << "Start time must be in the future.\n";
 						continue;
 					}
+					
+					cout << "Enter new event start datetime (YYYY-MM-DD HH:MM) (q to cancel): ";
+					getline(cin, endStr);
+					if (isCancel(endStr)) {
+						clearScreen();
+						cout << "Update cancelled.\n";
+						break;
+					}
 
 					tm endTm{};
 					istringstream ssEnd(endStr);
@@ -695,6 +736,7 @@ void manageEvents(Organizer& organizer) {
 					updated.setStartDate(newStart);
 					updated.setEndDate(newEnd);
 					manager.editEvent(idx, updated);
+					clearScreen();
 					cout << "Event start and end dates updated successfully!\n";
 					break;
 				}
@@ -765,10 +807,22 @@ void manageEvents(Organizer& organizer) {
 		}
 		// 4. Delete Event
 		else if (choice == 4) {
-			listEvents(manager.getEvents());
+			vector<Event> orgEvents = manager.getEventsByOrganizer(organizer.name);
+
+			if (orgEvents.empty()) {
+				cout << "No events to delete.\n";
+				system("pause");
+				clearScreen();
+				continue;
+			}
+			cout << "========== Event List ==========\n";
+			for (size_t i = 0; i < orgEvents.size(); i++) {
+				orgEvents[i].printDetails((int)i);
+			}
+
 			int idx;
 			while (true) {
-				idx = getIntInput("Enter index of event to delete (q to cancel): ");
+				idx = getIntInput("Enter index of event to cancel (q to cancel): ");
 				if (idx == -1) { 
 					cout << "Delete cancelled.\n"; 
 					break;
@@ -778,16 +832,41 @@ void manageEvents(Organizer& organizer) {
 					continue;
 				}
 
-				if (getConfirmation("Are you sure you want to delete event '" +
+				// find actual index in the full events	list
+				Event selectedEvent = orgEvents[idx];
+				size_t actualIdx = 0;
+				bool found = false;
+				vector<Event> allEvents = manager.getEvents();
+				for (size_t i = 0; i < allEvents.size(); i++) {
+					if (allEvents[i].name == selectedEvent.name &&
+						allEvents[i].organizer == selectedEvent.organizer) {
+						actualIdx = i;
+						found = true;
+						break;
+					}
+				}
+
+				// event not found
+				if (!found) {
+					cout << "Error: Event not found.\n";
+					break;
+				}
+
+				if (getConfirmation("Are you sure you want to cancel event '" +
 					manager.getEvents()[idx].name + "'? (y/n): ")) {
 					// change status to cancelled
 
 					Event updated = manager.getEvents()[idx];
 					updated.cancelEvent();
+
+					// change payment record status to refund if event is cancelled
+					markEventAsRefundedInPayments(manager.getEvents()[idx].name);
+
 					manager.editEvent(idx, updated);
-					cout << "Event deleted!\n";
+					clearScreen();
+					cout << "Event cancelled!\n";
 				}else {
-						cout << "Delete cancelled.\n";
+						cout << "Cancellation aborted.\n";
 					}
 
 				break; // valid

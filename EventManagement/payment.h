@@ -38,6 +38,7 @@ vector<Payment> loadPaymentsFromFile();
 void saveAllPayments(const vector<Payment>& payments);
 void refundPayment(User* user);
 void updateEventNameInPayments(const string& prevName, const string& newName);
+void markEventAsRefundedInPayments(const string& cancelledEventName);
 
 // Validation function declarations
 bool validateContactNumber(const string& phone);

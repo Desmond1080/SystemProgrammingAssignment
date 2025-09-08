@@ -128,21 +128,21 @@
             "status": "scheduled"
         },
         {
-            "category": 6,
+            "category": 7,
             "categoryOptions": [
                 {
-                    "available": 20,
+                    "available": 10,
                     "catName": "vip",
                     "price": 100.0
                 }
             ],
-            "description": "laugh",
+            "description": "laughing now",
             "endDate": 1760061600,
-            "location": "coex",
-            "name": "laughing zi",
-            "organizer": "",
+            "location": "coex hin",
+            "name": "laughing forever",
+            "organizer": "new name",
             "startDate": 1760054400,
-            "status": "scheduled"
+            "status": "Cancelled"
         }
     ]
 }

@@ -415,6 +415,10 @@ void editUserProfile(User& user) {
 					cout << "Age updated successfully!" << endl;
 					system("pause");
 				}
+				else {
+					cout << "Invalid age. Update failed." << endl;
+					system("pause");
+				}
 				break;
 			case 5:
 				cout << "Enter new Gender: ";
@@ -422,6 +426,10 @@ void editUserProfile(User& user) {
 				if (!field.empty() && validateGender(field) && validateLine(field)) {
 					user.gender = field;
 					cout << "Gender updated successfully!" << endl;
+					system("pause");
+				}
+				else {
+					cout << "Invalid gender. Update failed." << endl;
 					system("pause");
 				}
 				break;
@@ -435,6 +443,7 @@ void editUserProfile(User& user) {
 				}
 				else {
 					cout << "Invalid contact number. Update failed." << endl;
+					system("pause");
 				}
 				break;
 			case 7:
@@ -447,6 +456,7 @@ void editUserProfile(User& user) {
 				}
 				else {
 					cout << "Invalid email. Update failed." << endl;
+					system("pause");
 				}
 				break;
 			case 8:
@@ -463,6 +473,7 @@ void editUserProfile(User& user) {
 				}
 				else {
 					cout << "Invalid password. Update failed." << endl;
+					system("pause");
 				}
 				break;
 			case 9:

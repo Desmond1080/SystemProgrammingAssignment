@@ -30,6 +30,31 @@ void EventManager::listEvents() const {
     }
 }
 
+// Get events by organizer
+vector<Event> EventManager::getEventsByOrganizer(const string& organizer) const {
+	vector<Event> organizerEvents;
+	for (const auto& event : events) {
+		if (event.organizer == organizer) {
+			organizerEvents.push_back(event);
+		}
+	}
+	return organizerEvents;
+}
+
+// List events by organizer
+void EventManager::listEventsByOrganizer(const string& organizer) const {
+	vector<Event> organizerEvents = getEventsByOrganizer(organizer);
+	if (organizerEvents.empty()) {
+		cout << "No events found for organizer: " << organizer << endl;
+		return;
+	}
+
+	cout << "\n==================== Events by " << organizer << " ====================\n";
+	for (size_t i = 0; i < organizerEvents.size(); i++) {
+		organizerEvents[i].printDetails((int)i);
+	}
+}
+
 
 void EventManager::editEvent(size_t index, const Event& updatedEvent) {
     if (index < events.size()) {

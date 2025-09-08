@@ -569,3 +569,22 @@ void updateEventNameInPayments(const string& prevName, const string& newName) {
 		cout << "No payment records found for event: " << prevName << ". No updates made.\n";
 	}
 }
+
+void markEventAsRefundedInPayments(const string& cancelledEventName) {
+    vector<Payment> payments = loadPaymentsFromFile();
+	bool updated = false;
+
+	for (auto& p : payments) {
+		if (p.eventName == cancelledEventName) {
+			p.status = "Refunded";
+			updated = true;
+		}
+	}
+
+	if (updated) {
+		saveAllPayments(payments);
+		cout << "Marked all completed payments as refunded.\n";
+	}
+	else {
+		cout << "No completed payment records found. No updates made.\n";
+	}
