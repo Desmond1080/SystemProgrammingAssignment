@@ -154,7 +154,9 @@ void organizerRegister() {
 		getline(cin, organizer1.password);
 		if (validatePassword(organizer1.password)) {
 			//generate salt and hash the password
-			organizer1.salt = generateSalt();
+			do {
+				organizer1.salt = generateSalt();
+			} while (!validateLine(organizer1.salt));
 			organizer1.passwordHash = hashPassword(organizer1.password, organizer1.salt);
 			break;
 		}
@@ -205,8 +207,8 @@ bool organizerLogin(Organizer& loginOrganizer) {
 	if (hashedPassword == organizer.passwordHash) {
 		clearScreen();
 		cout << "Login successful! Welcome, " << organizer.name << "!" << endl;
-		//loginOrganizer = organizer; //copy organizer data to loginOrganizer
-		//organizerMenu(loginOrganizer); //show organizer menu
+		loginOrganizer = organizer; //copy organizer data to loginOrganizer
+		organizerMenu(loginOrganizer); //show organizer menu
 		clearScreen();
 		return true;
 	}
@@ -243,6 +245,7 @@ void editOrganizerProfile(Organizer& organizer) {
 			cout << "Invalid input. Please enter a number." << endl;
 			continue;
 		}
+
 		//cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear buffer
 
 		if (validateChoice(choice,1,4)) {
@@ -251,16 +254,26 @@ void editOrganizerProfile(Organizer& organizer) {
 			case 1:
 				cout << "Enter new name: ";
 				getline(cin, organizer.name);
-				updateOrganizerProfile(organizer);
-				clearScreen();
-				cout << "Name updated successfully!" << endl;
+				if (validateLine(organizer.name) && !organizer.name.empty()) {
+					updateOrganizerProfile(organizer);
+					clearScreen();
+					cout << "Name updated successfully!" << endl;
+				}
+				else {
+					cout << "Invalid input. Please try again." << endl;
+				}
 				break;
 			case 2:
 				cout << "Enter new description: ";
 				getline(cin, organizer.description);
-				updateOrganizerProfile(organizer);
-				clearScreen();
-				cout << "Description updated successfully!" << endl;
+				if (validateLine(organizer.description) && !organizer.name.empty()) {
+					updateOrganizerProfile(organizer);
+					clearScreen();
+					cout << "Description updated successfully!" << endl;
+				}
+				else {
+					cout << "Invalid input. Please try again." << endl;
+				}
 				break;
 			case 3:
 			{
@@ -269,7 +282,9 @@ void editOrganizerProfile(Organizer& organizer) {
 					cout << "Enter new password (at least 8 characters, including letters and numbers): ";
 					getline(cin, newPassword);
 					if (validatePassword(newPassword)) {
-						organizer.salt = generateSalt();
+						do {
+							organizer.salt = generateSalt();
+						} while (!validateLine(organizer.salt));
 						organizer.passwordHash = hashPassword(newPassword, organizer.salt);
 						updateOrganizerProfile(organizer);
 						clearScreen();
@@ -419,7 +434,14 @@ Event createEventFromInput(Organizer& loginOrganizer) {
 			cout << "Invalid format.\n";
 			continue;
 		}
+
 		startTime = mktime(&startTm);
+		// new date must be after today
+		time_t now = time(0);
+		if (difftime(startTime, now) <= 0) {
+			cout << "Start time must be in the future.\n";
+			continue;
+		}
 
 		cout << "Enter event end datetime (YYYY-MM-DD HH:MM) (q to cancel): ";
 		getline(cin, endStr);
@@ -569,6 +591,7 @@ void manageEvents(Organizer& organizer) {
 		else if (choice == 2) {
 			manager.listEvents();
 			system("pause");
+			clearScreen();
 		}
 		// 3. Edit Event
 		else if (choice == 3) {
@@ -650,6 +673,13 @@ void manageEvents(Organizer& organizer) {
 
 					newStart = mktime(&startTm);
 
+					// new date must be after today
+					time_t now = time(0);
+					if (difftime(newStart, now) <= 0) {
+						cout << "Start time must be in the future.\n";
+						continue;
+					}
+
 					tm endTm{};
 					istringstream ssEnd(endStr);
 					ssEnd >> get_time(&endTm, "%Y-%m-%d %H:%M");
@@ -709,6 +739,7 @@ void manageEvents(Organizer& organizer) {
 					updated.updateCategoryCapacity(catIdx, change);
 					manager.editEvent(idx, updated);
 					cout << "Ticket capacity updated successfully! New capacity: " << updatedCap << "\n";
+					clearScreen();
 					break;
 				}
 			}

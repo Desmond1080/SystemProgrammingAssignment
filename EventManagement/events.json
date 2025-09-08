@@ -26,7 +26,7 @@
             "category": 3,
             "categoryOptions": [
                 {
-                    "available": 20,
+                    "available": 42,
                     "catName": "VIP",
                     "price": 400.0
                 }

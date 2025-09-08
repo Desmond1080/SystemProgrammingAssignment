@@ -366,7 +366,7 @@ void saveAllPayments(const vector<Payment>& payments) {
 			}
 		}
 
-        outfile << "-------------------------\n\n";
+        outfile << "\n-------------------------\n\n";
     }
 }
 
@@ -377,16 +377,21 @@ void refundPayment(User* user) {
     vector<int> userPaymentIndices;
     string searchEmail;
 
-    while (true) {
-        cout << "\n===== Refund Menu =====\n";
-        cout << "Enter your email: ";
-        getline(cin, searchEmail);
+    if (user != nullptr) {
+		searchEmail = user->email;
+    }
+    else {
+        while (true) {
+            cout << "\n===== Refund Menu =====\n";
+            cout << "Enter your email: ";
+            getline(cin, searchEmail);
 
-        if (validateEmail(searchEmail)) {
-            break;
-        }
-        else {
-            cout << "\nInvalid Email.\n";
+            if (validateEmail(searchEmail)) {
+                break;
+            }
+            else {
+                cout << "\nInvalid Email.\n";
+            }
         }
     }
 

@@ -352,7 +352,7 @@ void displayUserProfile(const User& user) {
 void editUserProfile(User& user) {
 	int choice;
 	string field;
-	do {
+	while(true) {
 		clearScreen();
 		cout << "=== Edit Profile ===" << endl;
 		cout << "1. Edit First Name" << endl;
@@ -366,111 +366,118 @@ void editUserProfile(User& user) {
 		cout << "9. Exit Edit Profile" << endl;
 		cout << "Enter your choice: ";
 
-		cin >> choice;
-		cin.ignore();
-
-		switch (choice) {
-		case 1:
-			cout << "Enter new First Name: ";
-			getline(cin, field);
-			if (!field.empty()) {
-				user.username.firstname = field;
-				cout << "First Name updated successfully!" << endl;
-				system("pause");
-			}
-			break;
-
-		case 2:
-			cout << "Enter new Last Name: ";
-			getline(cin, field);
-			if (!field.empty()) {
-				user.username.lastname = field;
-				cout << "Last Name updated successfully!" << endl;
-				system("pause");
-			}
-			break;
-
-		case 3:
-			cout << "Enter new Nickname: ";
-			getline(cin, field);
-			if (!field.empty()) {
-				user.nickname = field;
-				cout << "Nickname updated successfully!" << endl;
-				system("pause");
-			}
-			break;
-		case 4:
-			cout << "Enter new Age: ";
-			getline(cin, field);
-			if (!field.empty()) {
-				user.age = field;
-				cout << "Age updated successfully!" << endl;
-				system("pause");
-			}
-			break;
-		case 5:
-			cout << "Enter new Gender: ";
-			getline(cin, field);
-			if (!field.empty() && validateGender(field)) {
-				user.gender = field;
-				cout << "Gender updated successfully!" << endl;
-				system("pause");
-			}
-			break;
-		case 6:
-			cout << "Enter new Contact Number: ";
-			getline(cin, field);
-			if (!field.empty() && validateContactNumber(field)) {
-				user.contactNumber = field;
-				cout << "Contact Number updated successfully!" << endl;
-				system("pause");
-			}
-			else {
-				cout << "Invalid contact number. Update failed." << endl;
-			}
-			break;
-		case 7:
-			cout << "Enter new Email: ";
-			getline(cin, field);
-			if (!field.empty() && validateEmail(field)) {
-				user.email = field;
-				cout << "Email updated successfully!" << endl;
-				system("pause");
-			}
-			else {
-				cout << "Invalid email. Update failed." << endl;
-			}
-			break;
-		case 8:
-			cout << "Enter new Password: ";
-			getline(cin, field);
-			if (!field.empty() && validatePassword(field)) {
-				user.password = field;
-				do {
-					user.salt = generateSalt();
-				} while (!validateLine(user.salt));
-				user.passwordHash = hashPassword(user.password, user.salt);
-				cout << "Password updated successfully!" << endl;
-				system("pause");
-			}
-			else {
-				cout << "Invalid password. Update failed." << endl;
-			}
-			break;
-		case 9:
-			cout << "Exiting Edit Profile." << endl;
-			//save updated profile to file
-			updateUserProfile(user);
-			break;
-		default:
-			cout << "Invalid choice. Please try again." << endl;
+		// Check if input is valid
+		if (!(cin >> choice)) {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Invalid input. Please enter a number." << endl;
+			system("pause");
+			continue;
 		}
 
-		if (choice >= 1 && choice <= 8) {
-			updateUserProfile(user); //save after each successful update
-		}
+		if (validateChoice(choice, 1, 9)) {
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			switch (choice) {
+			case 1:
+				cout << "Enter new First Name: ";
+				getline(cin, field);
+				if (!field.empty() && validateLine(field)) {
+					user.username.firstname = field;
+					cout << "First Name updated successfully!" << endl;
+					system("pause");
+				}
+				break;
 
-	} while (choice >= 1 && choice <= 7);
+			case 2:
+				cout << "Enter new Last Name: ";
+				getline(cin, field);
+				if (!field.empty() && validateLine(field)) {
+					user.username.lastname = field;
+					cout << "Last Name updated successfully!" << endl;
+					system("pause");
+				}
+				break;
+
+			case 3:
+				cout << "Enter new Nickname: ";
+				getline(cin, field);
+				if (!field.empty() && validateLine(field)) {
+					user.nickname = field;
+					cout << "Nickname updated successfully!" << endl;
+					system("pause");
+				}
+				break;
+			case 4:
+				cout << "Enter new Age: ";
+				getline(cin, field);
+				if (!field.empty() && validateAge(field)) {
+					user.age = field;
+					cout << "Age updated successfully!" << endl;
+					system("pause");
+				}
+				break;
+			case 5:
+				cout << "Enter new Gender: ";
+				getline(cin, field);
+				if (!field.empty() && validateGender(field) && validateLine(field)) {
+					user.gender = field;
+					cout << "Gender updated successfully!" << endl;
+					system("pause");
+				}
+				break;
+			case 6:
+				cout << "Enter new Contact Number: ";
+				getline(cin, field);
+				if (!field.empty() && validateContactNumber(field) && validateLine(field)) {
+					user.contactNumber = field;
+					cout << "Contact Number updated successfully!" << endl;
+					system("pause");
+				}
+				else {
+					cout << "Invalid contact number. Update failed." << endl;
+				}
+				break;
+			case 7:
+				cout << "Enter new Email: ";
+				getline(cin, field);
+				if (!field.empty() && validateEmail(field)) {
+					user.email = field;
+					cout << "Email updated successfully!" << endl;
+					system("pause");
+				}
+				else {
+					cout << "Invalid email. Update failed." << endl;
+				}
+				break;
+			case 8:
+				cout << "Enter new Password: ";
+				getline(cin, field);
+				if (!field.empty() && validatePassword(field)) {
+					user.password = field;
+					do {
+						user.salt = generateSalt();
+					} while (!validateLine(user.salt));
+					user.passwordHash = hashPassword(user.password, user.salt);
+					cout << "Password updated successfully!" << endl;
+					system("pause");
+				}
+				else {
+					cout << "Invalid password. Update failed." << endl;
+				}
+				break;
+			case 9:
+				cout << "Exiting Edit Profile." << endl;
+				//save updated profile to file
+				updateUserProfile(user);
+				return;
+			default:
+				cout << "Invalid choice. Please try again." << endl;
+			}
+		}
+		else {
+			cout << "Invalid input. Please enter number between 1 to 9." << endl;
+		}
+	} 
 }
 
 // delete user account 

@@ -224,7 +224,7 @@ void updateOrganizerProfile(const Organizer& organizer) {
 				file << organizer.name << "|" << organizer.email << "|" << organizer.passwordHash << "|" << organizer.salt << "|"  << organizer.description << endl;
 			}
 			else {
-				file << currentOrganizer.name << "|" << currentOrganizer.email << "|" << currentOrganizer.password << "|" << currentOrganizer.description << endl;
+				file << currentOrganizer.name << "|" << currentOrganizer.email << "|" << currentOrganizer.passwordHash << "|" << currentOrganizer.salt << "|" << currentOrganizer.description << endl;
 			}
 		}
 		file.close();
