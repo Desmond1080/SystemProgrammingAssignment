@@ -4,6 +4,7 @@
 #include "EventManager.h"
 #include "FileManager.h"
 #include "validation.h"
+#include "payment.h"
 
 #include <iostream>
 #include <limits>
@@ -442,7 +443,7 @@ Event createEventFromInput() {
 	}
 
 	Event e(name, description, static_cast<EventCategory>(categoryChoice),
-		startTime, endTime, location, organizer, ticketPrice, {});
+		startTime, endTime, location, organizer, "scheduled", {});
 
 	// Add ticket categories
 	char addMore = 'n';
@@ -707,6 +708,12 @@ void manageEvents() {
 				else {
 					manager.editEvent(idx, fresh);
 					cout << "Event fully updated!\n";
+					// compare to previous name 
+					string prevName = manager.getEvents()[idx].name;
+					if (prevName != updated.name) {
+						// update payment records if name changes
+						updateEventNameInPayments(prevName, updated.name);
+					}
 				}
 			}
 			else {
@@ -731,6 +738,7 @@ void manageEvents() {
 				if (getConfirmation("Are you sure you want to delete event '" +
 					manager.getEvents()[idx].name + "'? (y/n): ")) {
 					manager.deleteEvent(idx);
+					// change status to cancelled
 					cout << "Event deleted!\n";
 				}else {
 						cout << "Delete cancelled.\n";

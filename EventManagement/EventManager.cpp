@@ -47,14 +47,14 @@ void EventManager::editEvent(size_t index, const Event& updatedEvent) {
 
 }
 
-void EventManager::deleteEvent(size_t index) {
-    if (index < events.size()) {
-        events.erase(events.begin() + index);
-    }
-    else {
-        cout << "Invalid event index." << endl;
-    }
-}
+//void EventManager::deleteEvent(size_t index) {
+//    if (index < events.size()) {
+//        events.erase(events.begin() + index);
+//    }
+//    else {
+//        cout << "Invalid event index." << endl;
+//    }
+//}
 
 Event EventManager::searchEventByName(const string& name) const {
     string loweredName = name;

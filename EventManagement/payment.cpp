@@ -479,3 +479,23 @@ void refundPayment() {
 
     saveAllPayments(payments);
 }
+
+void updateEventNameInPayments(const string& prevName, const string& newName) {
+	vector<Payment> payments = loadPaymentsFromFile();
+	bool updated = false;
+
+	for (auto& p : payments) {
+		if (p.eventName == prevName) {
+			p.eventName = newName;
+			updated = true;
+		}
+	}
+
+	if (updated) {
+		saveAllPayments(payments);
+		cout << "Updated event name in payment records from '" << prevName << "' to '" << newName << "'.\n";
+	}
+	else {
+		cout << "No payment records found for event: " << prevName << ". No updates made.\n";
+	}
+}
