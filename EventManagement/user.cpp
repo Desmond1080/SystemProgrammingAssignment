@@ -46,7 +46,7 @@ bool userLoginMenu(User &user) {
 				break;
 			case 3:
 				clearScreen();
-				browseEvents(nullptr);
+				guestMenu();
 				break;
 			case 4:
 				clearScreen();
@@ -102,8 +102,9 @@ void userMenu(User& user) {
 			case 1:
 				browseEvents(&user);
 				break;
-			case 2:
-				viewTickets(user);
+			case 2:	
+				clearScreen();
+				viewTickets(user.email);
 				break;
 			case 3:
 				displayUserProfile(user);
@@ -472,7 +473,7 @@ void deleteUserAccount(User& user) {
 }
 
 // view tickets 
-void viewTickets(User& user) {
+void viewTickets(string &email) {
 	cout << "=== View Tickets ===" << endl;
 
 	//load all payments from file 
@@ -481,7 +482,7 @@ void viewTickets(User& user) {
 
 	//filter payments for user 
 	for (int i = 0; i < payments.size(); i++) {
-		if (payments[i].email == user.email && payments[i].status == "Completed") {
+		if (payments[i].email == email && payments[i].status == "Completed") {
 			userPayments.push_back(payments[i]);
 		}
 	}
@@ -521,7 +522,14 @@ void viewTickets(User& user) {
 			cout << "Invalid input. Please enter a number." << endl;
 			continue;
 		}
-		if (validateChoice(ticketChoice, 0, userPayments.size())) {
+
+		// check if user wants to return 
+		if (ticketChoice == 0) {
+			return;
+		}
+
+		if (validateChoice(ticketChoice, 1, userPayments.size())) {
+			clearScreen();
 			Payment selectedPayment = userPayments[ticketChoice - 1];
 			cout << "=== Ticket Details ===" << endl;
 			cout << "Event Name: " << selectedPayment.eventName << endl;

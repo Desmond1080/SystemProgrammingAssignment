@@ -47,6 +47,19 @@ void getGuestDetails(Payment& p) {
     }
 
     while (true) {
+        cout << "\n===== Customer Details =====\n";
+        cout << "Enter your email: ";
+        getline(cin, p.email);
+
+        if (validateEmail(p.email)) {
+            break;
+        }
+        else {
+            cout << "\nInvalid email format. Please try again.\n";
+        }
+    }
+
+    while (true) {
         cout << "Enter phone number (within 10 numbers): ";
         getline(cin, p.phone);
 

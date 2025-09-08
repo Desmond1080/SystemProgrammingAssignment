@@ -196,11 +196,10 @@ void selectTicket(Event event, User* user) {
 
         while (true) {
             cout << "Enter 'Y' to proceed to checkout or 'N' to buy more tickets: ";
-            
-			cin >> proceedChoice;
+           
             
             // Check if input is valid
-            if (!(cin >> ticketChoice)) {
+            if (!(cin >> proceedChoice)) {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 cout << "Invalid choice. Please try again." << endl;
