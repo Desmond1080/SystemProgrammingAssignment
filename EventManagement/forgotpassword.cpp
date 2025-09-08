@@ -6,6 +6,8 @@ using namespace std;
 
 // for user 
 void forgotPassword(const string& email) {
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
 	User user1;
 	if (!loadUserProfile(email, user1)) {
 		cout << "Email not found." << endl;
@@ -25,6 +27,7 @@ void forgotPassword(const string& email) {
 			if (validatePassword(newPassword)) {
 				updatePassword(email, newPassword);
 				cout << "Password updated successfully." << endl;
+				system("pause");
 				break;
 			}
 			else {
@@ -34,6 +37,7 @@ void forgotPassword(const string& email) {
 	}
 	else {
 		cout << "Nickname does not match. Cannot reset password." << endl;
+		system("pause");
 	}
 
 }

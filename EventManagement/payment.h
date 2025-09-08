@@ -3,6 +3,8 @@
 #ifndef PAYMENT_H
 #define PAYMENT_H
 
+#include "function.h"
+
 #include <iostream>
 #include <string>
 #include <regex>
@@ -34,7 +36,7 @@ void generateReceipt(const Payment& p);
 void savePaymentToFile(const Payment& p);
 vector<Payment> loadPaymentsFromFile();
 void saveAllPayments(const vector<Payment>& payments);
-void refundPayment();
+void refundPayment(User* user);
 void updateEventNameInPayments(const string& prevName, const string& newName);
 
 // Validation function declarations

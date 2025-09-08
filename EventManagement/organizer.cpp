@@ -56,7 +56,9 @@ bool organizerLoginMenu(Organizer& loginOrganizer) {
 			}
 		}
 		else {
+			cout << endl << endl;
 			cout << "Invalid input. Please enter a number between 1 and 3." << endl;
+			clearScreen();
 		}
 	}
 }
@@ -69,9 +71,7 @@ void organizerMenu(Organizer& organizer) {
 		cout << "1. View Profile" << endl;
 		cout << "2. Edit Profile" << endl;
 		cout << "3. Manage Events" << endl;
-		cout << "4. Add helper to the event" << endl;
-		cout << "5. Delete Account" << endl;
-		cout << "6. Logout" << endl;
+		cout << "4. Logout" << endl;
 		cout << "Enter your choice: ";
 		
 		// Check if input is valid
@@ -82,7 +82,7 @@ void organizerMenu(Organizer& organizer) {
 			continue;
 		}
 
-		if (validateChoice(choice,1,6)) {
+		if (validateChoice(choice,1,4)) {
 			switch (choice) {
 			case 1:
 				clearScreen();
@@ -97,15 +97,6 @@ void organizerMenu(Organizer& organizer) {
 				manageEvents();
 				break;
 			case 4:
-				clearScreen();
-				// helper management
-				break;
-			case 5:
-				clearScreen();
-				// delete account
-				choice = 6; // to exit after deletion
-				break;
-			case 6:
 				clearScreen();
 				cout << "Logging out..." << endl;
 				break;
@@ -397,15 +388,15 @@ Event createEventFromInput() {
 		break;
 	}
 
-	ticketPrice = getDoubleInput("Enter Base Ticket Price (q to cancel): ");
-	if(ticketPrice == -1.0) {
-		clearScreen();
-		return Event();
-	}
-	if (ticketPrice < 0.0) {
-		cout << "Ticket price cannot be negative!\n";
-		return Event();
-	}
+	//ticketPrice = getDoubleInput("Enter Base Ticket Price (q to cancel): ");
+	//if(ticketPrice == -1.0) {
+	//	clearScreen();
+	//	return Event();
+	//}
+	//if (ticketPrice < 0.0) {
+	//	cout << "Ticket price cannot be negative!\n";
+	//	return Event();
+	//}
 
 	while (true) {
 		string startStr, endStr;
@@ -737,8 +728,11 @@ void manageEvents() {
 
 				if (getConfirmation("Are you sure you want to delete event '" +
 					manager.getEvents()[idx].name + "'? (y/n): ")) {
-					manager.deleteEvent(idx);
 					// change status to cancelled
+
+					Event updated = manager.getEvents()[idx];
+					updated.cancelEvent();
+					manager.editEvent(idx, updated);
 					cout << "Event deleted!\n";
 				}else {
 						cout << "Delete cancelled.\n";

@@ -370,114 +370,179 @@ void saveAllPayments(const vector<Payment>& payments) {
     }
 }
 
-void refundPayment() {
-    vector<Payment> payments = loadPaymentsFromFile();
-    bool found = false;
+void refundPayment(User* user) {
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    string searchName, searchPhone;
+    vector<Payment> payments = loadPaymentsFromFile();
+    vector<int> userPaymentIndices;
+    string searchEmail;
 
     while (true) {
         cout << "\n===== Refund Menu =====\n";
-        cout << "Enter your name: ";
-        getline(cin, searchName);
+        cout << "Enter your email: ";
+        getline(cin, searchEmail);
 
-        if (validatePaymentName(searchName)) {
+        if (validateEmail(searchEmail)) {
             break;
         }
         else {
-            cout << "\nInvalid name? Name must be 2-50 characters with only letters and spaces.\n";
+            cout << "\nInvalid Email.\n";
         }
     }
 
-    while (true) {
-        cout << "Enter phone number (within 10 numbers): ";
-        getline(cin, searchPhone);
+    // Collect all payments for this email
+    for (size_t i = 0; i < payments.size(); ++i) {
+        if (payments[i].email == searchEmail && payments[i].status == "Completed") {
+            userPaymentIndices.push_back(static_cast<int>(i));
+        }
+    }
 
-        if (validateContactNumber(searchPhone)) {
+    if (userPaymentIndices.empty()) {
+        cout << "No payment found for the given email.\n";
+        system("pause");
+        return;
+    }
+    clearScreen();
+    // Show all payments for this email
+    cout << "\n===== Your Payments =====\n";
+    for (size_t idx = 0; idx < userPaymentIndices.size(); ++idx) {
+        const Payment& p = payments[userPaymentIndices[idx]];
+        cout << idx + 1 << ". "
+            << "Date   : " << p.date << "\n"
+            << "   Time   : " << p.time << "\n"
+            << "   Event  : " << p.eventName << "\n"
+            << "   Amount : RM " << fixed << setprecision(2) << p.amount << "\n"
+            << "   Status : " << p.status << "\n"
+            << "   Tickets: ";
+        EventManager manager;
+        string filename = "events.json";
+
+        // Load existing events if file exists
+        auto existing = FileManager::loadFromJSON(filename);
+        for (auto& e : existing) {
+            manager.addEvent(e);
+        }
+
+        Event event = manager.searchEventByName(p.eventName);
+
+        //cout << "Event found." << event.name << endl;
+
+        for (size_t i = 0; i < p.tickets.size(); ++i) {
+            int catIndex = p.tickets[i].first;
+            int quantity = p.tickets[i].second;
+
+            cout << quantity << " x " << event.categoryOptions[catIndex].first;
+            if (i < p.tickets.size() - 1) {
+                cout << ", ";
+            }
+        }
+
+        cout << endl;
+    }
+
+    // Let user choose which payment to refund
+    int choice = 0;
+    while (true) {
+        cout << "Enter the number of the payment you want to refund (0 to cancel): ";
+        string input;
+        getline(cin, input);
+        try {
+            choice = stoi(input);
+        }
+        catch (...) {
+            choice = -1;
+        }
+        if (choice == 0) {
+            cout << "Refund cancelled by user.\n";
+            return;
+        }
+        if (choice >= 1 && choice <= static_cast<int>(userPaymentIndices.size())) {
             break;
         }
-        cout << "\nInvalid phone number! Must be 10 digits starting with 01.\n";
-        cout << "Example: 0123456789\n" << endl;
+        cout << "Invalid choice. Please enter a valid number.\n";
     }
 
-    for (auto& p : payments) {
-        
-        if (p.name == searchName && p.phone == searchPhone) {
-            cout << "\n===== Payment Found =====\n";
-            cout << "Date   : " << p.date << "\n";
-            cout << "Time   : " << p.time << "\n";
-            cout << "Name   : " << p.name << "\n";
-            cout << "Email  : " << p.email << "\n";
-            cout << "Phone  : " << p.phone << "\n";
-            cout << "Method : " << p.method << "\n";
-            cout << "Status : " << p.status << "\n\n";
-            cout << "Amount : RM " << fixed << setprecision(2) << p.amount << "\n";
-            cout << "Event  : " << p.eventName << "\n";
-            cout << "Tickets: ";
+    Payment& p = payments[userPaymentIndices[choice - 1]];
+    clearScreen();
+    // Show details of the selected payment
+    cout << "\n===== Payment Details =====\n";
+    cout << "Date   : " << p.date << "\n";
+    cout << "Time   : " << p.time << "\n";
+    cout << "Name   : " << p.name << "\n";
+    cout << "Email  : " << p.email << "\n";
+    cout << "Phone  : " << p.phone << "\n";
+    cout << "Method : " << p.method << "\n";
+    cout << "Status : " << p.status << "\n";
+    cout << "Amount : RM " << fixed << setprecision(2) << p.amount << "\n";
+    cout << "Event  : " << p.eventName << "\n";
+    cout << "Tickets: ";
+    EventManager manager;
+    string filename = "events.json";
+    auto existing = FileManager::loadFromJSON(filename);
+    for (auto& e : existing) manager.addEvent(e);
+    Event event = manager.searchEventByName(p.eventName);
+    for (size_t i = 0; i < p.tickets.size(); ++i) {
+        int catIndex = p.tickets[i].first;
+        int quantity = p.tickets[i].second;
+        cout << "- " << quantity << " x " << event.categoryOptions[catIndex].first;
+        if (i < p.tickets.size() - 1) cout << ", ";
+    }
+    cout << endl;
 
-            EventManager manager;
-            string filename = "events.json";
+    if (p.status == "Cancelled") {
+        cout << "This payment has already been cancelled.\n";
+        return;
+    }
+    else if (p.status == "Refunded") {
+        cout << "Payment has already been refunded.\n";
+        return;
+    }
 
-            // Load existing events if file exists
-            auto existing = FileManager::loadFromJSON(filename);
-            for (auto& e : existing) {
-                manager.addEvent(e);
+    char confirm;
+    while (true) {
+        cout << "Do you want to refund this payment? (y/n): ";
+        string input;
+        getline(cin, input);
+        if (input.length() == 1) {
+            confirm = tolower(input[0]);
+            if (confirm == 'y' || confirm == 'n') break;
+        }
+        cout << "Invalid input! Please enter 'y' or 'n'.\n";
+    }
+
+    if (confirm == 'y') {
+        p.status = "Refunded";
+        cout << "Refund processed successfully.\n";
+        saveAllPayments(payments);
+        system("pause");
+
+        // Update event ticket availability
+        int eventIdx = -1;
+        const auto& events = manager.getEvents();
+        for (size_t i = 0; i < events.size(); ++i) {
+            if (events[i].name == event.name) {
+                eventIdx = static_cast<int>(i);
+                break;
             }
-
-            Event event = manager.searchEventByName(p.eventName);
-
-            for (size_t i = 0; i < p.tickets.size(); ++i) {
-			    int catIndex = p.tickets[i].first;
-			    int quantity = p.tickets[i].second;
-				cout << "- " << quantity << " x " << event.categoryOptions[catIndex].first;
-				if (i < p.tickets.size() - 1) {
-					cout << ", ";
-				}
-			}
-
-            if (p.status == "Cancelled") {
-                cout << "This payment has already been cancelled.\n";
-                return;
-            }
-            else if (p.status == "Refunded") {
-                cout << "Payment has already been refunded.\n";
-                return;
-            }
-
-            char confirm;
-            while (true) {
-                cout << "Do you want to refund this payment? (y/n): ";
-                string input;
-                getline(cin, input); 
-
-                if (input.length() == 1) {          
-                    confirm = tolower(input[0]);    
-                    if (confirm == 'y' || confirm == 'n') {
-                        break; 
-                    }
+        }
+        if (eventIdx != -1) {
+            Event updated = manager.getEvents()[eventIdx];
+            for (const auto& t : p.tickets) {
+                int catIndex = t.first;
+                int qty = t.second;
+                if (catIndex >= 0 && catIndex < static_cast<int>(updated.categoryOptions.size())) {
+                    int currentCapacity = updated.categoryOptions.at(catIndex).second.second;
+                    updated.updateCategoryCapacity(catIndex, currentCapacity + qty);
                 }
-                cout << "Invalid input! Please enter 'y' or 'n'.\n";
             }
-
-
-            if (confirm == 'y' || confirm == 'Y') {
-                p.status = "Refunded";
-                cout << "Refund processed successfully.\n";
-            }
-            else {
-                cout << "Refund aborted by user.\n";
-            }
-
-            found = true;
-            break; // stop after first exact match
+            manager.editEvent(eventIdx, updated);
+            FileManager::saveToJSON("events.json", manager.getEvents());
         }
     }
-
-    if (!found) {
-        cout << "No payment found for the given name and phone number.\n";
+    else {
+        cout << "Refund aborted by user.\n";
+        system("pause");
     }
-
-    saveAllPayments(payments);
 }
 
 void updateEventNameInPayments(const string& prevName, const string& newName) {

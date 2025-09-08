@@ -1,45 +1,24 @@
 {
-    "events": [
+  "events": [
+    {
+      "category": 5,
+      "categoryOptions": [
         {
-            "category": 3,
-            "categoryOptions": [
-                {
-                    "available": 77,
-                    "catName": "VIP",
-                    "price": 400.0
-                }
-            ],
-            "description": "This is a fun event haha",
-            "endDate": 0,
-            "location": "Kuala Lumpur",
-            "name": "Testing Event",
-            "organizer": "XT",
-            "startDate": 0,
-            "ticketPrice": 200.0
+          "available": 100,
+          "catName": "VIP",
+          "price": 120.0
         },
         {
-            "category": 3,
-            "categoryOptions": [
-                {
-                    "available": 20,
-                    "catName": "VIP",
-                    "price": 400.0
-                }
-            ],
-            "description": "This is a fun event haha",
-            "endDate": 0,
-            "location": "Kuala Lumpur",
-            "name": "Testing Event",
-            "organizer": "XT",
-            "startDate": 0,
-            "ticketPrice": 200.0
+          "available": 500,
+          "catName": "Standard",
+          "price": 50.0
         }
       ],
       "description": "Outdoor concert",
       "location": "Central Park",
       "name": "Music Festival",
       "organizer": "ABC Corp",
-      "status": "scheduled", 
+      "status": "scheduled",
       "timestamp": 1757103929
     },
     {
@@ -55,7 +34,7 @@
       "location": "Kuala Lumpur",
       "name": "Testing Event",
       "organizer": "XT",
-      "status": "scheduled", 
+      "status": "scheduled",
       "timestamp": 1757153460
     },
     {
@@ -76,7 +55,7 @@
       "location": "Penang bridge",
       "name": "Penang Marathon",
       "organizer": "ABC Corp",
-      "status": "scheduled", 
+      "status": "scheduled",
       "timestamp": 1757103929
     },
     {
@@ -97,7 +76,7 @@
       "location": "Central Park",
       "name": "Charity Amazing Hunt",
       "organizer": "ABC Corp",
-      "status": "scheduled", 
+      "status": "scheduled",
       "timestamp": 1757103929
     },
     {
@@ -118,7 +97,7 @@
       "location": "COEX",
       "name": "Comedy Clash",
       "organizer": "Penang laughs",
-      "status": "scheduled", 
+      "status": "scheduled",
       "timestamp": 1757103929
     },
     {
@@ -139,7 +118,7 @@
       "location": "COEX",
       "name": "Open Mic",
       "organizer": "Penang laughs",
-      "status": "scheduled", 
+      "status": "scheduled",
       "timestamp": 1757103929
     }
   ]

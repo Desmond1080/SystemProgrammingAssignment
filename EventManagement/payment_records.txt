@@ -1,44 +1,20 @@
-Date  : 2025-09-07
-Time  : 11:08:22
-Name  : Moni Piku
-Email : dester@gmail.com
-Phone : 0123456219
-Method: E-Wallet
-Status: Refunded
-Amount: RM 34567.00
-Event : Testing Event
-Tickets: 0|2,1|1
--------------------------
-
-Date  : 2025-09-08
-Time  : 00:51:42
-Name  : dada
-Email : dester@gmail.com
-Phone : 0123456789
-Method: E-Wallet
-Status: Completed
-Amount: RM 120.00
-Event : Music Festival
-Tickets: 0|1
--------------------------
-
-Date  : 2025-09-08
-Time  : 00:52:23
-Name  : dada
-Email : dester@gmail.com
-Phone : 0123456789
+Date  : 2025-08-05
+Time  : 09:15:22
+Name  : Ahmad Zulkarnain
+Email : ahmad@gmail.com
+Phone : 0165551234
 Method: Credit/Debit Card
 Status: Completed
-Amount: RM 290.00
+Amount: RM 100.00
 Event : Music Festival
-Tickets: 0|2,1|1
+Tickets: 1|3
 -------------------------
 
-Date  : 2025-09-08
-Time  : 14:41:51
-Name  : des
-Email : 
-Phone : 012-3456789
+Date  : 2025-08-03
+Time  : 09:15:22
+Name  : Ahmad Zulkarnain
+Email : ahmad@gmail.com
+Phone : 0165551234
 Method: Credit/Debit Card
 Status: Completed
 Amount: RM 100.00
@@ -46,27 +22,1107 @@ Event : Music Festival
 Tickets: 1|2
 -------------------------
 
-Date  : 2025-09-08
-Time  : 15:26:11
-Name  : des
-Email : 
-Phone : 012-3456789
-Method: Credit/Debit Card
+Date  : 2025-08-12
+Time  : 14:30:45
+Name  : Sarah Lim
+Email : sarah.lim@gmail.com
+Phone : 0178236549
+Method: E-Wallet
 Status: Completed
 Amount: RM 400.00
 Event : Testing Event
 Tickets: 0|1
 -------------------------
 
-Date  : 2025-09-08
-Time  : 15:36:47
-Name  : dester
-Email : des@gmail.com
-Phone : 012-3456789
+Date  : 2025-08-05
+Time  : 16:05:18
+Name  : Benjamin Wong
+Email : benjaminw@gmail.com
+Phone : 0119876543
 Method: Credit/Debit Card
+Status: Refunded
+Amount: RM 140.00
+Event : Penang Marathon
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-08-22
+Time  : 11:11:07
+Name  : Chloe Tan
+Email : chloe.tan@gmail.com
+Phone : 0198765432
+Method: E-Wallet
+Status: Completed
+Amount: RM 100.00
+Event : Charity Amazing Hunt
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-30
+Time  : 20:45:59
+Name  : Daniel Raj
+Email : daniel.r@gmail.com
+Phone : 0123456789
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 100.00
+Event : Comedy Clash
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-08-07
+Time  : 10:00:33
+Name  : Emily Ng
+Email : emily.ng@gmail.com
+Phone : 0134567890
+Method: E-Wallet
+Status: Completed
+Amount: RM 240.00
+Event : Music Festival
+Tickets: 0|2
+-------------------------
+
+Date  : 2025-08-19
+Time  : 15:22:18
+Name  : Farid Hussein
+Email : farid.h@gmail.com
+Phone : 0145829367
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 30.00
+Event : Charity Amazing Hunt
+Tickets: 1|1
+-------------------------
+
+Date  : 2025-08-14
+Time  : 08:45:01
+Name  : Grace Lee
+Email : grace.lee@gmail.com
+Phone : 0159876324
+Method: E-Wallet
+Status: Completed
+Amount: RM 70.00
+Event : Penang Marathon
+Tickets: 1|1
+-------------------------
+
+Date  : 2025-08-25
+Time  : 19:30:44
+Name  : Hafiz Rahman
+Email : hafiz.r@gmail.com
+Phone : 0162233445
+Method: Credit/Debit Card
+Status: Refunded
+Amount: RM 200.00
+Event : Comedy Clash
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-10
+Time  : 12:05:57
+Name  : Iris Tan
+Email : iris.tan@gmail.com
+Phone : 0175566778
+Method: E-Wallet
+Status: Completed
+Amount: RM 280.00
+Event : Testing Event
+Tickets: 1|4
+-------------------------
+
+Date  : 2025-08-08
+Time  : 17:40:12
+Name  : Jason Lim
+Email : jason.lim@gmail.com
+Phone : 0187788990
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 150.00
+Event : Music Festival
+Tickets: 1|3
+-------------------------
+
+Date  : 2025-08-17
+Time  : 13:15:30
+Name  : Karen Koh
+Email : karen.koh@gmail.com
+Phone : 0190011223
+Method: E-Wallet
+Status: Completed
+Amount: RM 120.00
+Event : Penang Marathon
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-29
+Time  : 21:05:25
+Name  : Leonard Chin
+Email : leonard.c@gmail.com
+Phone : 0112345678
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 60.00
+Event : Charity Amazing Hunt
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-08-02
+Time  : 14:55:10
+Name  : Melissa Wong
+Email : melissa.w@gmail.com
+Phone : 0123456000
+Method: E-Wallet
 Status: Completed
 Amount: RM 400.00
 Event : Testing Event
 Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-21
+Time  : 11:30:05
+Name  : Nathan Ng
+Email : nathan.ng@gmail.com
+Phone : 0134567111
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 250.00
+Event : Comedy Clash
+Tickets: 1|5
+-------------------------
+
+Date  : 2025-08-16
+Time  : 10:10:10
+Name  : Olivia Phang
+Email : olivia.p@gmail.com
+Phone : 0145678222
+Method: E-Wallet
+Status: Completed
+Amount: RM 100.00
+Event : Charity Amazing Hunt
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-27
+Time  : 16:45:19
+Name  : Patrick Yeoh
+Email : patrick.y@gmail.com
+Phone : 0156789333
+Method: Credit/Debit Card
+Status: Refunded
+Amount: RM 50.00
+Event : Music Festival
+Tickets: 1|1
+-------------------------
+
+Date  : 2025-08-13
+Time  : 08:20:35
+Name  : Queenie Tan
+Email : queenie.t@gmail.com
+Phone : 0167890444
+Method: E-Wallet
+Status: Completed
+Amount: RM 210.00
+Event : Penang Marathon
+Tickets: 1|3
+-------------------------
+
+Date  : 2025-08-24
+Time  : 22:15:40
+Name  : Robert Teo
+Email : robert.t@gmail.com
+Phone : 0178901555
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 800.00
+Event : Testing Event
+Tickets: 0|2
+-------------------------
+
+Date  : 2025-08-06
+Time  : 09:05:15
+Name  : Samantha Cheng
+Email : samantha.c@gmail.com
+Phone : 0189012666
+Method: E-Wallet
+Status: Completed
+Amount: RM 150.00
+Event : Comedy Clash
+Tickets: 1|3
+-------------------------
+
+Date  : 2025-08-31
+Time  : 23:59:59
+Name  : Thomas Lim
+Email : thomas.l@gmail.com
+Phone : 0190123777
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 360.00
+Event : Music Festival
+Tickets: 0|3
+-------------------------
+
+Date  : 2025-08-09
+Time  : 12:45:28
+Name  : Uma Devi
+Email : uma.d@gmail.com
+Phone : 0112233445
+Method: E-Wallet
+Status: Completed
+Amount: RM 90.00
+Event : Charity Amazing Hunt
+Tickets: 1|3
+-------------------------
+
+Date  : 2025-08-18
+Time  : 15:35:22
+Name  : Vincent Ho
+Email : vincent.h@gmail.com
+Phone : 0123344556
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 140.00
+Event : Penang Marathon
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-08-26
+Time  : 18:20:17
+Name  : Wendy Low
+Email : wendy.l@gmail.com
+Phone : 0134455667
+Method: E-Wallet
+Status: Completed
+Amount: RM 70.00
+Event : Testing Event
+Tickets: 1|1
+-------------------------
+
+Date  : 2025-08-11
+Time  : 07:15:09
+Name  : Xavier Lim
+Email : xavier.l@gmail.com
+Phone : 0145566778
+Method: Credit/Debit Card
+Status: Refunded
+Amount: RM 200.00
+Event : Comedy Clash
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-28
+Time  : 20:10:03
+Name  : Yvonne Ong
+Email : yvonne.o@gmail.com
+Phone : 0156677889
+Method: E-Wallet
+Status: Completed
+Amount: RM 250.00
+Event : Music Festival
+Tickets: 1|5
+-------------------------
+
+Date  : 2025-08-15
+Time  : 14:00:50
+Name  : Zachary Tan
+Email : zachary.t@gmail.com
+Phone : 0167788990
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 200.00
+Event : Charity Amazing Hunt
+Tickets: 0|2
+-------------------------
+
+Date  : 2025-08-04
+Time  : 10:55:44
+Name  : Amelia Wong
+Email : amelia.w@gmail.com
+Phone : 0178899001
+Method: E-Wallet
+Status: Completed
+Amount: RM 240.00
+Event : Penang Marathon
+Tickets: 0|2
+-------------------------
+
+Date  : 2025-08-23
+Time  : 19:40:38
+Name  : Brandon Tee
+Email : brandon.t@gmail.com
+Phone : 0189900112
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 210.00
+Event : Testing Event
+Tickets: 1|3
+-------------------------
+
+Date  : 2025-08-20
+Time  : 11:25:32
+Name  : Cassandra Lee
+Email : cassandra.l@gmail.com
+Phone : 0190011224
+Method: E-Wallet
+Status: Completed
+Amount: RM 100.00
+Event : Comedy Clash
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-08-01
+Time  : 12:00:15
+Name  : David Ng
+Email : david.n@gmail.com
+Phone : 0111122233
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 120.00
+Event : Music Festival
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-02
+Time  : 13:50:29
+Name  : Eliza Raj
+Email : eliza.r@gmail.com
+Phone : 0122233344
+Method: E-Wallet
+Status: Completed
+Amount: RM 30.00
+Event : Charity Amazing Hunt
+Tickets: 1|1
+-------------------------
+
+Date  : 2025-08-03
+Time  : 15:40:43
+Name  : Felix Chong
+Email : felix.c@gmail.com
+Phone : 0133344455
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 70.00
+Event : Penang Marathon
+Tickets: 1|1
+-------------------------
+
+Date  : 2025-08-04
+Time  : 17:30:57
+Name  : Gina Lim
+Email : gina.l@gmail.com
+Phone : 0144455566
+Method: E-Wallet
+Status: Completed
+Amount: RM 400.00
+Event : Testing Event
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-05
+Time  : 19:21:11
+Name  : Henry Soh
+Email : henry.s@gmail.com
+Phone : 0155566677
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 50.00
+Event : Comedy Clash
+Tickets: 1|1
+-------------------------
+
+Date  : 2025-08-06
+Time  : 21:11:25
+Name  : Isabella Tan
+Email : isabella.t@gmail.com
+Phone : 0166677788
+Method: E-Wallet
+Status: Completed
+Amount: RM 100.00
+Event : Music Festival
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-07
+Time  : 23:01:39
+Name  : Julian Koh
+Email : julian.k@gmail.com
+Phone : 0177788899
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 60.00
+Event : Charity Amazing Hunt
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-08-08
+Time  : 08:51:53
+Name  : Kylie Wong
+Email : kylie.w@gmail.com
+Phone : 0188899000
+Method: E-Wallet
+Status: Completed
+Amount: RM 140.00
+Event : Penang Marathon
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-08-09
+Time  : 10:42:07
+Name  : Lucas Teo
+Email : lucas.t@gmail.com
+Phone : 0199900111
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 800.00
+Event : Testing Event
+Tickets: 0|2
+-------------------------
+
+Date  : 2025-08-10
+Time  : 12:32:21
+Name  : Mia Cheng
+Email : mia.c@gmail.com
+Phone : 0111000111
+Method: E-Wallet
+Status: Completed
+Amount: RM 100.00
+Event : Comedy Clash
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-08-11
+Time  : 14:22:35
+Name  : Nigel Ong
+Email : nigel.o@gmail.com
+Phone : 0122111222
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 360.00
+Event : Music Festival
+Tickets: 0|3
+-------------------------
+
+Date  : 2025-08-12
+Time  : 16:12:49
+Name  : Ophelia Phua
+Email : ophelia.p@gmail.com
+Phone : 0133222333
+Method: E-Wallet
+Status: Completed
+Amount: RM 90.00
+Event : Charity Amazing Hunt
+Tickets: 1|3
+-------------------------
+
+Date  : 2025-08-13
+Time  : 18:03:03
+Name  : Peter Lim
+Email : peter.l@gmail.com
+Phone : 0144333444
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 210.00
+Event : Penang Marathon
+Tickets: 1|3
+-------------------------
+
+Date  : 2025-08-14
+Time  : 19:53:17
+Name  : Quinn Tan
+Email : quinn.t@gmail.com
+Phone : 0155444555
+Method: E-Wallet
+Status: Completed
+Amount: RM 70.00
+Event : Testing Event
+Tickets: 1|1
+-------------------------
+
+Date  : 2025-08-15
+Time  : 21:43:31
+Name  : Ryan Ho
+Email : ryan.h@gmail.com
+Phone : 0166555666
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 200.00
+Event : Comedy Clash
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-16
+Time  : 23:33:45
+Name  : Sophie Ng
+Email : sophie.n@gmail.com
+Phone : 0177666777
+Method: E-Wallet
+Status: Completed
+Amount: RM 250.00
+Event : Music Festival
+Tickets: 1|5
+-------------------------
+
+Date  : 2025-08-17
+Time  : 08:23:59
+Name  : Timothy Wong
+Email : timothy.w@gmail.com
+Phone : 0188777888
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 200.00
+Event : Charity Amazing Hunt
+Tickets: 0|2
+-------------------------
+
+Date  : 2025-08-18
+Time  : 10:14:13
+Name  : Uma Raj
+Email : uma.r@gmail.com
+Phone : 0199888999
+Method: E-Wallet
+Status: Completed
+Amount: RM 240.00
+Event : Penang Marathon
+Tickets: 0|2
+-------------------------
+
+Date  : 2025-08-19
+Time  : 12:04:27
+Name  : Victor Chin
+Email : victor.c@gmail.com
+Phone : 0111999000
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 210.00
+Event : Testing Event
+Tickets: 1|3
+-------------------------
+
+Date  : 2025-08-20
+Time  : 13:54:41
+Name  : Willow Tan
+Email : willow.t@gmail.com
+Phone : 0123000111
+Method: E-Wallet
+Status: Completed
+Amount: RM 100.00
+Event : Comedy Clash
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-08-21
+Time  : 15:44:55
+Name  : Xavier Lim
+Email : xavier.lim@gmail.com
+Phone : 0134111222
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 120.00
+Event : Music Festival
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-22
+Time  : 17:35:09
+Name  : Yara Singh
+Email : yara.s@gmail.com
+Phone : 0145222333
+Method: E-Wallet
+Status: Completed
+Amount: RM 30.00
+Event : Charity Amazing Hunt
+Tickets: 1|1
+-------------------------
+
+Date  : 2025-08-23
+Time  : 19:25:23
+Name  : Zane Cheng
+Email : zane.c@gmail.com
+Phone : 0156333444
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 70.00
+Event : Penang Marathon
+Tickets: 1|1
+-------------------------
+
+Date  : 2025-08-24
+Time  : 21:15:37
+Name  : Alyssa Teo
+Email : alyssa.t@gmail.com
+Phone : 0167444555
+Method: E-Wallet
+Status: Completed
+Amount: RM 400.00
+Event : Testing Event
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-25
+Time  : 23:05:51
+Name  : Brian Ong
+Email : brian.o@gmail.com
+Phone : 0178555666
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 50.00
+Event : Comedy Clash
+Tickets: 1|1
+-------------------------
+
+Date  : 2025-08-26
+Time  : 08:56:05
+Name  : Chloe Wong
+Email : chloe.w@gmail.com
+Phone : 0189666777
+Method: E-Wallet
+Status: Completed
+Amount: RM 100.00
+Event : Music Festival
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-27
+Time  : 10:46:19
+Name  : Darren Lim
+Email : darren.l@gmail.com
+Phone : 0190777888
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 60.00
+Event : Charity Amazing Hunt
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-08-28
+Time  : 12:36:33
+Name  : Emma Ho
+Email : emma.h@gmail.com
+Phone : 0111888999
+Method: E-Wallet
+Status: Completed
+Amount: RM 140.00
+Event : Penang Marathon
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-08-29
+Time  : 14:26:47
+Name  : Finn Tan
+Email : finn.t@gmail.com
+Phone : 0122999000
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 800.00
+Event : Testing Event
+Tickets: 0|2
+-------------------------
+
+Date  : 2025-08-30
+Time  : 16:17:01
+Name  : Grace Ng
+Email : grace.ng@gmail.com
+Phone : 0133000111
+Method: E-Wallet
+Status: Completed
+Amount: RM 100.00
+Event : Comedy Clash
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-08-31
+Time  : 18:07:15
+Name  : Hugo Raj
+Email : hugo.r@gmail.com
+Phone : 0144111222
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 360.00
+Event : Music Festival
+Tickets: 0|3
+-------------------------
+
+Date  : 2025-08-01
+Time  : 19:57:29
+Name  : Isabella Chin
+Email : isabella.c@gmail.com
+Phone : 0155222333
+Method: E-Wallet
+Status: Completed
+Amount: RM 90.00
+Event : Charity Amazing Hunt
+Tickets: 1|3
+-------------------------
+
+Date  : 2025-08-02
+Time  : 21:47:43
+Name  : Jake Wong
+Email : jake.w@gmail.com
+Phone : 0166333444
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 210.00
+Event : Penang Marathon
+Tickets: 1|3
+-------------------------
+
+Date  : 2025-08-03
+Time  : 23:37:57
+Name  : Kaitlyn Tan
+Email : kaitlyn.t@gmail.com
+Phone : 0177444555
+Method: E-Wallet
+Status: Completed
+Amount: RM 70.00
+Event : Testing Event
+Tickets: 1|1
+-------------------------
+
+Date  : 2025-08-04
+Time  : 08:28:11
+Name  : Leo Lim
+Email : leo.lim@gmail.com
+Phone : 0188555666
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 200.00
+Event : Comedy Clash
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-05
+Time  : 10:18:25
+Name  : Maya Ong
+Email : maya.o@gmail.com
+Phone : 0199666777
+Method: E-Wallet
+Status: Completed
+Amount: RM 250.00
+Event : Music Festival
+Tickets: 1|5
+-------------------------
+
+Date  : 2025-08-06
+Time  : 12:08:39
+Name  : Noah Teo
+Email : noah.t@gmail.com
+Phone : 0111777888
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 200.00
+Event : Charity Amazing Hunt
+Tickets: 0|2
+-------------------------
+
+Date  : 2025-08-07
+Time  : 13:58:53
+Name  : Olivia Phang
+Email : olivia.phang@gmail.com
+Phone : 0122888999
+Method: E-Wallet
+Status: Completed
+Amount: RM 240.00
+Event : Penang Marathon
+Tickets: 0|2
+-------------------------
+
+Date  : 2025-08-08
+Time  : 15:49:07
+Name  : Paul Soh
+Email : paul.s@gmail.com
+Phone : 0133999000
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 210.00
+Event : Testing Event
+Tickets: 1|3
+-------------------------
+
+Date  : 2025-08-09
+Time  : 17:39:21
+Name  : Quinn Cheng
+Email : quinn.c@gmail.com
+Phone : 0144000111
+Method: E-Wallet
+Status: Completed
+Amount: RM 100.00
+Event : Comedy Clash
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-08-10
+Time  : 19:29:35
+Name  : Ryan Ng
+Email : ryan.ng@gmail.com
+Phone : 0155111222
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 120.00
+Event : Music Festival
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-11
+Time  : 21:19:49
+Name  : Sara Lim
+Email : sara.lim@gmail.com
+Phone : 0166222333
+Method: E-Wallet
+Status: Completed
+Amount: RM 30.00
+Event : Charity Amazing Hunt
+Tickets: 1|1
+-------------------------
+
+Date  : 2025-08-12
+Time  : 23:10:03
+Name  : Thomas Wong
+Email : thomas.w@gmail.com
+Phone : 0177333444
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 70.00
+Event : Penang Marathon
+Tickets: 1|1
+-------------------------
+
+Date  : 2025-08-13
+Time  : 09:00:17
+Name  : Uma Devi
+Email : uma.devi@gmail.com
+Phone : 0188444555
+Method: E-Wallet
+Status: Completed
+Amount: RM 400.00
+Event : Testing Event
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-14
+Time  : 10:50:31
+Name  : Vincent Ho
+Email : vincent.ho@gmail.com
+Phone : 0199555666
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 50.00
+Event : Comedy Clash
+Tickets: 1|1
+-------------------------
+
+Date  : 2025-08-15
+Time  : 12:40:45
+Name  : Willow Tan
+Email : willow.tan@gmail.com
+Phone : 0111666777
+Method: E-Wallet
+Status: Completed
+Amount: RM 100.00
+Event : Music Festival
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-16
+Time  : 14:30:59
+Name  : Xavier Lim
+Email : xavier.lim2@gmail.com
+Phone : 0122777888
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 60.00
+Event : Charity Amazing Hunt
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-08-17
+Time  : 16:21:13
+Name  : Yvonne Ong
+Email : yvonne.ong@gmail.com
+Phone : 0133888999
+Method: E-Wallet
+Status: Completed
+Amount: RM 140.00
+Event : Penang Marathon
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-08-18
+Time  : 18:11:27
+Name  : Zachary Teo
+Email : zachary.t@gmail.com
+Phone : 0144999000
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 800.00
+Event : Testing Event
+Tickets: 0|2
+-------------------------
+
+Date  : 2025-08-19
+Time  : 20:01:41
+Name  : Amelia Wong
+Email : amelia.wong@gmail.com
+Phone : 0155000111
+Method: E-Wallet
+Status: Completed
+Amount: RM 100.00
+Event : Comedy Clash
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-08-20
+Time  : 21:51:55
+Name  : Brandon Cheng
+Email : brandon.c@gmail.com
+Phone : 0166111222
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 360.00
+Event : Music Festival
+Tickets: 0|3
+-------------------------
+
+Date  : 2025-08-21
+Time  : 23:42:09
+Name  : Cassandra Raj
+Email : cassandra.r@gmail.com
+Phone : 0177222333
+Method: E-Wallet
+Status: Completed
+Amount: RM 90.00
+Event : Charity Amazing Hunt
+Tickets: 1|3
+-------------------------
+
+Date  : 2025-08-22
+Time  : 08:32:23
+Name  : David Ng
+Email : david.ng@gmail.com
+Phone : 0188333444
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 210.00
+Event : Penang Marathon
+Tickets: 1|3
+-------------------------
+
+Date  : 2025-08-23
+Time  : 10:22:37
+Name  : Eliza Chin
+Email : eliza.c@gmail.com
+Phone : 0199444555
+Method: E-Wallet
+Status: Completed
+Amount: RM 70.00
+Event : Testing Event
+Tickets: 1|1
+-------------------------
+
+Date  : 2025-08-24
+Time  : 12:12:51
+Name  : Felix Lim
+Email : felix.l@gmail.com
+Phone : 0111555666
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 200.00
+Event : Comedy Clash
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-08-25
+Time  : 14:03:05
+Name  : Gina Wong
+Email : gina.w@gmail.com
+Phone : 0122666777
+Method: E-Wallet
+Status: Completed
+Amount: RM 250.00
+Event : Music Festival
+Tickets: 1|5
+-------------------------
+
+Date  : 2025-08-26
+Time  : 15:53:19
+Name  : Henry Tan
+Email : henry.t@gmail.com
+Phone : 0133777888
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 200.00
+Event : Charity Amazing Hunt
+Tickets: 0|2
+-------------------------
+
+Date  : 2025-08-27
+Time  : 17:43:33
+Name  : Iris Ong
+Email : iris@gmail.com
+Phone : 0144888999
+Method: E-Wallet
+Status: Completed
+Amount: RM 240.00
+Event : Penang Marathon
+Tickets: 0|2
+-------------------------
+
+Date  : 2025-08-28
+Time  : 19:33:47
+Name  : Julian Teo
+Email : julian.t@gmail.com
+Phone : 0155999000
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 210.00
+Event : Testing Event
+Tickets: 1|3
+-------------------------
+
+Date  : 2025-08-29
+Time  : 21:24:01
+Name  : Kylie Phang
+Email : kylie@gmail.com
+Phone : 0166000111
+Method: E-Wallet
+Status: Completed
+Amount: RM 100.00
+Event : Comedy Clash
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-08-30
+Time  : 23:14:15
+Name  : Lucas Ho
+Email : lucas.h@gmail.com
+Phone : 0177111222
+Method: Credit/Debit Card
+Status: Completed
+Amount: RM 120.00
+Event : Music Festival
+Tickets: 0|1
+-------------------------
+
+Date  : 2025-09-08
+Time  : 19:50:58
+Name  : dada
+Email : dester@gmail.com
+Phone : 0123456789
+Method: E-Wallet
+Status: Refunded
+Amount: RM 100.00
+Event : Music Festival
+Tickets: 1|2
+-------------------------
+
+Date  : 2025-09-08
+Time  : 19:57:06
+Name  : dada
+Email : dester@gmail.com
+Phone : 0123456789
+Method: E-Wallet
+Status: Completed
+Amount: RM 800.00
+Event : Testing Event
+Tickets: 0|2
 -------------------------
 

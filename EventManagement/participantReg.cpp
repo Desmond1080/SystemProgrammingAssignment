@@ -69,6 +69,17 @@ void browseEvents(User* user) {
 
         vector<Event> categoryEvents = manager.searchEventsByCategory(category);
 
+        // Filter out events that are full and past
+        time_t now = time(0);
+        categoryEvents.erase(remove_if(categoryEvents.begin(), categoryEvents.end(),
+			[now](const Event& e) {
+				bool allSoldOut = all_of(e.categoryOptions.begin(), e.categoryOptions.end(),
+					[](const pair<string, pair<double, int>>& cat) {
+						return cat.second.second <= 0; // Check if capacity is 0
+					});
+				return allSoldOut || e.endDate < now; // Remove if all categories sold out or event has ended
+			}), categoryEvents.end());
+
 		if (categoryEvents.empty()) {
 			//cout << "No events found in this category." << endl;
             system("pause"); // Press any key to continue
@@ -196,7 +207,6 @@ void selectTicket(Event event, User* user) {
 
         while (true) {
             cout << "Enter 'Y' to proceed to checkout or 'N' to buy more tickets: ";
-           
             
             // Check if input is valid
             if (!(cin >> proceedChoice)) {
@@ -250,7 +260,15 @@ void makePayment(vector<pair<int, int>> ticketsToBuy, User* user, Event event, i
 
     payment.amount = totalAmount;
 
-    showPaymentSummary(payment);
+    if (user == nullptr) {
+        showPaymentSummary(payment);
+    }
+    else {
+        cout << "----- Payment Summary -----\n";
+        cout << "Name        : " << payment.name << endl;
+        cout << "Email       : " << payment.email << endl;
+        cout << "Phone       : " << payment.phone << endl;
+    }
 
     // Choose method
     choosePaymentMethod(payment);
@@ -271,6 +289,7 @@ void makePayment(vector<pair<int, int>> ticketsToBuy, User* user, Event event, i
 
         int eventIdx = -1;
         const auto& events = manager.getEvents();
+
         for (size_t i = 0; i < events.size(); ++i) {
             if (events[i].name == event.name) {
                 eventIdx = static_cast<int>(i);

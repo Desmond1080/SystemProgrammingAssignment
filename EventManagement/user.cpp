@@ -1,9 +1,12 @@
-#include <iostream>
-#include <string>
-#include <algorithm>
 #include "function.h"
 #include "participantRegHeader.h"
 #include "payment.h"
+#include "FileManager.h"
+#include "EventManager.h"
+
+#include <iostream>
+#include <string>
+#include <algorithm>
 
 using namespace std;
 
@@ -13,7 +16,7 @@ bool userLoginMenu(User &user) {
 	User loginUser;
 
 	while (true) {
-		clearScreen();
+		//clearScreen();
 		cout << "=== User Page ===" << endl;
 		cout << "1. Login" << endl;
 		cout << "2. Register" << endl;
@@ -27,7 +30,7 @@ bool userLoginMenu(User &user) {
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			clearScreen();
-			cout << "Invalid input. Please enter a number." << endl;
+			cout << "Invalid input. Please enter a number." << endl << endl;
 			continue;
 		}
 		
@@ -61,6 +64,7 @@ bool userLoginMenu(User &user) {
 				clearScreen();
 				return false; // back to main menu
 			default:
+				clearScreen();
 				cout << "Invalid choice. Please try again." << endl;
 			}
 		}
@@ -80,12 +84,14 @@ void userMenu(User& user) {
 		clearScreen();
 		cout << "=== User Menu ===" << endl;
 		cout << "1. Browse Events" << endl;
-		cout << "2. View Tickets" << endl;
+		cout << "2. View Orders" << endl;
 		cout << "3. View Profile" << endl;
 		cout << "4. Edit Profile" << endl;
 		cout << "5. Delete Account" << endl;
 		cout << "6. Forgot Password" << endl;
-		cout << "7. Logout" << endl;
+		cout << "7. Refund Payment" << endl;
+		cout << "8. Logout" << endl;
+		cout << "=================" << endl;
 		cout << "Enter your choice: ";
 		
 		// Check if input is valid
@@ -97,14 +103,14 @@ void userMenu(User& user) {
 			continue;
 		}
 
-		if (validateChoice(choice,1,7)) {
+		if (validateChoice(choice,1,8)) {
 			switch (choice) {
 			case 1:
 				browseEvents(&user);
 				break;
 			case 2:	
 				clearScreen();
-				viewTickets(user.email);
+				viewOrders(user.email);
 				break;
 			case 3:
 				displayUserProfile(user);
@@ -118,8 +124,12 @@ void userMenu(User& user) {
 				return; // exit user menu after account deletion
 			case 6:
 				forgotPassword(user.email);
+				return; // exit user menu to re-login after password change
 				break;
 			case 7:
+				refundPayment(&user);
+				break;
+			case 8:
 				cout << "Logging out..." << endl;
 				clearScreen();
 				return; // exit user menu to logout
@@ -232,8 +242,10 @@ void userRegister() {
 		cout << "Enter password (At least 8 characters): ";
 		getline(cin, user1.password);
 		if (validatePassword(user1.password) && validateLine(user1.password)) {
-			//generate salt and hash password 
-			user1.salt = generateSalt();
+			//generate salt and hash password
+			do {
+				user1.salt = generateSalt();
+			} while (!validateLine(user1.salt));
 			user1.passwordHash = hashPassword(user1.password, user1.salt);
 			break;
 		}
@@ -265,6 +277,7 @@ bool userLogin(User &loginUser) {
 	if (!loadUserProfile(email, user1)) {
 		cout << "Login failed. Invalid email or password." << endl;
 		system("pause");
+		clearScreen();
 		return false;
 	}
 
@@ -288,11 +301,11 @@ bool userLogin(User &loginUser) {
 			attemps++;
 			user1.loginAttempts++;
 			cout << "Login failed. Invalid email or password." << endl;
-			cout << "Login attempts: " << user1.loginAttempts << endl;
-			cout << "You have " << (MAX_LOGIN_ATTEMPTS - attemps) << " attempts left." << endl;
+			cout << endl << "Login attempts: " << user1.loginAttempts << endl;
+			cout << "You have " << (MAX_LOGIN_ATTEMPTS - attemps) << " attempts left." << endl << endl;
 
 			if (attemps >= MAX_LOGIN_ATTEMPTS) {
-				cout << "Too many failed login attempts. " << endl;
+				cout << endl << "Too many failed login attempts. " << endl << endl;
 				cout << "Please try again later or use the 'Forgot Password' option (Y/N)." << endl;
 				char choice;
 				bool validChoice = false;
@@ -303,14 +316,16 @@ bool userLogin(User &loginUser) {
 					if (validatePasswordConfirmation(choice)) {
 						validChoice = true;
 						if (choice == 'Y' || choice == 'y') {
+							clearScreen();
 							forgotPassword(email);
 						}
 						else {
-							cout << "Please try again" << endl;
+							clearScreen();
+							cout << "Please try again later." << endl;
 						}
 					}
 					else {
-						cout << "Invalid input please field with y or n " << endl;
+						cout << "Invalid input please enter 'Y' or 'N'. " << endl;
 					}
 				} 
 				updateUserProfile(user1);
@@ -320,7 +335,6 @@ bool userLogin(User &loginUser) {
 	}
 	updateUserProfile(user1); // update the login attempt
 	return false;
-
 }
 
 // display user profile 
@@ -432,7 +446,9 @@ void editUserProfile(User& user) {
 			getline(cin, field);
 			if (!field.empty() && validatePassword(field)) {
 				user.password = field;
-				user.salt = generateSalt();
+				do {
+					user.salt = generateSalt();
+				} while (!validateLine(user.salt));
 				user.passwordHash = hashPassword(user.password, user.salt);
 				cout << "Password updated successfully!" << endl;
 				system("pause");
@@ -472,9 +488,9 @@ void deleteUserAccount(User& user) {
 	}
 }
 
-// view tickets 
-void viewTickets(string &email) {
-	cout << "=== View Tickets ===" << endl;
+// view orders
+void viewOrders(string &email) {
+	cout << "=== View Tickets ===" << endl << endl;
 
 	//load all payments from file 
 	vector<Payment> payments = loadPaymentsFromFile();
@@ -493,10 +509,10 @@ void viewTickets(string &email) {
 		return;
 	}
 
-	//display user tickets 
+	//display user tickets
 	for (int i = 0; i < userPayments.size(); i++) {
 		Payment p = userPayments[i];
-		cout << "=== Ticket " << (i + 1) << " ===" << endl;
+		cout << "--- Order " << (i + 1) << " ---" << endl;
 		cout << "Event Name: " << p.eventName << endl;
 		cout << "Purchase Date: " << p.date << endl;
 		cout << "Purchase Time: " << p.time << endl;
@@ -504,15 +520,36 @@ void viewTickets(string &email) {
 		cout << "Payment Method: " << p.method << endl;
 
 		//display tickets details 
-		cout << "Tickets: " << endl;
-		for (int j = 0; j < p.tickets.size(); j++) {
-			cout << "  Category Index: " << p.tickets[j].first << ", Quantity: " << p.tickets[j].second << endl;
+		cout << "Orders: " << endl;
+
+		EventManager manager;
+		string filename = "events.json";
+
+		// Load existing events if file exists
+		auto existing = FileManager::loadFromJSON(filename);
+		for (auto& e : existing) {
+			manager.addEvent(e);
 		}
-		cout << "======================================" << endl << endl;
+
+		Event event = manager.searchEventByName(p.eventName);
+
+		//cout << "Event found." << event.name << endl;
+
+		for (size_t i = 0; i < p.tickets.size(); ++i) {
+			int catIndex = p.tickets[i].first;
+			int quantity = p.tickets[i].second;
+
+			cout << quantity << " x " << event.categoryOptions[catIndex].first;
+			if (i < p.tickets.size() - 1) {
+				cout << ", ";
+			}
+		}
+
+		cout << endl << "-------------------------------" << endl << endl;
 	}
 
 	//option to view specific ticket details
-	cout << "Enter the ticket number to view details or 0 to return:";
+	cout << "Enter the ticket number to view details or 0 to return: ";
 	int ticketChoice;
 	//validate ticket choice input
 	while (true) {
@@ -531,7 +568,7 @@ void viewTickets(string &email) {
 		if (validateChoice(ticketChoice, 1, userPayments.size())) {
 			clearScreen();
 			Payment selectedPayment = userPayments[ticketChoice - 1];
-			cout << "=== Ticket Details ===" << endl;
+			cout << "=== Order Details ===" << endl;
 			cout << "Event Name: " << selectedPayment.eventName << endl;
 			cout << "Purchase Date: " << selectedPayment.date << endl;
 			cout << "Purchase Time: " << selectedPayment.time << endl;
@@ -540,10 +577,33 @@ void viewTickets(string &email) {
 			cout << "Amount Paid: RM" << selectedPayment.amount << endl;
 			cout << "Payment Method: " << selectedPayment.method << endl;
 
-			cout << "\n Ticket category: " << endl;
-			for (int j = 0; j < selectedPayment.tickets.size(); j++) {
-				cout << "  Category Index: " << selectedPayment.tickets[j].first << ", Quantity: " << selectedPayment.tickets[j].second << endl;
+			cout << "\nTickets: ";
+
+			EventManager manager;
+			string filename = "events.json";
+
+			// Load existing events if file exists
+			auto existing = FileManager::loadFromJSON(filename);
+			for (auto& e : existing) {
+				manager.addEvent(e);
 			}
+
+			Event event = manager.searchEventByName(selectedPayment.eventName);
+
+			//cout << "Event found." << event.name << endl;
+
+			for (size_t i = 0; i < selectedPayment.tickets.size(); ++i) {
+				int catIndex = selectedPayment.tickets[i].first;
+				int quantity = selectedPayment.tickets[i].second;
+
+				cout << quantity << " x " << event.categoryOptions[catIndex].first;
+				if (i < selectedPayment.tickets.size() - 1) {
+					cout << ", ";
+				}
+			}
+
+			cout << endl;
+
 			system("pause");
 			break;
 		}
