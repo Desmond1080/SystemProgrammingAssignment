@@ -15,7 +15,7 @@ void browseEvents(User* user) {
 
     while (true) {
         clearScreen();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+        //cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
 
         int catChoice = 0;
 
@@ -25,8 +25,17 @@ void browseEvents(User* user) {
         // Display exit as last option
         cout << static_cast<int>(EventCategory::Count) + 1 << ". Return" << endl;
 
-        cout << "Select Choice: ";
-        cin >> catChoice;
+        cout << endl << "Select Choice: ";
+        //cin >> catChoice;
+
+		// Check if input is valid
+		if (!(cin >> catChoice)) {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Invalid choice. Please try again." << endl;
+            system("pause"); // Press any key to continue
+			continue;
+		}
 
         // Invalid choice
         if (catChoice < 1 || catChoice > static_cast<int>(Category::Count) + 1) {
@@ -46,7 +55,6 @@ void browseEvents(User* user) {
 
         clearScreen();
 
-	    // Category category = Category::Concert; // Example category
         EventCategory category = static_cast<EventCategory>(catChoice);
 
 		// Event manager
@@ -62,7 +70,7 @@ void browseEvents(User* user) {
         vector<Event> categoryEvents = manager.searchEventsByCategory(category);
 
 		if (categoryEvents.empty()) {
-			cout << "No events found in this category." << endl;
+			//cout << "No events found in this category." << endl;
             system("pause"); // Press any key to continue
             continue;
 		}
@@ -73,17 +81,26 @@ void browseEvents(User* user) {
 
 void selectEvent(const vector<Event>& categoryEvents, EventCategory category, User* user) {
     while (true) {
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
+        //cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clear input buffer
 
         clearScreen();
-	    cout << "#" << categoryToString(category) << endl;
+	    cout << "#" << Event::categoryToString(category) << endl;
 
         int eventChoice = 0;
 
         listEventsUser(categoryEvents);
 
         cout << "Select Event to view details or 0 to return: ";
-        cin >> eventChoice;
+        //cin >> eventChoice;
+
+		// Check if input is valid
+		if (!(cin >> eventChoice)) {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Invalid choice. Please try again." << endl;
+            system("pause"); // Press any key to continue
+			continue;
+		}
 
         // Invalid choice
         if (eventChoice < 0 || eventChoice > static_cast<int>(categoryEvents.size())) {
@@ -117,7 +134,16 @@ void selectTicket(Event event, User* user) {
 
         // Select ticket type to buy or return
         cout << "Select ticket category to buy or 0 to return: ";
-        cin >> ticketChoice;
+        //cin >> ticketChoice;
+
+        // Check if input is valid
+        if (!(cin >> ticketChoice)) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid choice. Please try again." << endl;
+            system("pause"); // Press any key to continue
+            continue;
+        }
 
         // Invalid choice
         if (ticketChoice < 0 || ticketChoice > event.categoryOptions.size()) {
@@ -161,9 +187,26 @@ void selectTicket(Event event, User* user) {
 
         char proceedChoice = ' ';
 
+		//string choiceStr;
+		//cout << "Add a ticket category? (y/n): ";
+		//getline(cin, choiceStr);
+		//if (!choiceStr.empty()) {
+		//	addMore = choiceStr[0];
+		//}
+
         while (true) {
             cout << "Enter 'Y' to proceed to checkout or 'N' to buy more tickets: ";
-            cin >> proceedChoice;
+            
+			cin >> proceedChoice;
+            
+            // Check if input is valid
+            if (!(cin >> ticketChoice)) {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Invalid choice. Please try again." << endl;
+                system("pause"); // Press any key to continue
+                continue;
+            }
 
             if (toupper(proceedChoice) != 'Y' && toupper(proceedChoice) != 'N') {
                 cout << "Invalid choice. Please try again" << endl;
@@ -320,25 +363,43 @@ void listEventsUser(const vector<Event>& events) {
     for (size_t i = 0; i < events.size(); i++) {
         const Event& e = events[i];
 
+        //// Convert time_t ? readable string
+        //std::tm tmStruct{};
+        //localtime_s(&tmStruct, &e.date); // safer version on MSVC
+        //std::ostringstream dateStream;
+        //dateStream << std::put_time(&tmStruct, "%Y-%m-%d %H:%M");
+
         // Convert time_t ? readable string
-        std::tm tmStruct{};
-        localtime_s(&tmStruct, &e.date); // safer version on MSVC
-        std::ostringstream dateStream;
-        dateStream << std::put_time(&tmStruct, "%Y-%m-%d %H:%M");
+        char startBuffer[80], endBuffer[80];
+        std::tm tmStart{}, tmEnd{};
+    #ifdef _WIN32
+        localtime_s(&tmStart, &e.startDate);
+        localtime_s(&tmEnd, &e.endDate);
+    #else
+        localtime_r(&startDate, &tmStart);
+        localtime_r(&endDate, &tmEnd);
+    #endif
+        strftime(startBuffer, sizeof(startBuffer), "%Y-%m-%d %H:%M", &tmStart);
+        strftime(endBuffer, sizeof(endBuffer), "%Y-%m-%d %H:%M", &tmEnd);
 
         cout << "#" << i + 1 << endl;
         cout << e.name << endl;
-        cout << "Location: " << e.location << endl;
-        cout << "Date: " << dateStream.str() << endl;
+        cout << "Start Date : " << startBuffer << "\n";
+        cout << "End Date   : " << endBuffer << "\n";
+        cout << "Location   : " << e.location << endl;
+        //cout << "Date: " << dateStream.str() << endl;
 
         // From RMxx.xx
-        // Print ticket categories
-        //for (const auto& catPair : e.categoryOptions.size() {
-        for (size_t j = 0; j < e.categoryOptions.size(); j++) {
-            pair<string, pair<double, int>> catPair = e.categoryOptions.at(j);
-            cout << j + 1 << ". " << catPair.first //catName
-                << " - RM" << catPair.second.first << endl; //catPrice
+        double minPrice = e.categoryOptions.at(0).second.first;
+
+        for (size_t j = 1; j < e.categoryOptions.size(); j++) {
+            double catPrice = e.categoryOptions.at(j).second.first;
+            if (catPrice < minPrice) {
+                minPrice = catPrice;
+            }
         }
+
+        cout << fixed << setprecision(2) << "From RM" << minPrice << endl;
 
         cout << "=====================================" << endl;
     }
@@ -349,9 +410,13 @@ void displayCatMenu(){
 
     cout << "Select Category:" << endl;
 
+    cout << "=====================================" << endl;
+
     // for loop to display all categories
     for (int i = 0; i < static_cast<int>(Category::Count); i++) {
         Category cat = static_cast<Category>(i);
         cout << (i + 1) << ". " << catToString(cat) << endl;
     }
+
+    cout << "=====================================" << endl;
 }

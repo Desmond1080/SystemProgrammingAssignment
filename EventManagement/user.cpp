@@ -312,7 +312,6 @@ bool userLogin(User &loginUser) {
 				} 
 				updateUserProfile(user1);
 				return false;
-
 			}
 		}
 	}

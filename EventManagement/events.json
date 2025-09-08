@@ -1,36 +1,41 @@
 {
-    "events": [
+  "events": [
+    {
+      "category": 5,
+      "categoryOptions": [
         {
-            "category": 3,
-            "categoryOptions": [
-                {
-                    "available": 18,
-                    "catName": "VIP",
-                    "price": 400.0
-                }
-            ],
-            "description": "This is a fun event haha",
-            "location": "Kuala Lumpur",
-            "name": "Testing Event",
-            "organizer": "XT",
-            "ticketPrice": 200.0,
-            "timestamp": 1757153460
+          "available": 100,
+          "catName": "VIP",
+          "price": 120.0
         },
         {
-            "category": 3,
-            "categoryOptions": [
-                {
-                    "available": 20,
-                    "catName": "VIP",
-                    "price": 400.0
-                }
-            ],
-            "description": "This is a fun event haha",
-            "location": "Kuala Lumpur",
-            "name": "Testing Event",
-            "organizer": "XT",
-            "ticketPrice": 200.0,
-            "timestamp": 1757153460
+          "available": 500,
+          "catName": "Standard",
+          "price": 50.0
         }
-    ]
+      ],
+      "description": "Outdoor concert",
+      "location": "Central Park",
+      "name": "Music Festival",
+      "organizer": "ABC Corp",
+      "ticketPrice": 50.0,
+      "timestamp": 1757103929
+    },
+    {
+      "category": 3,
+      "categoryOptions": [
+        {
+          "available": 20,
+          "catName": "VIP",
+          "price": 400.0
+        }
+      ],
+      "description": "This is a fun event haha",
+      "location": "Kuala Lumpur",
+      "name": "Testing Event",
+      "organizer": "XT",
+      "ticketPrice": 200.0,
+      "timestamp": 1757153460
+    }
+  ]
 }
